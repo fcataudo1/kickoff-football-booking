@@ -3,6 +3,8 @@ package com.fpc.football_booking.controller;
 
 import com.fpc.football_booking.dto.AppUserDto;
 import com.fpc.football_booking.service.AppUserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,8 +17,12 @@ public class AppUserController {
     private final AppUserService userService;
 
 
-    public AppUserController(AppUserService userService) {
+    public AppUserController(
+            AppUserService userService
+    ) {
+
         this.userService = userService;
+
     }
 
 
@@ -26,6 +32,7 @@ public class AppUserController {
         return userService.getAll();
 
     }
+
 
 
     @GetMapping("/{id}")
@@ -38,32 +45,46 @@ public class AppUserController {
     }
 
 
+
     @PostMapping
-    public AppUserDto create(
+    public ResponseEntity<AppUserDto> create(
             @RequestBody AppUserDto dto
     ) {
 
-        return userService.insert(dto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
+                        userService.insert(dto)
+                );
 
     }
 
 
-    @PutMapping
+
+    @PutMapping("/{id}")
     public AppUserDto update(
+            @PathVariable Long id,
             @RequestBody AppUserDto dto
     ) {
+
+        dto.setId(id);
 
         return userService.update(dto);
 
     }
 
 
+
     @DeleteMapping("/{id}")
-    public void delete(
+    public ResponseEntity<Void> delete(
             @PathVariable Long id
     ) {
 
         userService.delete(id);
+
+        return ResponseEntity
+                .noContent()
+                .build();
 
     }
 

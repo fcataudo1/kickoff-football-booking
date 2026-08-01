@@ -2,9 +2,12 @@ package com.fpc.football_booking.controller;
 
 import com.fpc.football_booking.dto.FootballFieldDto;
 import com.fpc.football_booking.service.FootballFieldService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/fields")
@@ -23,12 +26,14 @@ public class FootballFieldController {
     }
 
 
+
     @GetMapping
     public List<FootballFieldDto> getAll(){
 
         return fieldService.getAll();
 
     }
+
 
 
     @GetMapping("/{id}")
@@ -41,32 +46,46 @@ public class FootballFieldController {
     }
 
 
+
     @PostMapping
-    public FootballFieldDto create(
+    public ResponseEntity<FootballFieldDto> create(
             @RequestBody FootballFieldDto dto
     ){
 
-        return fieldService.insert(dto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
+                        fieldService.insert(dto)
+                );
 
     }
 
 
-    @PutMapping
+
+    @PutMapping("/{id}")
     public FootballFieldDto update(
+            @PathVariable Long id,
             @RequestBody FootballFieldDto dto
     ){
+
+        dto.setId(id);
 
         return fieldService.update(dto);
 
     }
 
 
+
     @DeleteMapping("/{id}")
-    public void delete(
+    public ResponseEntity<Void> delete(
             @PathVariable Long id
     ){
 
         fieldService.delete(id);
+
+        return ResponseEntity
+                .noContent()
+                .build();
 
     }
 

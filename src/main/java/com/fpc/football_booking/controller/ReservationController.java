@@ -3,6 +3,8 @@ package com.fpc.football_booking.controller;
 
 import com.fpc.football_booking.dto.ReservationDto;
 import com.fpc.football_booking.service.ReservationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -26,13 +28,27 @@ public class ReservationController {
 
 
     @PostMapping
-    public ReservationDto create(
+    public ResponseEntity<ReservationDto> create(
             @RequestBody ReservationDto dto
     ){
 
-        return reservationService.createReservation(dto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
+                        reservationService.createReservation(dto)
+                );
 
     }
+
+
+
+    @GetMapping
+    public List<ReservationDto> getAll(){
+
+        return reservationService.getAllReservations();
+
+    }
+
 
 
     @GetMapping("/user/{userId}")
@@ -45,10 +61,11 @@ public class ReservationController {
     }
 
 
+
     @GetMapping("/field/{fieldId}")
     public List<ReservationDto> getByField(
             @PathVariable Long fieldId,
-            @RequestParam LocalDate date
+            @RequestParam("date") LocalDate date
     ){
 
         return reservationService.getFieldReservations(
@@ -59,12 +76,17 @@ public class ReservationController {
     }
 
 
+
     @DeleteMapping("/{id}")
-    public void cancel(
+    public ResponseEntity<Void> cancel(
             @PathVariable Long id
     ){
 
         reservationService.cancelReservation(id);
+
+        return ResponseEntity
+                .noContent()
+                .build();
 
     }
 
