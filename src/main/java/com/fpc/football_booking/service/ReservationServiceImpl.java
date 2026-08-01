@@ -6,6 +6,8 @@ import com.fpc.football_booking.entity.AppUser;
 import com.fpc.football_booking.entity.FootballField;
 import com.fpc.football_booking.entity.Reservation;
 import com.fpc.football_booking.entity.enums.ReservationStatus;
+import com.fpc.football_booking.exception.BusinessException;
+import com.fpc.football_booking.exception.ResourceNotFoundException;
 import com.fpc.football_booking.mapper.ReservationMapper;
 import com.fpc.football_booking.repository.AppUserRepository;
 import com.fpc.football_booking.repository.FootballFieldRepository;
@@ -71,7 +73,7 @@ public class ReservationServiceImpl implements ReservationService {
         AppUser user =
                 userRepository.findById(dto.getUserId())
                         .orElseThrow(() ->
-                                new RuntimeException(
+                                new ResourceNotFoundException(
                                         "User not found"
                                 ));
 
@@ -89,7 +91,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         if(userAlreadyBooked){
 
-            throw new RuntimeException(
+            throw new com.fpc.football_booking.exception.BusinessException(
                     "User already has a reservation today"
             );
 
@@ -104,7 +106,7 @@ public class ReservationServiceImpl implements ReservationService {
                                 dto.getFootballFieldId()
                         )
                         .orElseThrow(() ->
-                                new RuntimeException(
+                                new ResourceNotFoundException(
                                         "Football field not found"
                                 ));
 
@@ -123,7 +125,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         if(fieldAlreadyBooked){
 
-            throw new RuntimeException(
+            throw new BusinessException(
                     "Football field already booked"
             );
 
@@ -201,7 +203,7 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation =
                 reservationRepository.findById(reservationId)
                         .orElseThrow(() ->
-                                new RuntimeException(
+                                new ResourceNotFoundException(
                                         "Reservation not found"
                                 ));
 
