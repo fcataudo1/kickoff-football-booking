@@ -17,6 +17,8 @@ public interface ReservationService {
             LocalDate date
     );
 
+    List<ReservationDto> getAllReservations();
+
     void cancelReservation(Long reservationId);
 
 }

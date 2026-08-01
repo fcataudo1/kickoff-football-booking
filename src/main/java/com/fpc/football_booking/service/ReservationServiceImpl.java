@@ -12,6 +12,7 @@ import com.fpc.football_booking.mapper.ReservationMapper;
 import com.fpc.football_booking.repository.AppUserRepository;
 import com.fpc.football_booking.repository.FootballFieldRepository;
 import com.fpc.football_booking.repository.ReservationRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -47,6 +48,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Override
+    @Transactional
     public ReservationDto createReservation(
             ReservationDto dto
     ) {
@@ -54,18 +56,9 @@ public class ReservationServiceImpl implements ReservationService {
 
         // 1) Controllo orario apertura
 
-        LocalTime opening = LocalTime.of(16, 0);
-        LocalTime closing = LocalTime.MIDNIGHT;
-
-
-        if(dto.getStartTime().isBefore(opening)
-                || dto.getStartTime().equals(closing)) {
-
-            throw new RuntimeException(
-                    "Field closed at this time"
-            );
-        }
-
+        validateReservationTime(
+                dto.getStartTime()
+        );
 
 
         // 2) Recupero utente
@@ -91,7 +84,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         if(userAlreadyBooked){
 
-            throw new com.fpc.football_booking.exception.BusinessException(
+            throw new BusinessException(
                     "User already has a reservation today"
             );
 
@@ -109,6 +102,14 @@ public class ReservationServiceImpl implements ReservationService {
                                 new ResourceNotFoundException(
                                         "Football field not found"
                                 ));
+
+        if(!field.isActive()) {
+
+            throw new BusinessException(
+                    "Football field is not available"
+            );
+
+        }
 
 
 
@@ -164,6 +165,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<ReservationDto> getUserReservations(
             Long userId
     ) {
@@ -177,6 +179,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<ReservationDto> getFieldReservations(
             Long fieldId,
             LocalDate date
@@ -192,9 +195,20 @@ public class ReservationServiceImpl implements ReservationService {
 
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReservationDto> getAllReservations() {
+
+
+        return reservationMapper.toDTOList(
+                reservationRepository.findAll()
+        );
+
+    }
 
 
     @Override
+    @Transactional
     public void cancelReservation(
             Long reservationId
     ) {
@@ -214,6 +228,37 @@ public class ReservationServiceImpl implements ReservationService {
 
 
         reservationRepository.save(reservation);
+
+    }
+
+    private void validateReservationTime(
+            LocalTime startTime
+    ) {
+
+        LocalTime opening = LocalTime.of(16, 0);
+
+        LocalTime lastSlot = LocalTime.of(23, 0);
+
+
+        if (startTime.isBefore(opening)
+                || startTime.isAfter(lastSlot)) {
+
+            throw new BusinessException(
+                    "Reservations are available from 16:00 to 23:00"
+            );
+
+        }
+
+
+        if (startTime.getMinute() != 0
+                || startTime.getSecond() != 0
+                || startTime.getNano() != 0) {
+
+            throw new BusinessException(
+                    "Reservation must start on a full hour"
+            );
+
+        }
 
     }
 

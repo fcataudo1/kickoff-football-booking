@@ -30,8 +30,13 @@ public interface ReservationRepository
     List<Reservation> findByUserId(Long userId);
 
 
+
     List<Reservation> findByFootballFieldIdAndReservationDate(
             Long footballFieldId,
+            LocalDate reservationDate
+    );
+
+    List<Reservation> findByReservationDate(
             LocalDate reservationDate
     );
 

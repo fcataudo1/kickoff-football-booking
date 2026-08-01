@@ -2,6 +2,7 @@ package com.fpc.football_booking.service;
 
 import com.fpc.football_booking.mapper.Converter;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public abstract class AbstractService<ENTITY, DTO>
 
 
     @Override
+    @Transactional
     public DTO insert(DTO dto) {
 
         ENTITY entity = converter.toEntity(dto);
@@ -35,6 +37,7 @@ public abstract class AbstractService<ENTITY, DTO>
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<DTO> getAll() {
 
         return converter.toDTOList(
@@ -44,6 +47,7 @@ public abstract class AbstractService<ENTITY, DTO>
 
 
     @Override
+    @Transactional(readOnly = true)
     public DTO read(Long id) {
 
         ENTITY entity = repository.findById(id)
@@ -56,6 +60,7 @@ public abstract class AbstractService<ENTITY, DTO>
 
 
     @Override
+    @Transactional
     public DTO update(DTO dto) {
 
         ENTITY entity = converter.toEntity(dto);
@@ -67,6 +72,7 @@ public abstract class AbstractService<ENTITY, DTO>
 
 
     @Override
+    @Transactional
     public void delete(Long id) {
 
         repository.deleteById(id);
