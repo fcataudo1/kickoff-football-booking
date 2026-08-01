@@ -1,4 +1,4 @@
-package com.fpc.football_booking.entity.dto;
+package com.fpc.football_booking.dto;
 
 import com.fpc.football_booking.entity.enums.Role;
 import lombok.*;
