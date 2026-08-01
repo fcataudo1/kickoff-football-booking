@@ -124,7 +124,16 @@ public class ReservationSeeder implements CommandLineRunner {
                     "ReservationSeeder initialized: 3 reservations created"
             );
 
+        } else {
+
+
+            logger.info(
+                    "ReservationSeeder skipped: database already contains data"
+            );
+
+
         }
+
 
     }
 
