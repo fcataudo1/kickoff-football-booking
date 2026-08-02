@@ -26,10 +26,6 @@ public class ReservationDto {
 
     private String customerEmail;
 
-
-    private Long footballFieldId;
-
-
     private LocalDate reservationDate;
 
 
@@ -39,5 +35,7 @@ public class ReservationDto {
     private ReservationStatus status;
 
     private BigDecimal price;
+
+    private FootballFieldDto footballField;
 
 }

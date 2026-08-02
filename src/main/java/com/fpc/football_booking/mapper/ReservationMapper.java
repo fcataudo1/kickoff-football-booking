@@ -10,8 +10,20 @@ public class ReservationMapper
         extends AbstractConverter<Reservation, ReservationDto> {
 
 
+    private final FootballFieldMapper footballFieldMapper;
+
+
+    public ReservationMapper(
+            FootballFieldMapper footballFieldMapper
+    ){
+        this.footballFieldMapper = footballFieldMapper;
+    }
+
+
+
     @Override
     public ReservationDto toDTO(Reservation entity) {
+
 
         if (entity == null) {
             return null;
@@ -39,15 +51,6 @@ public class ReservationMapper
         );
 
 
-        if (entity.getFootballField() != null) {
-
-            dto.setFootballFieldId(
-                    entity.getFootballField().getId()
-            );
-
-        }
-
-
         dto.setReservationDate(
                 entity.getReservationDate()
         );
@@ -61,8 +64,18 @@ public class ReservationMapper
         dto.setStatus(
                 entity.getStatus()
         );
+
+
         dto.setPrice(
                 entity.getPrice()
+        );
+
+
+        // aggiunto campo
+        dto.setFootballField(
+                footballFieldMapper.toDTO(
+                        entity.getFootballField()
+                )
         );
 
 

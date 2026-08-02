@@ -51,52 +51,28 @@ public class ReservationServiceImpl implements ReservationService {
             ReservationDto dto
     ) {
 
-
         validateReservationTime(
                 dto.getStartTime()
         );
 
 
-
-        FootballField field =
-                fieldRepository.findById(
-                                dto.getFootballFieldId()
-                        )
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Football field not found"
-                                )
-                        );
+        List<FootballField> availableFields =
+                fieldRepository.findAvailableFields(
+                        dto.getReservationDate(),
+                        dto.getStartTime()
+                );
 
 
-
-        if(!field.isActive()) {
+        if(availableFields.isEmpty()){
 
             throw new BusinessException(
-                    "Football field is not available"
+                    "Nessun campo disponibile"
             );
 
         }
 
 
-
-        boolean alreadyBooked =
-                reservationRepository
-                        .existsByFootballFieldIdAndReservationDateAndStartTime(
-                                dto.getFootballFieldId(),
-                                dto.getReservationDate(),
-                                dto.getStartTime()
-                        );
-
-
-        if(alreadyBooked){
-
-            throw new BusinessException(
-                    "Football field already booked"
-            );
-
-        }
-
+        FootballField field = availableFields.get(0);
 
 
         Reservation reservation =
@@ -107,7 +83,6 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setFootballField(
                 field
         );
-
 
 
         reservation.setPrice(
