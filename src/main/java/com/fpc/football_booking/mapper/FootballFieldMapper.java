@@ -6,7 +6,8 @@ import com.fpc.football_booking.entity.FootballField;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FootballFieldMapper extends AbstractConverter<FootballField, FootballFieldDto> {
+public class FootballFieldMapper
+        extends AbstractConverter<FootballField, FootballFieldDto> {
 
 
     @Override
@@ -16,15 +17,24 @@ public class FootballFieldMapper extends AbstractConverter<FootballField, Footba
             return null;
         }
 
+
         FootballFieldDto dto = new FootballFieldDto();
 
+
         dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setPricePerHour(entity.getPricePerHour());
-        dto.setActive(entity.isActive());
+
+        dto.setName(
+                entity.getName()
+        );
+
+        dto.setActive(
+                entity.isActive()
+        );
+
 
         return dto;
     }
+
 
 
     @Override
@@ -34,13 +44,26 @@ public class FootballFieldMapper extends AbstractConverter<FootballField, Footba
             return null;
         }
 
+
         FootballField entity = new FootballField();
 
-        entity.setId(dto.getId());
-        entity.setName(dto.getName());
-        entity.setPricePerHour(dto.getPricePerHour());
-        entity.setActive(dto.isActive());
+
+        entity.setId(
+                dto.getId()
+        );
+
+
+        entity.setName(
+                dto.getName()
+        );
+
+
+        entity.setActive(
+                dto.isActive()
+        );
+
 
         return entity;
     }
+
 }

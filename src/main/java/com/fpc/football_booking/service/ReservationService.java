@@ -8,17 +8,23 @@ import java.util.List;
 
 public interface ReservationService {
 
-    ReservationDto createReservation(ReservationDto dto);
 
-    List<ReservationDto> getUserReservations(Long userId);
+    ReservationDto createReservation(
+            ReservationDto dto
+    );
+
 
     List<ReservationDto> getFieldReservations(
             Long fieldId,
             LocalDate date
     );
 
+
     List<ReservationDto> getAllReservations();
 
-    void cancelReservation(Long reservationId);
+
+    void cancelReservation(
+            Long reservationId
+    );
 
 }

@@ -15,20 +15,21 @@ import java.util.List;
 @Builder
 public class FootballField {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
 
 
     @Column(nullable = false)
     private String name;
 
 
-    @Column(nullable = false)
-    private BigDecimal pricePerHour;
-
 
     @Column(nullable = false)
-    private boolean active;
+    @Builder.Default
+    private boolean active = true;
+
 
 }

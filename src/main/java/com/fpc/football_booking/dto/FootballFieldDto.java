@@ -9,11 +9,13 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class FootballFieldDto {
 
+
     private Long id;
+
 
     private String name;
 
-    private BigDecimal pricePerHour;
 
     private boolean active;
+
 }

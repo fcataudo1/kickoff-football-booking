@@ -4,8 +4,10 @@ import com.fpc.football_booking.entity.enums.ReservationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+
 
 @Entity
 @Table(name = "reservations")
@@ -16,27 +18,50 @@ import java.time.LocalTime;
 @Builder
 public class Reservation {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
+    @Column(nullable = false)
+    private String customerName;
+
+
+    @Column(nullable = false)
+    private String customerPhone;
+
+
+    @Column
+    private String customerEmail;
+
+
 
     @Column(nullable = false)
     private LocalDate reservationDate;
 
 
+
     @Column(nullable = false)
     private LocalTime startTime;
 
+
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ReservationStatus status;
+    @Builder.Default
+    private ReservationStatus status = ReservationStatus.CONFIRMED;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private AppUser user;
+    @Column(nullable = false, precision = 8, scale = 2)
+    private BigDecimal price;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "football_field_id", nullable = false)
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+            name = "football_field_id",
+            nullable = false
+    )
     private FootballField footballField;
+
 }

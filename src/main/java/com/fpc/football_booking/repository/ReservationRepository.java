@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+
 @Repository
 public interface ReservationRepository
         extends JpaRepository<Reservation, Long> {
@@ -21,20 +22,11 @@ public interface ReservationRepository
     );
 
 
-    boolean existsByUserIdAndReservationDate(
-            Long userId,
-            LocalDate reservationDate
-    );
-
-
-    List<Reservation> findByUserId(Long userId);
-
-
-
     List<Reservation> findByFootballFieldIdAndReservationDate(
             Long footballFieldId,
             LocalDate reservationDate
     );
+
 
     List<Reservation> findByReservationDate(
             LocalDate reservationDate

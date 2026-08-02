@@ -1,5 +1,6 @@
 package com.fpc.football_booking.service;
 
+import com.fpc.football_booking.exception.ResourceNotFoundException;
 import com.fpc.football_booking.mapper.Converter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +53,7 @@ public abstract class AbstractService<ENTITY, DTO>
 
         ENTITY entity = repository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Entity not found")
+                        new ResourceNotFoundException("Entity not found")
                 );
 
         return converter.toDTO(entity);

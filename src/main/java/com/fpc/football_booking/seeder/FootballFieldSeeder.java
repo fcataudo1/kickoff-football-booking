@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 
 
 @Component
-@Order(2)
 @Profile("dev")
+@Order(1)
 public class FootballFieldSeeder
         extends AbstractSeeder<FootballField> {
 
@@ -25,12 +25,14 @@ public class FootballFieldSeeder
     }
 
 
+
     @Override
     protected int getNumberOfEntities() {
 
         return 3;
 
     }
+
 
 
     @Override
@@ -42,11 +44,6 @@ public class FootballFieldSeeder
 
         field.setName(
                 "Campo " + index
-        );
-
-
-        field.setPricePerHour(
-                new BigDecimal("50.00")
         );
 
 

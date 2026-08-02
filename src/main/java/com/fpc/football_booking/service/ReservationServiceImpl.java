@@ -2,19 +2,18 @@ package com.fpc.football_booking.service;
 
 
 import com.fpc.football_booking.dto.ReservationDto;
-import com.fpc.football_booking.entity.AppUser;
 import com.fpc.football_booking.entity.FootballField;
 import com.fpc.football_booking.entity.Reservation;
 import com.fpc.football_booking.entity.enums.ReservationStatus;
 import com.fpc.football_booking.exception.BusinessException;
 import com.fpc.football_booking.exception.ResourceNotFoundException;
 import com.fpc.football_booking.mapper.ReservationMapper;
-import com.fpc.football_booking.repository.AppUserRepository;
 import com.fpc.football_booking.repository.FootballFieldRepository;
 import com.fpc.football_booking.repository.ReservationRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -25,26 +24,25 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
 
-    private final AppUserRepository userRepository;
-
     private final FootballFieldRepository fieldRepository;
 
     private final ReservationMapper reservationMapper;
 
+    private static final BigDecimal FIXED_PRICE =
+            BigDecimal.valueOf(50);
 
     public ReservationServiceImpl(
             ReservationRepository reservationRepository,
-            AppUserRepository userRepository,
             FootballFieldRepository fieldRepository,
             ReservationMapper reservationMapper
     ) {
 
         this.reservationRepository = reservationRepository;
-        this.userRepository = userRepository;
         this.fieldRepository = fieldRepository;
         this.reservationMapper = reservationMapper;
 
     }
+
 
 
     @Override
@@ -54,45 +52,11 @@ public class ReservationServiceImpl implements ReservationService {
     ) {
 
 
-        // 1) Controllo orario apertura
-
         validateReservationTime(
                 dto.getStartTime()
         );
 
 
-        // 2) Recupero utente
-
-        AppUser user =
-                userRepository.findById(dto.getUserId())
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "User not found"
-                                ));
-
-
-
-        // 3) Controllo una prenotazione al giorno
-
-        boolean userAlreadyBooked =
-                reservationRepository
-                        .existsByUserIdAndReservationDate(
-                                dto.getUserId(),
-                                dto.getReservationDate()
-                        );
-
-
-        if(userAlreadyBooked){
-
-            throw new BusinessException(
-                    "User already has a reservation today"
-            );
-
-        }
-
-
-
-        // 4) Recupero campo
 
         FootballField field =
                 fieldRepository.findById(
@@ -101,7 +65,10 @@ public class ReservationServiceImpl implements ReservationService {
                         .orElseThrow(() ->
                                 new ResourceNotFoundException(
                                         "Football field not found"
-                                ));
+                                )
+                        );
+
+
 
         if(!field.isActive()) {
 
@@ -113,9 +80,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 
 
-        // 5) Controllo disponibilità campo
-
-        boolean fieldAlreadyBooked =
+        boolean alreadyBooked =
                 reservationRepository
                         .existsByFootballFieldIdAndReservationDateAndStartTime(
                                 dto.getFootballFieldId(),
@@ -124,7 +89,7 @@ public class ReservationServiceImpl implements ReservationService {
                         );
 
 
-        if(fieldAlreadyBooked){
+        if(alreadyBooked){
 
             throw new BusinessException(
                     "Football field already booked"
@@ -134,23 +99,26 @@ public class ReservationServiceImpl implements ReservationService {
 
 
 
-        // 6) Creo prenotazione
-
         Reservation reservation =
                 reservationMapper.toEntity(dto);
 
 
-        reservation.setUser(user);
 
-        reservation.setFootballField(field);
+        reservation.setFootballField(
+                field
+        );
+
+
+
+        reservation.setPrice(
+                FIXED_PRICE
+        );
+
 
         reservation.setStatus(
                 ReservationStatus.CONFIRMED
         );
 
-
-
-        // 7) Salvo
 
         Reservation saved =
                 reservationRepository.save(
@@ -164,18 +132,6 @@ public class ReservationServiceImpl implements ReservationService {
 
 
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<ReservationDto> getUserReservations(
-            Long userId
-    ) {
-
-        return reservationMapper.toDTOList(
-                reservationRepository.findByUserId(userId)
-        );
-
-    }
-
 
 
     @Override
@@ -184,6 +140,7 @@ public class ReservationServiceImpl implements ReservationService {
             Long fieldId,
             LocalDate date
     ) {
+
 
         return reservationMapper.toDTOList(
                 reservationRepository
@@ -194,6 +151,10 @@ public class ReservationServiceImpl implements ReservationService {
         );
 
     }
+
+
+
+
 
     @Override
     @Transactional(readOnly = true)
@@ -207,19 +168,29 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
 
+
+
+
     @Override
     @Transactional
-    public void cancelReservation(
-            Long reservationId
-    ) {
-
+    public void cancelReservation(Long reservationId) {
 
         Reservation reservation =
                 reservationRepository.findById(reservationId)
                         .orElseThrow(() ->
                                 new ResourceNotFoundException(
                                         "Reservation not found"
-                                ));
+                                )
+                        );
+
+
+        if(reservation.getStatus() == ReservationStatus.CANCELLED) {
+
+            throw new BusinessException(
+                    "Reservation already cancelled"
+            );
+
+        }
 
 
         reservation.setStatus(
@@ -231,17 +202,27 @@ public class ReservationServiceImpl implements ReservationService {
 
     }
 
+
+
+
+
     private void validateReservationTime(
             LocalTime startTime
     ) {
 
-        LocalTime opening = LocalTime.of(16, 0);
 
-        LocalTime lastSlot = LocalTime.of(23, 0);
+        LocalTime opening =
+                LocalTime.of(16,0);
 
 
-        if (startTime.isBefore(opening)
+        LocalTime lastSlot =
+                LocalTime.of(23,0);
+
+
+
+        if(startTime.isBefore(opening)
                 || startTime.isAfter(lastSlot)) {
+
 
             throw new BusinessException(
                     "Reservations are available from 16:00 to 23:00"
@@ -250,9 +231,11 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
 
-        if (startTime.getMinute() != 0
+
+        if(startTime.getMinute() != 0
                 || startTime.getSecond() != 0
                 || startTime.getNano() != 0) {
+
 
             throw new BusinessException(
                     "Reservation must start on a full hour"

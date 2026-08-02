@@ -14,6 +14,11 @@ public interface FootballFieldRepository
 
 
     List<FootballField> findByActiveTrue();
+
+
     Optional<FootballField> findByName(String name);
+
+
+    boolean existsByName(String name);
 
 }

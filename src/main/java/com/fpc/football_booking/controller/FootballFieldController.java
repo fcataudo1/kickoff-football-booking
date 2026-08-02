@@ -28,7 +28,7 @@ public class FootballFieldController {
 
 
     @GetMapping
-    public List<FootballFieldDto> getAll(){
+    public List<FootballFieldDto> getAll() {
 
         return fieldService.getAll();
 
@@ -36,10 +36,11 @@ public class FootballFieldController {
 
 
 
+
     @GetMapping("/{id}")
     public FootballFieldDto getById(
             @PathVariable Long id
-    ){
+    ) {
 
         return fieldService.read(id);
 
@@ -47,10 +48,11 @@ public class FootballFieldController {
 
 
 
+
     @PostMapping
     public ResponseEntity<FootballFieldDto> create(
             @RequestBody FootballFieldDto dto
-    ){
+    ) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -62,11 +64,12 @@ public class FootballFieldController {
 
 
 
+
     @PutMapping("/{id}")
     public FootballFieldDto update(
             @PathVariable Long id,
             @RequestBody FootballFieldDto dto
-    ){
+    ) {
 
         dto.setId(id);
 
@@ -76,12 +79,13 @@ public class FootballFieldController {
 
 
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(
-            @PathVariable Long id
-    ){
 
-        fieldService.delete(id);
+    @PutMapping("/{id}/disable")
+    public ResponseEntity<Void> disable(
+            @PathVariable Long id
+    ) {
+
+        fieldService.disable(id);
 
         return ResponseEntity
                 .noContent()

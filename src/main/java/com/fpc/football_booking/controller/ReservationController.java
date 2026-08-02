@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/reservations")
 public class ReservationController {
@@ -20,17 +21,18 @@ public class ReservationController {
 
     public ReservationController(
             ReservationService reservationService
-    ){
+    ) {
 
         this.reservationService = reservationService;
 
     }
 
 
+
     @PostMapping
     public ResponseEntity<ReservationDto> create(
             @RequestBody ReservationDto dto
-    ){
+    ) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -42,8 +44,9 @@ public class ReservationController {
 
 
 
+
     @GetMapping
-    public List<ReservationDto> getAll(){
+    public List<ReservationDto> getAll() {
 
         return reservationService.getAllReservations();
 
@@ -51,22 +54,12 @@ public class ReservationController {
 
 
 
-    @GetMapping("/user/{userId}")
-    public List<ReservationDto> getByUser(
-            @PathVariable Long userId
-    ){
-
-        return reservationService.getUserReservations(userId);
-
-    }
-
-
 
     @GetMapping("/field/{fieldId}")
     public List<ReservationDto> getByField(
             @PathVariable Long fieldId,
-            @RequestParam("date") LocalDate date
-    ){
+            @RequestParam LocalDate date
+    ) {
 
         return reservationService.getFieldReservations(
                 fieldId,
@@ -77,10 +70,11 @@ public class ReservationController {
 
 
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancel(
             @PathVariable Long id
-    ){
+    ) {
 
         reservationService.cancelReservation(id);
 
