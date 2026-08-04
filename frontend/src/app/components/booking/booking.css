@@ -1,0 +1,121 @@
+.booking-box{
+
+    max-width:700px;
+
+    margin:-20px auto 0;
+
+    display:flex;
+
+    gap:25px;
+
+    align-items:end;
+
+    background:white;
+
+    padding:35px;
+
+    border-radius:20px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,0.12);
+
+}
+
+.booking{
+
+    position:relative;
+
+    padding:70px 0 100px;
+
+    background:white;
+
+}
+
+
+
+.booking::after{
+
+    content:"";
+
+    position:absolute;
+
+    bottom:-1px;
+
+    left:0;
+
+    width:100%;
+
+    height:60px;
+
+    background:#f8f9fa;
+
+    clip-path:ellipse(70% 50% at 50% 100%);
+
+}
+
+.modal-backdrop-custom{
+
+position:fixed;
+
+inset:0;
+
+background:rgba(0,0,0,.6);
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+z-index:1050;
+
+}
+
+.modal-box{
+
+    background:white;
+
+    width:500px;
+
+    max-width:90%;
+
+    padding:30px;
+
+    border-radius:15px;
+
+}
+
+
+.success-popup{
+
+position:fixed;
+
+top:50%;
+
+left:50%;
+
+transform:translate(-50%,-50%);
+
+background:white;
+
+padding:40px;
+
+z-index:2000;
+
+text-align:center;
+
+}
+
+
+.success-popup i{
+
+font-size:60px;
+
+color:#22c55e;
+
+}
+
+.error-popup i{
+
+    color:#dc2626;
+
+}

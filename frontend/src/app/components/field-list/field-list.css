@@ -1,0 +1,53 @@
+.fields-container {
+
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+
+}
+
+
+
+.field-card {
+
+    width: 220px;
+    padding: 20px;
+
+    border: 1px solid #ddd;
+    border-radius: 10px;
+
+}
+
+
+
+.available {
+
+    color: green;
+
+}
+
+
+
+.disabled {
+
+    color: red;
+
+}
+
+
+
+button {
+
+    background-color: #22c55e;
+
+    color: white;
+
+    border: none;
+
+    padding: 10px 20px;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+
+}

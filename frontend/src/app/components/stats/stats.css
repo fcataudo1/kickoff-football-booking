@@ -1,0 +1,57 @@
+.stats{
+
+    background:linear-gradient(
+        135deg,
+        #14532D,
+        #166534
+    );
+
+    overflow:hidden;
+
+    box-shadow:0 15px 40px rgba(0,0,0,0.15);
+
+}
+
+
+
+.stat{
+
+    padding:20px;
+
+}
+
+
+
+.stat h2{
+
+    color:#22c55e;
+
+    font-size:60px;
+
+    margin-bottom:10px;
+
+}
+
+
+
+.stat p{
+
+    font-size:20px;
+
+    color:white;
+
+    opacity:0.9;
+
+    margin:0;
+
+}
+
+
+
+.stat-border{
+
+    border-left:1px solid rgba(255,255,255,0.25);
+
+    border-right:1px solid rgba(255,255,255,0.25);
+
+}
