@@ -30,7 +30,7 @@ Il progetto permette agli utenti di selezionare una data e un orario, verificare
 - REST API
 - Swagger / OpenAPI
 
-## 🗄️ Database
+### 🗄️ Database
 
 Il progetto utilizza **PostgreSQL** come database relazionale per la gestione dei dati relativi ai **campi da calcio** e alle **prenotazioni**.
 
