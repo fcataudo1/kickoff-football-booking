@@ -30,7 +30,16 @@ Il progetto permette agli utenti di selezionare una data e un orario, verificare
 - REST API
 - Swagger / OpenAPI
 
-### 🗄️ Database
+### Frontend
+
+- Angular
+- TypeScript
+- Bootstrap
+- Bootstrap Icons
+- HTML5
+- CSS3
+
+## 🗄️ Database
 
 Il progetto utilizza **PostgreSQL** come database relazionale per la gestione dei dati relativi ai **campi da calcio** e alle **prenotazioni**.
 
@@ -43,15 +52,6 @@ Il database gestisce:
 - Prezzo della prenotazione
 
 L'accesso ai dati viene gestito tramite **Spring Data JPA** e **Hibernate**, utilizzando repository JPA per le operazioni di persistenza.
-
-### Frontend
-
-- Angular
-- TypeScript
-- Bootstrap
-- Bootstrap Icons
-- HTML5
-- CSS3
 
 ## 🛠️ Strumenti e supporto allo sviluppo
 
