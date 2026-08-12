@@ -148,6 +148,16 @@ Le prenotazioni rispettano alcune regole definite nel backend:
 - Non è possibile prenotare una data passata
 - Il campo deve essere disponibile per la data e l'orario selezionati
 
+## 🚀 Sviluppi futuri
+
+- Registrazione, login e autenticazione utenti
+- Gestione ruoli: `CLIENT`, `RECEPTIONIST`, `ADMIN`
+- Pannelli dedicati a receptionist e amministratore
+- Gestione avanzata di utenti, campi e prenotazioni
+- Calendario e notifiche email
+- Pagamenti online
+- Spring Security e gestione delle autorizzazioni
+
 ## 💰 Prezzo
 
 Il prezzo della prenotazione viene impostato dal backend a:
