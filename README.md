@@ -32,17 +32,17 @@ Il progetto permette agli utenti di selezionare una data e un orario, verificare
 
 ## 🗄️ Database
 
-Il progetto utilizza **PostgreSQL** per la gestione dei dati relativi a:
+Il progetto utilizza **PostgreSQL** come database relazionale per la gestione dei dati relativi ai **campi da calcio** e alle **prenotazioni**.
 
-- Campi da calcio
-- Prenotazioni
-- Stato delle prenotazioni
-- Data e orario delle partite
+Il database gestisce:
+
+- Informazioni e disponibilità dei campi
 - Dati del cliente associati alla prenotazione
+- Data e orario della partita
+- Stato della prenotazione (`CONFIRMED` / `CANCELLED`)
+- Prezzo della prenotazione
 
-L'accesso al database viene gestito tramite **Spring Data JPA** e **Hibernate**.
-
-Le operazioni di persistenza vengono effettuate dal backend attraverso repository JPA.
+L'accesso ai dati viene gestito tramite **Spring Data JPA** e **Hibernate**, utilizzando repository JPA per le operazioni di persistenza.
 
 ### Frontend
 
