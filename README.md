@@ -2,60 +2,81 @@
 
 Applicazione web full-stack per la gestione e prenotazione di campi da calcio.
 
-Il progetto permette agli utenti di visualizzare i campi disponibili, scegliere data e orario e completare una prenotazione tramite un'interfaccia web semplice, moderna e responsive.
+Il progetto permette agli utenti di selezionare una data e un orario, verificare la disponibilità dei campi e completare una prenotazione tramite un'interfaccia web semplice, moderna e responsive.
 
 ## 📸 Anteprima
 
 ### Homepage
 
-![KickOff Homepage](frontend/src/assets/screenshots/homepage.png)
+<!-- Inserire screenshot della homepage -->
 
 ### Prenotazione
 
-![KickOff Booking](frontend/src/assets/screenshots/booking.png)
+<!-- Inserire screenshot della sezione/form di prenotazione -->
 
 ### Responsive
 
-![KickOff Responsive](frontend/src/assets/screenshots/responsive.png)
+<!-- Inserire screenshot della versione responsive -->
 
 ## 🚀 Tecnologie utilizzate
 
 ### Backend
 
-* Java
-* Spring Boot
-* Spring Data JPA
-* Hibernate
-* PostgreSQL
-* REST API
-* Swagger / OpenAPI
+- Java
+- Spring Boot
+- Spring Data JPA
+- Hibernate
+- PostgreSQL
+- REST API
+- Swagger / OpenAPI
+
+## 🗄️ Database
+
+Il progetto utilizza **PostgreSQL** per la gestione dei dati relativi a:
+
+- Campi da calcio
+- Prenotazioni
+- Stato delle prenotazioni
+- Data e orario delle partite
+- Dati del cliente associati alla prenotazione
+
+L'accesso al database viene gestito tramite **Spring Data JPA** e **Hibernate**.
+
+Le operazioni di persistenza vengono effettuate dal backend attraverso repository JPA.
 
 ### Frontend
 
-* Angular
-* TypeScript
-* Bootstrap
-* Bootstrap Icons
-* HTML5
-* CSS3
+- Angular
+- TypeScript
+- Bootstrap
+- Bootstrap Icons
+- HTML5
+- CSS3
+
+## 🛠️ Strumenti e supporto allo sviluppo
+
+- IntelliJ IDEA
+- Visual Studio Code
+- Postman
+- Git / GitHub
+- GitHub Desktop
+- ChatGPT come supporto allo sviluppo, debugging e revisione del codice
 
 ## ⚽ Funzionalità principali
 
-* Visualizzazione dei campi disponibili
-* Selezione della data della partita
-* Selezione dell'orario disponibile
-* Prenotazione di una partita
-* Validazione dei dati inseriti
-* Controllo della disponibilità dei campi
-* Gestione delle prenotazioni già effettuate
-* Prevenzione di prenotazioni multiple dello stesso utente nella stessa fascia oraria
-* Gestione dello stato della prenotazione:
-
-  * `CONFIRMED`
-  * `CANCELLED`
-* Visualizzazione della conferma della prenotazione
-* Gestione degli errori e delle prenotazioni non disponibili
-* Interfaccia responsive per desktop, tablet e smartphone
+- Selezione della data della partita
+- Selezione dell'orario disponibile
+- Verifica della disponibilità dei campi
+- Prenotazione di una partita
+- Validazione dei dati inseriti
+- Controllo delle prenotazioni già effettuate
+- Prevenzione di prenotazioni multiple dello stesso numero di telefono nella stessa fascia oraria
+- Gestione dello stato della prenotazione:
+  - `CONFIRMED`
+  - `CANCELLED`
+- Visualizzazione della conferma della prenotazione
+- Gestione degli errori e delle prenotazioni non disponibili
+- Interfaccia responsive per desktop, tablet e smartphone
 
 ## 🗂️ Struttura del progetto
 
@@ -81,11 +102,11 @@ Il backend è sviluppato con **Spring Boot** e utilizza **PostgreSQL** come data
 
 Le principali operazioni vengono esposte tramite API REST per:
 
-* Creare una prenotazione
-* Recuperare tutte le prenotazioni
-* Recuperare le prenotazioni di un determinato campo
-* Annullare una prenotazione
-* Recuperare i campi disponibili
+- Creare una prenotazione
+- Recuperare tutte le prenotazioni
+- Recuperare le prenotazioni di un determinato campo
+- Annullare una prenotazione
+- Recuperare i campi disponibili
 
 ### Endpoint principali
 
@@ -103,16 +124,16 @@ Il frontend è sviluppato con **Angular** e utilizza componenti standalone.
 
 L'interfaccia comprende:
 
-* Navbar
-* Hero section
-* Sezione prenotazione
-* Form di prenotazione
-* Sezione servizi
-* Video promozionale
-* Vantaggi di KickOff
-* Statistiche
-* Sezione contatti
-* Footer
+- Navbar
+- Hero section
+- Sezione prenotazione
+- Form di prenotazione
+- Sezione servizi
+- Video promozionale
+- Vantaggi di KickOff
+- Statistiche
+- Sezione contatti
+- Footer
 
 Il layout è responsive grazie a **Bootstrap**.
 
@@ -120,12 +141,12 @@ Il layout è responsive grazie a **Bootstrap**.
 
 Le prenotazioni rispettano alcune regole definite nel backend:
 
-* Le prenotazioni sono disponibili dalle **16:00 alle 23:00**
-* Gli orari devono essere selezionati su un'ora intera
-* Ogni prenotazione ha una durata di **1 ora**
-* Un utente non può effettuare più prenotazioni nella stessa fascia oraria
-* Non è possibile prenotare una data passata
-* Il campo deve essere disponibile per la data e l'orario selezionati
+- Le prenotazioni sono disponibili dalle **16:00 alle 23:00**
+- Gli orari devono essere selezionati su un'ora intera
+- Ogni prenotazione ha una durata di **1 ora**
+- Lo stesso numero di telefono non può effettuare più prenotazioni nella stessa fascia oraria
+- Non è possibile prenotare una data passata
+- Il campo deve essere disponibile per la data e l'orario selezionati
 
 ## 💰 Prezzo
 
