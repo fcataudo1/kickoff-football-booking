@@ -8,15 +8,15 @@ Il progetto permette agli utenti di selezionare una data e un orario, verificare
 
 ### Homepage
 
-<!-- Inserire screenshot della homepage -->
+![KickOff Homepage](frontend/src/assets/screenshots/homepage.png)
 
 ### Prenotazione
 
-<!-- Inserire screenshot della sezione/form di prenotazione -->
+![KickOff Booking](frontend/src/assets/screenshots/booking.png)
 
 ### Responsive
 
-<!-- Inserire screenshot della versione responsive -->
+![KickOff Responsive](frontend/src/assets/screenshots/responsive.png)
 
 ## 🚀 Tecnologie utilizzate
 
