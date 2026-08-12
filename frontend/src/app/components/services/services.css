@@ -1,0 +1,36 @@
+.services {
+    background: #f8f9fa;
+    padding: 80px 0;
+}
+
+.services h2 {
+    color: #14532D;
+}
+
+.service-card {
+    border: none;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: .3s;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-top {
+    height: 220px;
+    object-fit: cover;
+}
+
+.service-card .card-title {
+    color: #14532D;
+    font-weight: 700;
+}
+
+@media (max-width: 576px) {
+    .card-img-top {
+        height: 200px;
+    }
+}

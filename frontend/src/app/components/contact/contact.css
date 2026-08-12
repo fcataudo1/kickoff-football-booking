@@ -1,0 +1,43 @@
+.contact {
+    background: #f8f9fa;
+}
+
+
+.contact-title {
+    color: #14532D;
+}
+
+
+.contact-card {
+    background: white;
+    padding: 30px 20px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: .3s ease;
+}
+
+
+.contact-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+
+.contact-card i {
+    font-size: 40px;
+    color: #22c55e;
+    margin-bottom: 15px;
+}
+
+
+.contact-card h3 {
+    color: #14532D;
+    font-size: 22px;
+}
+
+
+.contact-card p {
+    color: #666;
+    margin: 0;
+}
