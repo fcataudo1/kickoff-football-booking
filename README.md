@@ -210,3 +210,7 @@ Durante l'esecuzione del backend è possibile utilizzare Swagger UI per visualiz
 
 Progetto realizzato come applicazione full-stack per la gestione delle prenotazioni di campi da calcio.
 
+## 📄 License
+
+This project is licensed under the MIT License.
+
