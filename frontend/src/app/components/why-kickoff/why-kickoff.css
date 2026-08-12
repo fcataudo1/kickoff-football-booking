@@ -1,63 +1,59 @@
-.why-kickoff{
-
-    background:white;
-
+.why-kickoff {
+    background: white;
 }
 
 
-
-.why-kickoff h2{
-
-    color:#14532D;
-
+.why-kickoff h2 {
+    color: #14532D;
 }
 
 
-
-.advantage-card{
-
-    background:#f8f9fa;
-
-    transition:.3s ease;
-
+.advantage-card {
+    background: #f8f9fa;
+    transition: .3s ease;
 }
 
 
-
-.advantage-card:hover{
-
-    transform:translateY(-10px);
-
-    box-shadow:0 15px 30px rgba(0,0,0,0.15)!important;
-
+.advantage-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
 }
 
 
-
-.advantage-card i{
-
-    font-size:45px;
-
-    color:#22c55e;
-
+.advantage-card i {
+    font-size: 45px;
+    color: #22c55e;
 }
 
 
-
-.advantage-card h3{
-
-    color:#14532D;
-
-    font-size:24px;
-
+.advantage-card h3 {
+    color: #14532D;
+    font-size: 24px;
 }
 
 
+.advantage-card p {
+    color: #555;
+    line-height: 1.6;
+}
 
-.advantage-card p{
 
-    color:#555;
+@media (max-width: 576px) {
 
-    line-height:1.6;
+    .why-kickoff {
+        padding: 60px 0 !important;
+    }
+
+    .why-kickoff h2 {
+        font-size: 32px;
+    }
+
+    .advantage-card {
+        padding: 25px !important;
+    }
+
+    .advantage-card h3 {
+        font-size: 21px;
+    }
 
 }

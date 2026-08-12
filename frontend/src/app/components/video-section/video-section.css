@@ -94,3 +94,41 @@
     color:rgba(255,255,255,0.9);
 
 }
+
+@media (max-width: 768px) {
+
+    .video-section {
+        height: 500px;
+        margin: 50px 15px;
+        border-radius: 20px;
+    }
+
+    .video-content {
+        padding: 25px;
+    }
+
+    .video-content h2 {
+        font-size: 40px;
+    }
+
+    .video-content p {
+        font-size: 18px;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .video-section {
+        height: 450px;
+        margin: 40px 10px;
+    }
+
+    .video-content h2 {
+        font-size: 32px;
+    }
+
+    .video-content p {
+        font-size: 16px;
+    }
+}

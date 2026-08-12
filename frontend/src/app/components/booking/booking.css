@@ -52,36 +52,38 @@
 
 }
 
-.modal-backdrop-custom{
+.modal-backdrop-custom {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .6);
 
-position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-inset:0;
+    z-index: 1050;
 
-background:rgba(0,0,0,.6);
+    padding: 20px;
 
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-z-index:1050;
-
+    overflow-y: auto;
 }
 
-.modal-box{
 
-    background:white;
+.modal-box {
+    background: white;
 
-    width:500px;
+    width: 500px;
+    max-width: 100%;
 
-    max-width:90%;
+    max-height: 90vh;
 
-    padding:30px;
+    overflow-y: auto;
 
-    border-radius:15px;
+    padding: 30px;
 
+    border-radius: 15px;
+
+    position: relative;
 }
 
 
@@ -117,5 +119,40 @@ color:#22c55e;
 .error-popup i{
 
     color:#dc2626;
+
+}
+
+@media (max-width: 768px) {
+
+    .booking-box {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 15px;
+        margin: 0 auto;
+        padding: 25px;
+    }
+
+    .booking-box > div {
+        width: 100%;
+    }
+
+    .booking-box button {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .modal-box {
+        width: 95%;
+        max-width: 95%;
+        padding: 25px 20px;
+    }
+
+    .success-popup {
+        width: 90%;
+        padding: 30px 20px;
+    }
 
 }

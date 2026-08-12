@@ -6,218 +6,274 @@ import { ReservationFormComponent } from '../reservation-form/reservation-form';
 
 
 @Component({
-selector:'app-booking',
-standalone:true,
-imports:[
- FormsModule,
- ReservationFormComponent,
- SlicePipe
-],
-templateUrl:'./booking.html',
-styleUrl:'./booking.css'
+    selector: 'app-booking',
+    standalone: true,
+
+    imports: [
+        FormsModule,
+        ReservationFormComponent,
+        SlicePipe
+    ],
+
+    templateUrl: './booking.html',
+    styleUrl: './booking.css'
 })
 export class BookingComponent {
 
 
+    // =========================
+    // DATI PRENOTAZIONE
+    // =========================
 
-reservationDate = '';
+    reservationDate = '';
 
-startTime = '';
+    startTime = '';
 
-showReservation = false;
 
+    // Serve per mostrare
+    // gli errori del primo form
 
-reservationSuccess = false;
+    bookingSubmitted = false;
 
-reservationError = false;
 
+    // =========================
+    // POPUP / MODALE
+    // =========================
 
-minDate = '';
+    showReservation = false;
 
+    reservationSuccess = false;
 
+    reservationError = false;
 
-availableTimes = [
 
-'16:00',
-'17:00',
-'18:00',
-'19:00',
-'20:00',
-'21:00',
-'22:00',
-'23:00'
+    // =========================
+    // DATA MINIMA
+    // =========================
 
-];
+    minDate = '';
 
 
+    // =========================
+    // ORARI DISPONIBILI
+    // =========================
 
-filteredTimes = [
- ...this.availableTimes
-];
+    availableTimes = [
 
+        '16:00',
+        '17:00',
+        '18:00',
+        '19:00',
+        '20:00',
+        '21:00',
+        '22:00',
+        '23:00'
 
-confirmedReservation:any = null;
+    ];
 
 
+    filteredTimes = [
+        ...this.availableTimes
+    ];
 
 
-constructor(){
+    // =========================
+    // PRENOTAZIONE CONFERMATA
+    // =========================
 
+    confirmedReservation: any = null;
 
-const today = new Date();
 
+    // =========================
+    // COSTRUTTORE
+    // =========================
 
-this.minDate =
-today
-.toISOString()
-.split('T')[0];
+    constructor() {
 
+        const today = new Date();
 
-}
+        this.minDate =
+            today
+                .toISOString()
+                .split('T')[0];
 
+    }
 
 
+    // =========================
+    // CAMBIO DATA
+    // =========================
 
-onDateChange(){
+    onDateChange() {
 
-const today = new Date();
+        const today = new Date();
 
-const selected =
-new Date(this.reservationDate);
+        const selected =
+            new Date(this.reservationDate);
 
 
+        // Se è stata selezionata oggi
 
-if(
-selected.toDateString()
-===
-today.toDateString()
-){
+        if (
+            selected.toDateString()
+            ===
+            today.toDateString()
+        ) {
 
 
-const currentHour =
-today.getHours();
+            const currentHour =
+                today.getHours();
 
 
+            this.filteredTimes =
+                this.availableTimes.filter(time => {
 
-this.filteredTimes =
-this.availableTimes.filter(time=>{
 
+                    const hour =
+                        Number(
+                            time.split(':')[0]
+                        );
 
-const hour =
-Number(
-time.split(':')[0]
-);
 
+                    // Mostra solo gli orari
+                    // successivi all'ora corrente
 
-return hour > currentHour;
+                    return hour > currentHour;
 
+                });
 
-});
 
+        }
 
-}
-else{
+        // Se è un giorno futuro
 
+        else {
 
-this.filteredTimes =
-[
-...this.availableTimes
-];
+            this.filteredTimes = [
+                ...this.availableTimes
+            ];
 
+        }
 
-}
 
+        // Se l'orario precedentemente
+        // selezionato non è più disponibile
 
-}
+        if (
+            !this.filteredTimes.includes(this.startTime)
+        ) {
 
+            this.startTime = '';
 
+        }
 
+    }
 
-openReservation(){
 
+    // =========================
+    // CONTINUA
+    // =========================
 
-if(
-!this.reservationDate ||
-!this.startTime
-){
+    openReservation() {
 
-alert(
-"Inserisci data e orario"
-);
 
-return;
+        // Mostriamo gli errori
 
-}
+        this.bookingSubmitted = true;
 
 
-this.showReservation=true;
+        // Se manca data oppure orario
+        // non apriamo il modale
 
+        if (
+            !this.reservationDate ||
+            !this.startTime
+        ) {
 
-}
+            return;
 
+        }
 
 
+        // Tutto corretto
 
-closeModal(){
+        this.showReservation = true;
 
-this.showReservation=false;
+    }
 
-}
 
+    // =========================
+    // CHIUDI MODALE
+    // =========================
 
+    closeModal() {
 
+        this.showReservation = false;
 
+    }
 
-closeReservation(reservation:any){
 
+    // =========================
+    // PRENOTAZIONE COMPLETATA
+    // =========================
 
-this.showReservation=false;
+    closeReservation(reservation: any) {
 
+        this.showReservation = false;
 
-this.confirmedReservation=reservation;
+        this.confirmedReservation =
+            reservation;
 
+        this.reservationSuccess = true;
 
-this.reservationSuccess=true;
+    }
 
 
-}
+    // =========================
+    // ERRORE BACKEND
+    // =========================
 
+    showError() {
 
+        this.showReservation = false;
 
+        this.reservationError = true;
 
-showError(){
+    }
 
 
-this.showReservation=false;
+    // =========================
+    // CHIUDI ERRORE
+    // =========================
 
-this.reservationError=true;
+    closeError() {
 
+        this.reservationError = false;
 
-}
+    }
 
 
+    // =========================
+    // CHIUDI SUCCESSO
+    // =========================
 
-closeError(){
+    closeSuccess() {
 
-this.reservationError=false;
+        this.reservationSuccess = false;
 
-}
+        this.reservationDate = '';
 
+        this.startTime = '';
 
+        this.bookingSubmitted = false;
 
-closeSuccess(){
 
+        // Ripristiniamo tutti gli orari
 
-this.reservationSuccess=false;
+        this.filteredTimes = [
+            ...this.availableTimes
+        ];
 
-
-this.reservationDate='';
-
-this.startTime='';
-
-
-}
-
-
+    }
 
 }

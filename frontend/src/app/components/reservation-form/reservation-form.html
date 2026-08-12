@@ -1,107 +1,147 @@
 <div class="card shadow mt-4 reservation-card">
 
+    <div class="card-header bg-success text-white">
 
-<div class="card-header bg-success text-white">
+        <h4>
+            <i class="bi bi-calendar-check"></i>
+            Completa prenotazione
+        </h4>
 
-<h4>
-<i class="bi bi-calendar-check"></i>
-Completa prenotazione
-</h4>
-
-</div>
-
+    </div>
 
 
-<div class="card-body">
+    <div class="card-body">
+
+        <!-- NOME E COGNOME -->
+        <div class="mb-3">
+
+            <label class="form-label">
+                Nome e Cognome
+            </label>
+
+            <input
+                class="form-control"
+                [class.is-invalid]="submitted && !reservation.customerName.trim()"
+                type="text"
+                [(ngModel)]="reservation.customerName"
+                placeholder="Es. Mario Rossi">
+
+            @if (submitted && !reservation.customerName.trim()) {
+
+                <div class="invalid-feedback">
+                    Inserisci nome e cognome.
+                </div>
+
+            }
+
+        </div>
 
 
-<div class="mb-3">
+        <!-- TELEFONO -->
+        <div class="mb-3">
 
-<label>
-Nome e Cognome
-</label>
+            <label class="form-label">
+                Telefono
+            </label>
 
-<input
-class="form-control"
-type="text"
-[(ngModel)]="reservation.customerName">
+            <input
+                class="form-control"
+                [class.is-invalid]="submitted && !isPhoneValid()"
+                type="tel"
+                inputmode="numeric"
+                maxlength="10"
+                [(ngModel)]="reservation.customerPhone"
+                placeholder="Es. 3331234567">
 
-</div>
+            @if (submitted && !reservation.customerPhone) {
 
+                <div class="invalid-feedback">
+                    Inserisci il numero di telefono.
+                </div>
 
+            } @else if (submitted && !isPhoneValid()) {
 
-<div class="mb-3">
+                <div class="invalid-feedback">
+                    Il numero deve contenere 10 cifre.
+                </div>
 
-<label>
-Telefono
-</label>
+            }
 
-<input
-class="form-control"
-type="text"
-[(ngModel)]="reservation.customerPhone">
-
-</div>
-
-
-
-<div class="mb-3">
-
-<label>
-Email
-</label>
-
-<input
-class="form-control"
-type="email"
-[(ngModel)]="reservation.customerEmail">
-
-</div>
+        </div>
 
 
+        <!-- EMAIL -->
+        <div class="mb-3">
 
-<div class="mb-3">
+            <label class="form-label">
+                Email
+            </label>
 
-<label>
-Data partita
-</label>
+            <input
+                class="form-control"
+                [class.is-invalid]="submitted && !isEmailValid()"
+                type="email"
+                [(ngModel)]="reservation.customerEmail"
+                placeholder="Es. nome@email.it">
 
-<input
-type="date"
-class="form-control"
-[ngModel]="reservation.reservationDate"
-readonly>
-</div>
+            @if (submitted && !reservation.customerEmail) {
 
+                <div class="invalid-feedback">
+                    Inserisci l'email.
+                </div>
 
+            } @else if (submitted && !isEmailValid()) {
 
-<div class="mb-3">
+                <div class="invalid-feedback">
+                    Inserisci un indirizzo email valido.
+                </div>
 
-<label>
-Orario
-</label>
+            }
 
-
-<input
-class="form-control"
-[ngModel]="reservation.startTime"
-readonly>
-
-</div>
-
-
-
-<button
-class="btn btn-success w-100"
-(click)="createReservation()">
-
-Conferma prenotazione
-
-</button>
+        </div>
 
 
+        <!-- DATA PARTITA -->
+        <div class="mb-3">
 
-</div>
+            <label class="form-label">
+                Data partita
+            </label>
 
+            <input
+                type="date"
+                class="form-control"
+                [ngModel]="reservation.reservationDate"
+                readonly>
+
+        </div>
+
+
+        <!-- ORARIO -->
+        <div class="mb-3">
+
+            <label class="form-label">
+                Orario
+            </label>
+
+            <input
+                class="form-control"
+                [ngModel]="reservation.startTime"
+                readonly>
+
+        </div>
+
+
+        <!-- BOTTONE -->
+        <button
+            type="button"
+            class="btn btn-success w-100"
+            (click)="createReservation()">
+
+            Conferma prenotazione
+
+        </button>
+
+    </div>
 
 </div>
