@@ -26,16 +26,17 @@ public interface FootballFieldRepository
     boolean existsByName(String name);
 
     @Query("""
-    SELECT f
-    FROM FootballField f
-    WHERE f.active = true
-    AND f.id NOT IN (
-        SELECT r.footballField.id
-        FROM Reservation r
-        WHERE r.reservationDate = :date
-        AND r.startTime = :time
-    )
-    ORDER BY f.id
+        SELECT f
+        FROM FootballField f
+        WHERE f.active = true
+        AND f.id NOT IN (
+            SELECT r.footballField.id
+            FROM Reservation r
+            WHERE r.reservationDate = :date
+            AND r.startTime = :time
+            AND r.status = 'CONFIRMED'
+        )
+        ORDER BY f.id
     """)
     List<FootballField> findAvailableFields(
             @Param("date") LocalDate date,

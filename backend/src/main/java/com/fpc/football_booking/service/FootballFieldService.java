@@ -4,6 +4,7 @@ package com.fpc.football_booking.service;
 import com.fpc.football_booking.dto.FootballFieldDto;
 import com.fpc.football_booking.entity.FootballField;
 import com.fpc.football_booking.exception.BusinessException;
+import com.fpc.football_booking.exception.ConflictException;
 import com.fpc.football_booking.exception.ResourceNotFoundException;
 import com.fpc.football_booking.mapper.FootballFieldMapper;
 import com.fpc.football_booking.repository.FootballFieldRepository;
@@ -35,6 +36,7 @@ public class FootballFieldService
 
     }
 
+    @Transactional
     public void disable(Long id) {
 
 
@@ -64,7 +66,7 @@ public class FootballFieldService
 
         if(footballFieldRepository.existsByName(dto.getName())) {
 
-            throw new BusinessException(
+            throw new ConflictException(
                     "Football field already exists"
             );
 
@@ -102,6 +104,28 @@ public class FootballFieldService
                 footballFieldRepository.findByActiveTrue()
         );
 
+    }
+
+    @Override
+    @Transactional
+    public FootballFieldDto update(
+            FootballFieldDto dto
+    ) {
+
+        FootballField field =
+                footballFieldRepository.findById(dto.getId())
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Football field not found"
+                                )
+                        );
+
+        field.setName(dto.getName());
+
+        FootballField updated =
+                footballFieldRepository.save(field);
+
+        return converter.toDTO(updated);
     }
 
 }

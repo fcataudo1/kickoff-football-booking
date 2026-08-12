@@ -88,57 +88,19 @@ public class ReservationMapper
     @Override
     public Reservation toEntity(ReservationDto dto) {
 
-
         if (dto == null) {
             return null;
         }
 
-
         Reservation entity = new Reservation();
 
-
-        entity.setId(
-                dto.getId()
-        );
-
-
-        entity.setCustomerName(
-                dto.getCustomerName()
-        );
-
-
-        entity.setCustomerPhone(
-                dto.getCustomerPhone()
-        );
-
-
-        entity.setCustomerEmail(
-                dto.getCustomerEmail()
-        );
-
-
-        entity.setReservationDate(
-                dto.getReservationDate()
-        );
-
-
-        entity.setStartTime(
-                dto.getStartTime()
-        );
-
-
-        entity.setStatus(
-                dto.getStatus()
-        );
-
-
-        entity.setPrice(
-                dto.getPrice()
-        );
-
+        entity.setCustomerName(dto.getCustomerName());
+        entity.setCustomerPhone(dto.getCustomerPhone());
+        entity.setCustomerEmail(dto.getCustomerEmail());
+        entity.setReservationDate(dto.getReservationDate());
+        entity.setStartTime(dto.getStartTime());
 
         return entity;
-
     }
 
 }

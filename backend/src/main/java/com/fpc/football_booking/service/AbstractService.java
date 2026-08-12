@@ -66,15 +66,23 @@ public abstract class AbstractService<ENTITY, DTO>
 
         ENTITY entity = converter.toEntity(dto);
 
-        ENTITY updatedEntity = repository.save(entity);
+        ENTITY updatedEntity =
+                repository.save(entity);
 
         return converter.toDTO(updatedEntity);
     }
 
-
     @Override
     @Transactional
     public void delete(Long id) {
+
+        if (!repository.existsById(id)) {
+
+            throw new ResourceNotFoundException(
+                    "Entity not found"
+            );
+
+        }
 
         repository.deleteById(id);
     }

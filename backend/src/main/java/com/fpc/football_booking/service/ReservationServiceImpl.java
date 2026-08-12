@@ -6,6 +6,7 @@ import com.fpc.football_booking.entity.FootballField;
 import com.fpc.football_booking.entity.Reservation;
 import com.fpc.football_booking.entity.enums.ReservationStatus;
 import com.fpc.football_booking.exception.BusinessException;
+import com.fpc.football_booking.exception.ConflictException;
 import com.fpc.football_booking.exception.ResourceNotFoundException;
 import com.fpc.football_booking.mapper.ReservationMapper;
 import com.fpc.football_booking.repository.FootballFieldRepository;
@@ -51,11 +52,36 @@ public class ReservationServiceImpl implements ReservationService {
             ReservationDto dto
     ) {
 
+
+        if (dto.getReservationDate().isBefore(LocalDate.now())) {
+
+            throw new BusinessException(
+                    "Reservation date cannot be in the past"
+            );
+
+        }
+
         validateReservationTime(
                 dto.getStartTime()
         );
 
 
+
+        if (reservationRepository
+                .existsConfirmedReservation(
+                        dto.getCustomerPhone(),
+                        dto.getReservationDate(),
+                        dto.getStartTime()
+                )) {
+
+            throw new ConflictException(
+                    "You already have a reservation for this time"
+            );
+
+        }
+
+
+        // Cerca un campo disponibile
         List<FootballField> availableFields =
                 fieldRepository.findAvailableFields(
                         dto.getReservationDate(),
@@ -65,8 +91,8 @@ public class ReservationServiceImpl implements ReservationService {
 
         if(availableFields.isEmpty()){
 
-            throw new BusinessException(
-                    "Nessun campo disponibile"
+            throw new ConflictException(
+                    "No football field available"
             );
 
         }
@@ -77,7 +103,6 @@ public class ReservationServiceImpl implements ReservationService {
 
         Reservation reservation =
                 reservationMapper.toEntity(dto);
-
 
 
         reservation.setFootballField(

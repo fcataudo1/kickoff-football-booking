@@ -1,7 +1,6 @@
 package com.fpc.football_booking.dto;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -9,13 +8,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class FootballFieldDto {
 
-
     private Long id;
 
-
+    @NotBlank(message = "Football field name is required")
     private String name;
 
-
     private boolean active;
-
 }
