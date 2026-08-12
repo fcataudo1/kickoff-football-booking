@@ -148,6 +148,12 @@ Le prenotazioni rispettano alcune regole definite nel backend:
 - Non è possibile prenotare una data passata
 - Il campo deve essere disponibile per la data e l'orario selezionati
 
+## 💰 Prezzo
+
+Il prezzo della prenotazione viene impostato dal backend a:
+
+**50 € per partita**
+
 ## 🚀 Sviluppi futuri
 
 - Registrazione, login e autenticazione utenti
@@ -157,12 +163,6 @@ Le prenotazioni rispettano alcune regole definite nel backend:
 - Calendario e notifiche email
 - Pagamenti online
 - Spring Security e gestione delle autorizzazioni
-
-## 💰 Prezzo
-
-Il prezzo della prenotazione viene impostato dal backend a:
-
-**50 € per partita**
 
 ## ▶️ Avvio del progetto
 
