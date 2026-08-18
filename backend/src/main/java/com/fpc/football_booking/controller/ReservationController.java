@@ -31,9 +31,7 @@ public class ReservationController {
     public ReservationController(
             ReservationService reservationService
     ) {
-
         this.reservationService = reservationService;
-
     }
 
 
@@ -53,7 +51,7 @@ public class ReservationController {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Campo non trovato"
+                    description = "Utente non trovato"
             ),
             @ApiResponse(
                     responseCode = "409",
@@ -61,15 +59,18 @@ public class ReservationController {
             )
     })
     public ResponseEntity<ReservationDto> create(
-            @Valid @RequestBody ReservationDto dto
+            @Valid @RequestBody ReservationDto dto,
+            @RequestParam Long userId
     ) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(
-                        reservationService.createReservation(dto)
+                        reservationService.createReservation(
+                                dto,
+                                userId
+                        )
                 );
-
     }
 
 
@@ -85,7 +86,6 @@ public class ReservationController {
     public List<ReservationDto> getAll() {
 
         return reservationService.getAllReservations();
-
     }
 
 
@@ -113,7 +113,6 @@ public class ReservationController {
                 fieldId,
                 date
         );
-
     }
 
 
@@ -141,7 +140,5 @@ public class ReservationController {
         return ResponseEntity
                 .noContent()
                 .build();
-
     }
-
 }

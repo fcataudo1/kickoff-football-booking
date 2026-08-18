@@ -22,19 +22,6 @@ public class ReservationDto {
 
     private Long id;
 
-    @NotBlank(message = "Customer name is required")
-    private String customerName;
-
-    @NotBlank(message = "Customer phone is required")
-    @Pattern(
-            regexp = "^[0-9]{10}$",
-            message = "Customer phone must contain 10 digits"
-    )
-    private String customerPhone;
-
-    @Email(message = "Customer email must be valid")
-    private String customerEmail;
-
     @NotNull(message = "Reservation date is required")
     private LocalDate reservationDate;
 
@@ -46,4 +33,6 @@ public class ReservationDto {
     private BigDecimal price;
 
     private FootballFieldDto footballField;
+
+    private UserResponseDto user;
 }

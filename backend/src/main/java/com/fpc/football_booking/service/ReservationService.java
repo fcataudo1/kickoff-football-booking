@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface ReservationService {
 
-
     ReservationDto createReservation(
-            ReservationDto dto
+            ReservationDto dto,
+            Long userId
     );
 
 

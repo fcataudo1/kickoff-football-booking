@@ -1,5 +1,7 @@
 package com.fpc.football_booking.seeder;
 
+import com.fpc.football_booking.entity.User;
+import com.fpc.football_booking.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.fpc.football_booking.entity.FootballField;
@@ -19,50 +21,40 @@ import java.util.List;
 
 @Component
 @Profile("dev")
-@Order(2)
+@Order(3)
 public class ReservationSeeder implements CommandLineRunner {
-
 
     private static final Logger logger =
             LoggerFactory.getLogger(ReservationSeeder.class);
 
-
     private static final BigDecimal FIXED_PRICE =
             new BigDecimal("50.00");
 
-
-
     private final ReservationRepository reservationRepository;
-
     private final FootballFieldRepository fieldRepository;
-
+    private final UserRepository userRepository;
 
 
     public ReservationSeeder(
             ReservationRepository reservationRepository,
-            FootballFieldRepository fieldRepository
+            FootballFieldRepository fieldRepository,
+            UserRepository userRepository
     ) {
-
         this.reservationRepository = reservationRepository;
         this.fieldRepository = fieldRepository;
-
+        this.userRepository = userRepository;
     }
-
 
 
     @Override
     public void run(String... args) {
 
-
-        if(reservationRepository.count() == 0) {
-
+        if (reservationRepository.count() == 0) {
 
             FootballField field1 =
                     fieldRepository
                             .findByName("Campo 1")
                             .orElseThrow();
-
-
 
             FootballField field2 =
                     fieldRepository
@@ -70,39 +62,44 @@ public class ReservationSeeder implements CommandLineRunner {
                             .orElseThrow();
 
 
+            User cliente =
+                    userRepository
+                            .findByEmail("mario.rossi@example.com")
+                            .orElseThrow();
+
+            User receptionist =
+                    userRepository
+                            .findByEmail("luca.bianchi@example.com")
+                            .orElseThrow();
+
+            User admin =
+                    userRepository
+                            .findByEmail("admin@kickoff.com")
+                            .orElseThrow();
 
 
             Reservation reservation1 =
                     createReservation(
-                            "Mario Rossi",
-                            "3331111111",
-                            "mario@test.com",
+                            cliente,
                             field1,
-                            LocalTime.of(18,0)
+                            LocalTime.of(18, 0)
                     );
-
 
 
             Reservation reservation2 =
                     createReservation(
-                            "Luca Bianchi",
-                            "3332222222",
-                            "luca@test.com",
+                            receptionist,
                             field1,
-                            LocalTime.of(20,0)
+                            LocalTime.of(20, 0)
                     );
-
 
 
             Reservation reservation3 =
                     createReservation(
-                            "Giuseppe Verdi",
-                            "3333333333",
-                            "giuseppe@test.com",
+                            admin,
                             field2,
-                            LocalTime.of(21,0)
+                            LocalTime.of(21, 0)
                     );
-
 
 
             reservationRepository.saveAll(
@@ -114,89 +111,45 @@ public class ReservationSeeder implements CommandLineRunner {
             );
 
 
-
             logger.info(
                     "ReservationSeeder initialized: 3 reservations created"
             );
 
-
         } else {
-
 
             logger.info(
                     "ReservationSeeder skipped: database already contains data"
             );
-
         }
-
-
     }
 
 
-
-
-
     private Reservation createReservation(
-            String customerName,
-            String customerPhone,
-            String customerEmail,
+            User user,
             FootballField field,
             LocalTime startTime
     ) {
 
-
         Reservation reservation = new Reservation();
 
 
+        reservation.setUser(user);
 
-        reservation.setCustomerName(
-                customerName
-        );
-
-
-        reservation.setCustomerPhone(
-                customerPhone
-        );
-
-
-        reservation.setCustomerEmail(
-                customerEmail
-        );
-
-
-
-        reservation.setFootballField(
-                field
-        );
-
-
+        reservation.setFootballField(field);
 
         reservation.setReservationDate(
                 LocalDate.now().plusDays(1)
         );
 
+        reservation.setStartTime(startTime);
 
-
-        reservation.setStartTime(
-                startTime
-        );
-
-
-
-        reservation.setPrice(
-                FIXED_PRICE
-        );
-
-
+        reservation.setPrice(FIXED_PRICE);
 
         reservation.setStatus(
                 ReservationStatus.CONFIRMED
         );
 
 
-
         return reservation;
-
     }
-
 }

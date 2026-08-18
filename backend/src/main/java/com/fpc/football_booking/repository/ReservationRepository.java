@@ -16,18 +16,16 @@ import java.util.List;
 public interface ReservationRepository
         extends JpaRepository<Reservation, Long> {
 
-
-
     @Query("""
         SELECT COUNT(r) > 0
         FROM Reservation r
-        WHERE r.customerPhone = :phone
+        WHERE r.user.id = :userId
         AND r.reservationDate = :date
         AND r.startTime = :time
         AND r.status = 'CONFIRMED'
     """)
     boolean existsConfirmedReservation(
-            @Param("phone") String phone,
+            @Param("userId") Long userId,
             @Param("date") LocalDate date,
             @Param("time") LocalTime time
     );
@@ -37,7 +35,4 @@ public interface ReservationRepository
             Long footballFieldId,
             LocalDate reservationDate
     );
-
-
-
 }
