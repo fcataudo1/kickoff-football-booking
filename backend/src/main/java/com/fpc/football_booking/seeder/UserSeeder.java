@@ -9,10 +9,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
-
-
 @Component
 @Profile("dev")
 @Order(2)
@@ -22,12 +21,15 @@ public class UserSeeder implements CommandLineRunner {
             LoggerFactory.getLogger(UserSeeder.class);
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     public UserSeeder(
-            UserRepository userRepository
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder
     ) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -48,7 +50,9 @@ public class UserSeeder implements CommandLineRunner {
                 .nome("Mario")
                 .cognome("Rossi")
                 .email("mario.rossi@example.com")
-                .password("password")
+                .password(
+                        passwordEncoder.encode("password")
+                )
                 .telefono("3331111111")
                 .ruolo(Role.CLIENTE)
                 .build();
@@ -58,7 +62,9 @@ public class UserSeeder implements CommandLineRunner {
                 .nome("Luca")
                 .cognome("Bianchi")
                 .email("luca.bianchi@example.com")
-                .password("password")
+                .password(
+                        passwordEncoder.encode("password")
+                )
                 .telefono("3332222222")
                 .ruolo(Role.RECEPTIONIST)
                 .build();
@@ -68,7 +74,9 @@ public class UserSeeder implements CommandLineRunner {
                 .nome("Francesco")
                 .cognome("Cataudo")
                 .email("admin@kickoff.com")
-                .password("password")
+                .password(
+                        passwordEncoder.encode("password")
+                )
                 .telefono("3333333333")
                 .ruolo(Role.ADMIN)
                 .build();

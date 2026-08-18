@@ -8,6 +8,7 @@ import com.fpc.football_booking.exception.ConflictException;
 import com.fpc.football_booking.exception.ResourceNotFoundException;
 import com.fpc.football_booking.mapper.UserMapper;
 import com.fpc.football_booking.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,14 +19,17 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
 
     public UserServiceImpl(
             UserRepository userRepository,
-            UserMapper userMapper
+            UserMapper userMapper,
+            PasswordEncoder passwordEncoder
     ) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -53,11 +57,15 @@ public class UserServiceImpl implements UserService {
 
         User user = userMapper.toEntity(dto);
 
+        user.setPassword(
+                passwordEncoder.encode(
+                        dto.getPassword()
+                )
+        );
 
         user.setRuolo(
                 Role.CLIENTE
         );
-
 
         User saved =
                 userRepository.save(user);

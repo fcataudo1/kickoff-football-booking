@@ -6,6 +6,7 @@ import com.fpc.football_booking.dto.ReservationDto;
 import java.time.LocalDate;
 import java.util.List;
 
+
 public interface ReservationService {
 
     ReservationDto createReservation(
@@ -24,7 +25,10 @@ public interface ReservationService {
 
 
     void cancelReservation(
-            Long reservationId
+            Long reservationId,
+            Long userId
     );
+
+    List<ReservationDto> getMyReservations(Long userId);
 
 }

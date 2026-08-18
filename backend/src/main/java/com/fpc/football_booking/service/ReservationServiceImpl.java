@@ -159,11 +159,23 @@ public class ReservationServiceImpl implements ReservationService {
         );
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReservationDto> getMyReservations(
+            Long userId
+    ) {
+
+        return reservationMapper.toDTOList(
+                reservationRepository.findByUserId(userId)
+        );
+    }
+
 
     @Override
     @Transactional
     public void cancelReservation(
-            Long reservationId
+            Long reservationId,
+            Long userId
     ) {
 
         Reservation reservation =
@@ -181,6 +193,15 @@ public class ReservationServiceImpl implements ReservationService {
 
             throw new BusinessException(
                     "Reservation already cancelled"
+            );
+        }
+
+
+        if (!reservation.getUser().getId()
+                .equals(userId)) {
+
+            throw new BusinessException(
+                    "You can only cancel your own reservations"
             );
         }
 

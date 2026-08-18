@@ -16,6 +16,7 @@ import java.util.List;
 public interface ReservationRepository
         extends JpaRepository<Reservation, Long> {
 
+
     @Query("""
         SELECT COUNT(r) > 0
         FROM Reservation r
@@ -34,5 +35,10 @@ public interface ReservationRepository
     List<Reservation> findByFootballFieldIdAndReservationDate(
             Long footballFieldId,
             LocalDate reservationDate
+    );
+
+
+    List<Reservation> findByUserId(
+            Long userId
     );
 }

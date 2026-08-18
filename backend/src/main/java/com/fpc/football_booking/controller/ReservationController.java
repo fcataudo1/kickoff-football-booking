@@ -15,6 +15,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import com.fpc.football_booking.entity.User;
+import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -60,15 +62,17 @@ public class ReservationController {
     })
     public ResponseEntity<ReservationDto> create(
             @Valid @RequestBody ReservationDto dto,
-            @RequestParam Long userId
+            Authentication authentication
     ) {
+
+        User user = (User) authentication.getPrincipal();
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(
                         reservationService.createReservation(
                                 dto,
-                                userId
+                                user.getId()
                         )
                 );
     }
@@ -88,6 +92,25 @@ public class ReservationController {
         return reservationService.getAllReservations();
     }
 
+    @GetMapping("/my")
+    @Operation(
+            summary = "Recupera le proprie prenotazioni",
+            description = "Restituisce le prenotazioni dell'utente autenticato."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Prenotazioni recuperate correttamente"
+    )
+    public List<ReservationDto> getMyReservations(
+            Authentication authentication
+    ) {
+
+        User user = (User) authentication.getPrincipal();
+
+        return reservationService.getMyReservations(
+                user.getId()
+        );
+    }
 
     @GetMapping("/field/{fieldId}")
     @Operation(
@@ -132,10 +155,16 @@ public class ReservationController {
             )
     })
     public ResponseEntity<Void> cancel(
-            @PathVariable Long id
+            @PathVariable Long id,
+            Authentication authentication
     ) {
 
-        reservationService.cancelReservation(id);
+        User user = (User) authentication.getPrincipal();
+
+        reservationService.cancelReservation(
+                id,
+                user.getId()
+        );
 
         return ResponseEntity
                 .noContent()
