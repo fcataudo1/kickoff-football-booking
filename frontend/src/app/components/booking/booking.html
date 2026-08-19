@@ -1,4 +1,6 @@
-<!-- FORM PRENOTAZIONE -->
+<!-- ========================= -->
+<!-- SEZIONE PRENOTAZIONE -->
+<!-- ========================= -->
 
 <section class="booking" id="booking">
 
@@ -13,223 +15,265 @@
         </p>
 
 
-        <div class="booking-box shadow rounded-4 p-4 d-flex justify-content-center align-items-end gap-4">
+        <!-- ========================= -->
+        <!-- UTENTE NON AUTENTICATO -->
+        <!-- ========================= -->
+
+        <!-- ========================= -->
+<!-- UTENTE AUTENTICATO -->
+<!-- ========================= -->
+
+@if (isLoggedIn) {
 
 
-            <!-- DATA -->
+    <!-- ========================= -->
+    <!-- CLIENTE -->
+    <!-- ========================= -->
 
-            <div class="text-start">
+    @if (isCliente) {
 
-                <label class="form-label fw-bold text-success">
-                    Data
-                </label>
+        <div class="booking-box shadow rounded-4 p-4">
 
-                <input
-                    class="form-control"
-                    [class.is-invalid]="bookingSubmitted && !reservationDate"
-                    type="date"
-                    [min]="minDate"
-                    [(ngModel)]="reservationDate"
-                    (change)="onDateChange()">
+            <div class="mb-4">
 
-
-                @if (bookingSubmitted && !reservationDate) {
-
-                    <div class="invalid-feedback">
-                        Seleziona una data.
-                    </div>
-
-                }
+                <i
+                    class="bi bi-calendar-check text-success"
+                    style="font-size: 48px;">
+                </i>
 
             </div>
 
 
-            <!-- ORARIO -->
+            <h4 class="fw-bold mb-4">
+                Nuova prenotazione
+            </h4>
 
-            <div class="text-start">
 
-                <label class="form-label fw-bold text-success">
-                    Orario
-                </label>
+            <div class="booking-form text-start">
 
-                <select
-                    class="form-select"
-                    [class.is-invalid]="bookingSubmitted && !startTime"
-                    [(ngModel)]="startTime">
 
-                    <option value="" disabled>
-                        Seleziona orario
-                    </option>
+                <!-- DATA -->
 
-                    @for (time of filteredTimes; track time) {
+                <div class="mb-3">
 
-                        <option [value]="time">
-                            {{ time }}
-                        </option>
+                    <label
+                        for="reservationDate"
+                        class="form-label fw-bold">
+
+                        Data
+
+                    </label>
+
+
+                    <input
+                        id="reservationDate"
+                        type="date"
+                        class="form-control"
+                        [class.is-invalid]="dateErrorMessage"
+                        [min]="minDate"
+                        [(ngModel)]="reservationDate"
+                        (ngModelChange)="dateErrorMessage = ''">
+
+
+                    @if (dateErrorMessage) {
+
+                        <div class="field-error">
+
+                            <i class="bi bi-exclamation-circle-fill"></i>
+
+                            {{ dateErrorMessage }}
+
+                        </div>
 
                     }
 
-                </select>
+                </div>
 
 
-                @if (bookingSubmitted && !startTime) {
+                <!-- ORARIO -->
 
-                    <div class="invalid-feedback">
-                        Seleziona un orario.
-                    </div>
+                <div class="mb-4">
 
-                }
+                    <label
+                        for="startTime"
+                        class="form-label fw-bold">
+
+                        Orario
+
+                    </label>
+
+
+                    <select
+                        id="startTime"
+                        class="form-select"
+                        [class.is-invalid]="timeErrorMessage"
+                        [(ngModel)]="startTime"
+                        (ngModelChange)="timeErrorMessage = ''">
+
+                        <option
+                            value=""
+                            disabled>
+
+                            Seleziona un orario
+
+                        </option>
+
+
+                        @for (
+                            time of availableTimes;
+                            track time
+                        ) {
+
+                            <option
+                                [value]="time">
+
+                                {{ time }}
+
+                            </option>
+
+                        }
+
+                    </select>
+
+
+                    @if (timeErrorMessage) {
+
+                        <div class="field-error">
+
+                            <i class="bi bi-exclamation-circle-fill"></i>
+
+                            {{ timeErrorMessage }}
+
+                        </div>
+
+                    }
+
+                </div>
+
+
+                <!-- BOTTONE -->
+
+                <div class="text-center">
+
+                    <button
+                        type="button"
+                        class="btn btn-success rounded-pill px-4"
+                        [disabled]="loading"
+                        (click)="openBooking()">
+
+                        @if (loading) {
+
+                            <span
+                                class="spinner-border spinner-border-sm me-2">
+                            </span>
+
+                            Prenotazione...
+
+                        }
+
+                        @else {
+
+                            <i
+                                class="bi bi-calendar-plus me-2">
+                            </i>
+
+                            Prenota
+
+                        }
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    }
+
+
+    <!-- ========================= -->
+    <!-- RECEPTIONIST -->
+    <!-- ========================= -->
+
+    @if (isReceptionist) {
+
+        <div class="booking-box shadow rounded-4 p-5">
+
+            <div class="mb-3">
+
+                <i
+                    class="bi bi-person-badge text-success"
+                    style="font-size: 48px;">
+                </i>
 
             </div>
 
 
-            <!-- BOTTONE -->
+            <h4 class="fw-bold mb-3">
 
-            <button
-                type="button"
-                class="btn btn-success rounded-pill px-4"
-                (click)="openReservation()">
+                Gestione prenotazioni
 
-                Continua
-
-            </button>
+            </h4>
 
 
-        </div>
+            <p class="text-muted mb-0">
 
-    </div>
+                Il receptionist non effettua prenotazioni
+                come cliente.
 
-</section>
+                <br>
 
+                Puoi gestire le prenotazioni dei clienti
+                dalla sezione
 
+                <strong>
+                    Prenotazioni
+                </strong>
 
+                nella barra di navigazione.
 
-<!-- MODALE FORM -->
-
-@if (showReservation) {
-
-    <div class="modal-backdrop-custom">
-
-        <div class="modal-box shadow rounded-4 position-relative">
-
-
-            <!-- X -->
-
-            <button
-                type="button"
-                class="btn-close position-absolute top-0 end-0 m-3"
-                aria-label="Close"
-                (click)="closeModal()">
-            </button>
-
-
-            <!-- FORM PRENOTAZIONE -->
-
-            <app-reservation-form
-
-                [reservationDate]="reservationDate"
-
-                [startTime]="startTime"
-
-                (reservationCompleted)="closeReservation($event)"
-
-                (reservationError)="showError()">
-
-            </app-reservation-form>
-
+            </p>
 
         </div>
 
-    </div>
-
-}
+    }
 
 
+    <!-- ========================= -->
+    <!-- ADMIN -->
+    <!-- ========================= -->
+
+    @if (isAdmin) {
+
+        <div class="booking-box shadow rounded-4 p-5">
+
+            <div class="mb-3">
+
+                <i
+                    class="bi bi-shield-lock text-success"
+                    style="font-size: 48px;">
+                </i>
+
+            </div>
 
 
-<!-- POPUP SUCCESSO -->
+            <h4 class="fw-bold mb-3">
 
-@if (reservationSuccess) {
+                Area amministrativa
 
-    <div class="success-popup shadow rounded-4">
-
-        <i class="bi bi-check-circle"></i>
-
-        <h3>
-            Prenotazione confermata!
-        </h3>
+            </h4>
 
 
-        <p>
-            Campo:
+            <p class="text-muted mb-0">
 
-            <strong>
-                {{ confirmedReservation?.footballField?.name }}
-            </strong>
-        </p>
+                La prenotazione online è riservata
+                agli utenti con ruolo Cliente.
 
+            </p>
 
-        <p>
-            Data:
+        </div>
 
-            {{ confirmedReservation?.reservationDate }}
-        </p>
-
-
-        <p>
-            Orario:
-
-            <strong>
-                {{ confirmedReservation?.startTime | slice:0:5 }}
-            </strong>
-        </p>
-
-
-        <button
-            type="button"
-            class="btn btn-success rounded-pill"
-            (click)="closeSuccess()">
-
-            Chiudi
-
-        </button>
-
-    </div>
-
-}
-
-
-
-
-<!-- POPUP ERRORE -->
-
-@if (reservationError) {
-
-    <div class="success-popup error-popup shadow rounded-4">
-
-        <i class="bi bi-x-circle"></i>
-
-        <h3>
-            Prenotazione non riuscita
-        </h3>
-
-
-        <p>
-            Il campo potrebbe essere già occupato.
-            <br>
-            Riprova con un altro orario.
-        </p>
-
-
-        <button
-            type="button"
-            class="btn btn-danger rounded-pill"
-            (click)="closeError()">
-
-            Chiudi
-
-        </button>
-
-    </div>
+    }
 
 }

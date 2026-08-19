@@ -11,6 +11,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.http.HttpMethod;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -36,6 +41,8 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
+
+                .cors(cors -> {})
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
@@ -121,9 +128,7 @@ public class SecurityConfig {
                         // Creazione prenotazione
                         .requestMatchers(HttpMethod.POST, "/api/reservations")
                         .hasAnyRole(
-                                "CLIENTE",
-                                "RECEPTIONIST",
-                                "ADMIN"
+                                "CLIENTE"
                         )
 
 
@@ -167,10 +172,22 @@ public class SecurityConfig {
                                 "/api/reservations/**"
                         )
                         .hasAnyRole(
-                                "CLIENTE",
-                                "RECEPTIONIST",
-                                "ADMIN"
+                                "CLIENTE"
                         )
+
+
+                                // =========================
+                                // ANNULLAMENTO RECEPTIONIST
+                                // =========================
+
+                                .requestMatchers(
+                                        HttpMethod.PATCH,
+                                        "/api/reservations/*/cancel"
+                                )
+                                .hasAnyRole(
+                                        "RECEPTIONIST",
+                                        "ADMIN"
+                                )
 
 
                         // Tutto il resto
@@ -184,5 +201,43 @@ public class SecurityConfig {
                 );
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration configuration =
+                new CorsConfiguration();
+
+        configuration.setAllowedOrigins(
+                List.of("http://localhost:4200")
+        );
+
+        configuration.setAllowedMethods(
+                List.of(
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "PATCH",
+                        "DELETE",
+                        "OPTIONS"
+                )
+        );
+
+        configuration.setAllowedHeaders(
+                List.of("*")
+        );
+
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration(
+                "/**",
+                configuration
+        );
+
+        return source;
     }
 }

@@ -1,158 +1,500 @@
-.booking-box{
+/* ================================================= */
+/* BOOKING */
+/* ================================================= */
 
-    max-width:700px;
+.booking {
+    position: relative;
 
-    margin:-20px auto 0;
+    padding: 70px 0 100px;
 
-    display:flex;
-
-    gap:25px;
-
-    align-items:end;
-
-    background:white;
-
-    padding:35px;
-
-    border-radius:20px;
-
-    box-shadow:0 10px 30px rgba(0,0,0,0.12);
-
-}
-
-.booking{
-
-    position:relative;
-
-    padding:70px 0 100px;
-
-    background:white;
-
+    background: white;
 }
 
 
+/* ================================================= */
+/* BOOKING BOX */
+/* ================================================= */
 
-.booking::after{
+.booking-box {
+    max-width: 650px;
 
-    content:"";
+    margin: 30px auto 0;
 
-    position:absolute;
+    padding: 40px;
 
-    bottom:-1px;
-
-    left:0;
-
-    width:100%;
-
-    height:60px;
-
-    background:#f8f9fa;
-
-    clip-path:ellipse(70% 50% at 50% 100%);
-
-}
-
-.modal-backdrop-custom {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, .6);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    z-index: 1050;
-
-    padding: 20px;
-
-    overflow-y: auto;
-}
-
-
-.modal-box {
     background: white;
 
-    width: 500px;
-    max-width: 100%;
+    border-radius: 20px;
 
-    max-height: 90vh;
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.12);
 
-    overflow-y: auto;
-
-    padding: 30px;
-
-    border-radius: 15px;
-
-    position: relative;
+    text-align: center;
 }
 
 
-.success-popup{
+/* ================================================= */
+/* ICONA */
+/* ================================================= */
 
-position:fixed;
+.booking-box i {
+    display: inline-block;
 
-top:50%;
+    margin-bottom: 5px;
+}
 
-left:50%;
 
-transform:translate(-50%,-50%);
+/* ================================================= */
+/* TITOLO */
+/* ================================================= */
 
-background:white;
+.booking-box h4 {
+    color: #1e293b;
 
-padding:40px;
+    font-size: 20px;
+}
 
-z-index:2000;
 
-text-align:center;
+/* ================================================= */
+/* TESTO */
+/* ================================================= */
+
+.booking-box p {
+    max-width: 500px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    line-height: 1.6;
+}
+
+
+/* ================================================= */
+/* FORM */
+/* ================================================= */
+
+.booking-form {
+    max-width: 500px;
+
+    margin: 0 auto;
+}
+
+
+/* ================================================= */
+/* LABEL */
+/* ================================================= */
+
+.booking-form .form-label {
+    color: #334155;
+
+    font-size: 14px;
+}
+
+
+/* ================================================= */
+/* INPUT E SELECT */
+/* ================================================= */
+
+.booking-form .form-control,
+.booking-form .form-select {
+    min-height: 44px;
+
+    border: 1px solid #dbe2ea;
+
+    border-radius: 10px;
+
+    color: #334155;
+
+    font-size: 14px;
+
+    transition:
+        border-color .2s,
+        box-shadow .2s;
+}
+
+
+.booking-form .form-control:focus,
+.booking-form .form-select:focus {
+
+    border-color: #198754;
+
+    box-shadow:
+        0 0 0 3px rgba(25, 135, 84, 0.10);
+}
+
+
+/* ================================================= */
+/* BUTTON */
+/* ================================================= */
+
+.booking-box button {
+    min-height: 44px;
+
+    padding: 10px 25px;
+
+    font-weight: 600;
+
+    transition:
+        transform .2s,
+        box-shadow .2s;
+}
+
+
+.booking-box button:hover:not(:disabled) {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 15px rgba(25, 135, 84, 0.20);
+}
+
+
+.booking-box button:disabled {
+
+    opacity: .7;
+
+    cursor: not-allowed;
+}
+
+/* ================================================= */
+/* ERRORE VALIDAZIONE CAMPO */
+/* ================================================= */
+
+.field-error {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 7px;
+
+    color: #dc3545;
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+    line-height: 1.4;
+
+    animation:
+        validationError .2s ease-out;
+}
+
+
+.field-error i {
+
+    margin: 0;
+
+    color: #dc3545;
+
+    font-size: 13px;
+
+    flex-shrink: 0;
+}
+
+
+/* ================================================= */
+/* CAMPO CON ERRORE */
+/* ================================================= */
+
+.booking-form .form-control.is-invalid,
+.booking-form .form-select.is-invalid {
+
+    border-color: #dc3545;
+
+    background-image: none;
+
+    box-shadow: none;
+}
+
+
+.booking-form .form-control.is-invalid:focus,
+.booking-form .form-select.is-invalid:focus {
+
+    border-color: #dc3545;
+
+    box-shadow:
+        0 0 0 3px rgba(220, 53, 69, 0.10);
+}
+
+
+/* ================================================= */
+/* ANIMAZIONE ERRORE */
+/* ================================================= */
+
+@keyframes validationError {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(-3px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
 
 }
 
 
-.success-popup i{
+/* ================================================= */
+/* CURVA INFERIORE */
+/* ================================================= */
 
-font-size:60px;
+.booking::after {
 
-color:#22c55e;
+    content: "";
+
+    position: absolute;
+
+    bottom: -1px;
+    left: 0;
+
+    width: 100%;
+    height: 60px;
+
+    background: #f8f9fa;
+
+    clip-path:
+        ellipse(70% 50% at 50% 100%);
+}
+
+
+/* ================================================= */
+/* POPUP PRENOTAZIONE */
+/* ================================================= */
+
+.success-popup {
+
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 420px;
+    max-width: 90%;
+
+    padding: 35px;
+
+    background: white;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 20px;
+
+    z-index: 2000;
+
+    text-align: center;
+
+    box-shadow:
+        0 25px 70px rgba(15, 23, 42, .25);
+
+    animation:
+        bookingPopupIn .2s ease-out;
+}
+
+
+@keyframes bookingPopupIn {
+
+    from {
+        opacity: 0;
+        transform:
+            translate(-50%, -47%);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translate(-50%, -50%);
+    }
 
 }
 
-.error-popup i{
 
-    color:#dc2626;
+/* ================================================= */
+/* ICONA POPUP */
+/* ================================================= */
 
+.success-popup > i {
+
+    display: block;
+
+    margin-bottom: 15px;
+
+    font-size: 55px;
+
+    color: #22c55e;
 }
+
+
+/* ================================================= */
+/* TITOLO POPUP */
+/* ================================================= */
+
+.success-popup h3 {
+
+    margin-bottom: 20px;
+
+    color: #1e293b;
+
+    font-size: 21px;
+
+    font-weight: 700;
+}
+
+
+/* ================================================= */
+/* TESTO POPUP */
+/* ================================================= */
+
+.success-popup p {
+
+    margin-bottom: 9px;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+.success-popup strong {
+
+    color: #334155;
+}
+
+
+/* ================================================= */
+/* BUTTON POPUP */
+/* ================================================= */
+
+.success-popup button {
+
+    margin-top: 18px;
+
+    min-width: 100px;
+
+    min-height: 40px;
+
+    font-weight: 600;
+}
+
+
+/* ================================================= */
+/* POPUP ERRORE BACKEND */
+/* ================================================= */
+
+.error-popup {
+
+    border-color: #fecaca;
+}
+
+
+.error-popup > i {
+
+    color: #dc2626;
+}
+
+
+.error-popup h3 {
+
+    color: #991b1b;
+}
+
+
+.error-popup .btn-danger {
+
+    margin-top: 18px;
+}
+
+
+/* ================================================= */
+/* MOBILE */
+/* ================================================= */
 
 @media (max-width: 768px) {
 
-    .booking-box {
-        flex-direction: column;
-        align-items: stretch !important;
-        gap: 15px;
-        margin: 0 auto;
-        padding: 25px;
+    .booking {
+
+        padding:
+            50px 0 80px;
     }
 
-    .booking-box > div {
-        width: 100%;
+
+    .booking-box {
+
+        width: 90%;
+
+        margin: 25px auto 0;
+
+        padding: 30px 25px;
     }
+
+
+    .booking-box h4 {
+
+        font-size: 18px;
+    }
+
+
+    .booking-box p {
+
+        font-size: 14px;
+    }
+
 
     .booking-box button {
+
         width: 100%;
     }
 
 }
 
+
+/* ================================================= */
+/* SMALL MOBILE */
+/* ================================================= */
+
 @media (max-width: 576px) {
 
-    .modal-box {
-        width: 95%;
-        max-width: 95%;
+    .booking {
+
+        padding:
+            40px 0 70px;
+    }
+
+
+    .booking-box {
+
+        width: 92%;
+
         padding: 25px 20px;
     }
 
+
     .success-popup {
+
         width: 90%;
-        padding: 30px 20px;
+
+        padding:
+            30px 20px;
     }
+
+
+    .success-popup h3 {
+
+        font-size: 19px;
+    }
+
+
 
 }

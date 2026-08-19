@@ -58,9 +58,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token =
                 authHeader.substring(7);
 
-        System.out.println("=== JWT FILTER ===");
-        System.out.println("URI: " + request.getRequestURI());
-        System.out.println("TOKEN PRESENT: true");
 
         try {
 
@@ -81,18 +78,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                 token,
                                 user
                         )) {
-
-                    System.out.println(
-                            "USER: " + user.getEmail()
-                    );
-
-                    System.out.println(
-                            "ROLE: " + user.getRuolo()
-                    );
-
-                    System.out.println(
-                            "TOKEN VALID: true"
-                    );
 
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(

@@ -1,93 +1,818 @@
-.logo{
+ /* ================================================= */
+/* NAVBAR */
+/* ================================================= */
 
-    width:160px;
+.kickoff-navbar {
 
-}
+    background: #14532d !important;
 
+    min-height: 76px;
 
+    padding: 8px 0;
 
-.navbar{
-
-    background:#14532D !important;
-
-}
-
-
-
-.nav-link{
-
-    color:white !important;
-
-    font-size:17px;
-
-    font-weight:600;
-
-    transition:.3s;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
 }
 
 
+/* ================================================= */
+/* LOGO */
+/* ================================================= */
 
-.nav-link:hover{
+.logo {
 
-    color:#22c55e !important;
+    width: 145px;
 
-}
+    height: auto;
 
+    display: block;
 
-
-.social-icon{
-
-    width:40px;
-
-    height:40px;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    border-radius:50%;
-
-    color:white;
-
-    text-decoration:none;
-
-    font-size:22px;
-
-    transition:.3s;
+    transition: transform 0.25s ease;
 
 }
 
 
+.logo:hover {
 
-.social-icon:hover{
-
-    transform:translateY(-5px);
-
-}
-
-
-
-.instagram{
-
-    background:#E1306C;
+    transform: scale(1.03);
 
 }
 
 
+/* ================================================= */
+/* LINK NAVBAR */
+/* ================================================= */
 
-.facebook{
+.nav-link {
 
-    background:#1877F2;
+    position: relative;
+
+    padding: 10px 13px !important;
+
+    color: rgba(255, 255, 255, 0.88) !important;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    border-radius: 8px;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
 
 }
 
 
+.nav-link:hover {
 
-.tiktok{
+    color: #ffffff !important;
 
-    background:black;
+    background: rgba(255, 255, 255, 0.08);
+
+}
+
+
+.nav-link.active {
+
+    color: #ffffff !important;
+
+    background: rgba(255, 255, 255, 0.12);
+
+}
+
+
+/* ================================================= */
+/* AREA UTENTE */
+/* ================================================= */
+
+.user-area {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-right: 15px;
+
+}
+
+
+/* ================================================= */
+/* LINK PRENOTAZIONI / UTENTE */
+/* ================================================= */
+
+.user-menu-link {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 8px 11px;
+
+    border: none;
+
+    background: transparent;
+
+    color: rgba(255, 255, 255, 0.9);
+
+    text-decoration: none;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+
+}
+
+
+.user-menu-link:hover {
+
+    color: #ffffff;
+
+    background: rgba(255, 255, 255, 0.1);
+
+}
+
+
+.user-menu-link i {
+
+    font-size: 15px;
+
+}
+
+
+/* ================================================= */
+/* PROFILO */
+/* ================================================= */
+
+.user-profile {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 5px 10px 5px 6px;
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    border-radius: 30px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: white;
+
+    transition: 0.2s ease;
+
+}
+
+
+.user-profile:hover {
+
+    background: rgba(255, 255, 255, 0.14);
+
+}
+
+
+/* ================================================= */
+/* AVATAR */
+/* ================================================= */
+
+.user-avatar {
+
+    width: 34px;
+
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    color: #ffffff;
+
+    font-size: 16px;
+
+}
+
+
+/* ================================================= */
+/* INFO UTENTE */
+/* ================================================= */
+
+.user-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    line-height: 1.15;
+
+}
+
+
+.user-info strong {
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+
+.user-info small {
+
+    margin-top: 2px;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    font-size: 10px;
+
+}
+
+
+/* ================================================= */
+/* DROPDOWN */
+/* ================================================= */
+
+.dropdown-menu {
+
+    min-width: 205px;
+
+    margin-top: 10px !important;
+
+    padding: 7px;
+
+    border: none;
+
+    border-radius: 12px;
+
+}
+
+
+.dropdown-header {
+
+    padding: 7px 10px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+.dropdown-item {
+
+    padding: 9px 10px;
+
+    border-radius: 8px;
+
+    color: #334155;
+
+    font-size: 13px;
+
+}
+
+
+.dropdown-item:hover {
+
+    background: #f1f5f9;
+
+}
+
+
+.logout-item {
+
+    width: 100%;
+
+    border: none;
+
+    background: transparent;
+
+    text-align: left;
+
+    color: #dc3545;
+
+    cursor: pointer;
+
+}
+
+
+.logout-item:hover {
+
+    background: #fef2f2;
+
+    color: #dc3545;
+
+}
+
+
+/* ================================================= */
+/* LOGIN / REGISTRAZIONE */
+/* ================================================= */
+
+.auth-buttons {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+}
+
+
+.btn-login,
+.btn-register {
+
+    min-height: 37px;
+
+    padding: 7px 14px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    transition: 0.2s ease;
+
+}
+
+
+.btn-login {
+
+    border: 1px solid rgba(255, 255, 255, 0.45);
+
+    background: transparent;
+
+    color: white;
+
+}
+
+
+.btn-login:hover {
+
+    background: rgba(255, 255, 255, 0.1);
+
+    border-color: white;
+
+    color: white;
+
+}
+
+
+.btn-register {
+
+    border: none;
+
+    background: white;
+
+    color: #14532d;
+
+}
+
+
+.btn-register:hover {
+
+    background: #f0fdf4;
+
+    color: #14532d;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* ================================================= */
+/* SOCIAL */
+/* ================================================= */
+
+.social {
+
+    align-items: center;
+
+    gap: 6px;
+
+}
+
+
+.social-icon {
+
+    width: 32px;
+
+    height: 32px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    transition: transform 0.2s ease;
+
+}
+
+
+.social-icon:hover {
+
+    transform: translateY(-2px);
+
+}
+
+
+.instagram {
+
+    background: #e1306c;
+
+}
+
+
+.facebook {
+
+    background: #1877f2;
+
+}
+
+
+.tiktok {
+
+    background: #000000;
+
+}
+
+
+/* ================================================= */
+/* POPUP LOGOUT */
+/* ================================================= */
+
+.logout-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(15, 23, 42, 0.65);
+
+    backdrop-filter: blur(4px);
+
+}
+
+
+/* ================================================= */
+/* MODALE */
+/* ================================================= */
+
+.logout-modal {
+
+    width: 100%;
+
+    max-width: 390px;
+
+    padding: 30px;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+
+    text-align: center;
+
+    animation: logoutModalAppear 0.2s ease-out;
+
+}
+
+
+/* ================================================= */
+/* ICONA LOGOUT */
+/* ================================================= */
+
+.logout-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #fef2f2;
+
+    color: #dc3545;
+
+    font-size: 25px;
+
+}
+
+
+/* ================================================= */
+/* TITOLO POPUP */
+/* ================================================= */
+
+.logout-modal h4 {
+
+    margin: 0 0 9px;
+
+    color: #1e293b;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+}
+
+
+/* ================================================= */
+/* TESTO POPUP */
+/* ================================================= */
+
+.logout-modal p {
+
+    margin: 0 0 25px;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+}
+
+
+/* ================================================= */
+/* BOTTONI POPUP */
+/* ================================================= */
+
+.logout-actions {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+}
+
+
+.btn-cancel-logout,
+.btn-confirm-logout {
+
+    min-width: 110px;
+
+    padding: 9px 18px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+
+}
+
+
+/* NO */
+
+.btn-cancel-logout {
+
+    border: 1px solid #cbd5e1;
+
+    background: #ffffff;
+
+    color: #475569;
+
+}
+
+
+.btn-cancel-logout:hover {
+
+    background: #f8fafc;
+
+    border-color: #94a3b8;
+
+}
+
+
+/* SÌ, ESCI */
+
+.btn-confirm-logout {
+
+    border: 1px solid #dc3545;
+
+    background: #dc3545;
+
+    color: #ffffff;
+
+}
+
+
+.btn-confirm-logout:hover {
+
+    background: #bb2d3b;
+
+    border-color: #bb2d3b;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* ================================================= */
+/* ANIMAZIONE POPUP */
+/* ================================================= */
+
+@keyframes logoutModalAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(-10px) scale(0.97);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0) scale(1);
+
+    }
+
+}
+
+
+/* ================================================= */
+/* MOBILE */
+/* ================================================= */
+
+@media (max-width: 991px) {
+
+    .kickoff-navbar {
+
+        padding: 9px 0;
+
+    }
+
+
+    .navbar-collapse {
+
+        margin-top: 12px;
+
+        padding: 12px;
+
+        border-radius: 12px;
+
+        background: rgba(0, 0, 0, 0.12);
+
+    }
+
+
+    .nav-link {
+
+        margin-bottom: 3px;
+
+    }
+
+
+    .user-area {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        margin: 12px 0 0;
+
+        padding-top: 12px;
+
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    }
+
+
+    .user-menu-link {
+
+        justify-content: flex-start;
+
+        padding: 10px;
+
+    }
+
+
+    .user-profile {
+
+        width: 100%;
+
+        justify-content: flex-start;
+
+    }
+
+
+    .auth-buttons {
+
+        width: 100%;
+
+        flex-direction: column;
+
+    }
+
+
+    .btn-login,
+    .btn-register {
+
+        width: 100%;
+
+    }
+
+}
+
+
+/* ================================================= */
+/* MOBILE PICCOLO */
+/* ================================================= */
+
+@media (max-width: 576px) {
+
+    .logo {
+
+        width: 125px;
+
+    }
+
+
+    .logout-modal {
+
+        max-width: 350px;
+
+        padding: 25px 20px;
+
+    }
+
+
+    .logout-actions {
+
+        flex-direction: column-reverse;
+
+    }
+
+
+    .btn-cancel-logout,
+    .btn-confirm-logout {
+
+        width: 100%;
+
+    }
 
 }

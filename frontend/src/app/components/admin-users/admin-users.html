@@ -1,0 +1,491 @@
+<!-- ================================================= -->
+<!-- FINESTRA GESTIONE UTENTI ADMIN -->
+<!-- ================================================= -->
+
+<div class="users-overlay">
+
+    <div class="users-modal">
+
+
+        <!-- ================================================= -->
+        <!-- HEADER -->
+        <!-- ================================================= -->
+
+        <div class="users-header">
+
+            <div class="header-content">
+
+                <div class="header-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        Gestione utenti
+                    </h2>
+
+                    <p>
+                        Visualizza gli utenti registrati nel sistema
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="close-users"
+                [disabled]="loading"
+                (click)="closeWindow()"
+                aria-label="Chiudi">
+
+                <i class="bi bi-x"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- CONTENUTO -->
+        <!-- ================================================= -->
+
+        <div class="users-content">
+
+
+            <!-- ================================================= -->
+            <!-- RIEPILOGO -->
+            <!-- ================================================= -->
+
+            <div class="users-summary">
+
+
+                <!-- TOTALE -->
+
+                <div>
+
+                    <span class="summary-label">
+                        Utenti registrati
+                    </span>
+
+                    <strong>
+                        {{ users.length }}
+                    </strong>
+
+                </div>
+
+
+                <!-- CLIENTI -->
+
+                <div>
+
+                    <span class="summary-label">
+                        Clienti
+                    </span>
+
+                    <strong>
+                        {{ getUsersByRole('CLIENTE') }}
+                    </strong>
+
+                </div>
+
+
+                <!-- RECEPTIONIST -->
+
+                <div>
+
+                    <span class="summary-label">
+                        Receptionist
+                    </span>
+
+                    <strong>
+                        {{ getUsersByRole('RECEPTIONIST') }}
+                    </strong>
+
+                </div>
+
+
+                <!-- ADMIN -->
+
+                <div>
+
+                    <span class="summary-label">
+                        Admin
+                    </span>
+
+                    <strong>
+                        {{ getUsersByRole('ADMIN') }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- LOADING -->
+            <!-- ================================================= -->
+
+            @if (loading) {
+
+                <div class="loading-container">
+
+                    <div
+                        class="spinner-border text-success"
+                        role="status">
+                    </div>
+
+                    <p>
+                        Caricamento utenti...
+                    </p>
+
+                </div>
+
+            }
+
+
+            <!-- ================================================= -->
+            <!-- ERRORE -->
+            <!-- ================================================= -->
+
+            @if (
+                !loading &&
+                errorMessage
+            ) {
+
+                <div class="users-alert error">
+
+                    <i class="bi bi-exclamation-circle"></i>
+
+                    <span>
+                        {{ errorMessage }}
+                    </span>
+
+                    <button
+                        type="button"
+                        (click)="loadUsers()">
+
+                        Riprova
+
+                    </button>
+
+                </div>
+
+            }
+
+
+            <!-- ================================================= -->
+            <!-- NESSUN UTENTE -->
+            <!-- ================================================= -->
+
+            @if (
+                !loading &&
+                !errorMessage &&
+                users.length === 0
+            ) {
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+
+                        <i class="bi bi-people"></i>
+
+                    </div>
+
+                    <h4>
+                        Nessun utente
+                    </h4>
+
+                    <p>
+                        Non sono presenti utenti registrati.
+                    </p>
+
+                </div>
+
+            }
+
+
+            <!-- ================================================= -->
+            <!-- LISTA UTENTI -->
+            <!-- ================================================= -->
+
+            @if (
+                !loading &&
+                !errorMessage &&
+                users.length > 0
+            ) {
+
+                <div class="users-list">
+
+                    @for (
+                        user of users;
+                        track user.id
+                    ) {
+
+                        <div class="user-card">
+
+
+                            <!-- ================================================= -->
+                            <!-- ICONA -->
+                            <!-- ================================================= -->
+
+                            <div class="user-icon">
+
+                                <i class="bi bi-person-fill"></i>
+
+                            </div>
+
+
+                            <!-- ================================================= -->
+                            <!-- DATI UTENTE -->
+                            <!-- ================================================= -->
+
+                            <div class="user-main">
+
+                                <strong>
+
+                                    {{ user.nome }}
+                                    {{ user.cognome }}
+
+                                </strong>
+
+                                <span>
+
+                                    {{ user.email }}
+
+                                </span>
+
+                            </div>
+
+
+                            <!-- ================================================= -->
+                            <!-- TELEFONO -->
+                            <!-- ================================================= -->
+
+                            <div class="user-phone">
+
+                                <i class="bi bi-telephone"></i>
+
+                                <span>
+                                    {{ user.telefono }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- ================================================= -->
+                            <!-- RUOLO -->
+                            <!-- ================================================= -->
+
+                            <div class="user-role">
+
+                                <span
+                                    class="role-badge"
+                                    [class]="getRoleClass(user.ruolo)">
+
+                                    <i class="bi bi-shield-check"></i>
+
+                                    {{ getRoleLabel(user.ruolo) }}
+
+                                </span>
+
+                            </div>
+
+
+                            <!-- ================================================= -->
+                            <!-- AZIONI -->
+                            <!-- ================================================= -->
+
+                            <div class="user-actions">
+
+                                <button
+                                    type="button"
+                                    class="view-user"
+                                    (click)="openDetails(user)">
+
+                                    <i class="bi bi-eye"></i>
+
+                                    <span>
+                                        Dettagli
+                                    </span>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    }
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- MODALE DETTAGLI UTENTE -->
+<!-- ================================================= -->
+
+@if (
+    showDetailsModal &&
+    selectedUser
+) {
+
+    <div
+        class="details-modal-overlay"
+        (click)="closeDetails()">
+
+        <div
+            class="details-modal"
+            (click)="$event.stopPropagation()">
+
+
+            <!-- ================================================= -->
+            <!-- ICONA -->
+            <!-- ================================================= -->
+
+            <div class="details-icon">
+
+                <i class="bi bi-person-vcard"></i>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- TITOLO -->
+            <!-- ================================================= -->
+
+            <h3>
+                Dettagli utente
+            </h3>
+
+
+            <!-- ================================================= -->
+            <!-- DATI -->
+            <!-- ================================================= -->
+
+            <div class="user-details">
+
+
+                <!-- NOME -->
+
+                <div class="detail-item">
+
+                    <span>
+                        Nome
+                    </span>
+
+                    <strong>
+                        {{ selectedUser.nome }}
+                    </strong>
+
+                </div>
+
+
+                <!-- COGNOME -->
+
+                <div class="detail-item">
+
+                    <span>
+                        Cognome
+                    </span>
+
+                    <strong>
+                        {{ selectedUser.cognome }}
+                    </strong>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="detail-item">
+
+                    <span>
+                        Email
+                    </span>
+
+                    <strong>
+                        {{ selectedUser.email }}
+                    </strong>
+
+                </div>
+
+
+                <!-- TELEFONO -->
+
+                <div class="detail-item">
+
+                    <span>
+                        Telefono
+                    </span>
+
+                    <strong>
+                        {{ selectedUser.telefono }}
+                    </strong>
+
+                </div>
+
+
+                <!-- RUOLO -->
+
+                <div class="detail-item">
+
+                    <span>
+                        Ruolo
+                    </span>
+
+                    <strong>
+                        {{ getRoleLabel(selectedUser.ruolo) }}
+                    </strong>
+
+                </div>
+
+
+                <!-- ID -->
+
+                <div class="detail-item">
+
+                    <span>
+                        ID utente
+                    </span>
+
+                    <strong>
+                        #{{ selectedUser.id }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- CHIUDI -->
+            <!-- ================================================= -->
+
+            <div class="details-actions">
+
+                <button
+                    type="button"
+                    class="details-close"
+                    (click)="closeDetails()">
+
+                    Chiudi
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+}

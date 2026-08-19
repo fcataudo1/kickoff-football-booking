@@ -170,4 +170,37 @@ public class ReservationController {
                 .noContent()
                 .build();
     }
+
+
+    @PatchMapping("/{id}/cancel")
+    @Operation(
+            summary = "Annulla una prenotazione come receptionist",
+            description = "Permette al personale autorizzato di annullare una prenotazione di un cliente."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Prenotazione annullata correttamente"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Prenotazione non trovata"
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Prenotazione già annullata"
+            )
+    })
+    public ResponseEntity<Void> cancelByStaff(
+            @PathVariable Long id
+    ) {
+
+        reservationService.cancelReservationByStaff(
+                id
+        );
+
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
 }

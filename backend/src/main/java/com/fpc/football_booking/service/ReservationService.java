@@ -31,4 +31,8 @@ public interface ReservationService {
 
     List<ReservationDto> getMyReservations(Long userId);
 
+    void cancelReservationByStaff(
+            Long reservationId
+    );
+
 }

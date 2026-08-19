@@ -246,4 +246,39 @@ public class ReservationServiceImpl implements ReservationService {
             );
         }
     }
+
+    @Override
+    @Transactional
+    public void cancelReservationByStaff(
+            Long reservationId
+    ) {
+
+        Reservation reservation =
+                reservationRepository.findById(
+                        reservationId
+                ).orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Reservation not found"
+                        )
+                );
+
+
+        if (reservation.getStatus()
+                == ReservationStatus.CANCELLED) {
+
+            throw new BusinessException(
+                    "Reservation already cancelled"
+            );
+        }
+
+
+        reservation.setStatus(
+                ReservationStatus.CANCELLED
+        );
+
+
+        reservationRepository.save(
+                reservation
+        );
+    }
 }
