@@ -1,7 +1,3 @@
-<!-- ========================= -->
-<!-- SEZIONE PRENOTAZIONE -->
-<!-- ========================= -->
-
 <section class="booking" id="booking">
 
     <div class="container text-center">
@@ -15,171 +11,56 @@
         </p>
 
 
-        <!-- ========================= -->
-        <!-- UTENTE NON AUTENTICATO -->
-        <!-- ========================= -->
+        @if (!isLoggedIn) {
 
-        <!-- ========================= -->
-<!-- UTENTE AUTENTICATO -->
-<!-- ========================= -->
-
-@if (isLoggedIn) {
-
-
-    <!-- ========================= -->
-    <!-- CLIENTE -->
-    <!-- ========================= -->
-
-    @if (isCliente) {
-
-        <div class="booking-box shadow rounded-4 p-4">
-
-            <div class="mb-4">
-
-                <i
-                    class="bi bi-calendar-check text-success"
-                    style="font-size: 48px;">
-                </i>
-
-            </div>
-
-
-            <h4 class="fw-bold mb-4">
-                Nuova prenotazione
-            </h4>
-
-
-            <div class="booking-form text-start">
-
-
-                <!-- DATA -->
+            <div class="booking-box shadow rounded-4 p-5">
 
                 <div class="mb-3">
 
-                    <label
-                        for="reservationDate"
-                        class="form-label fw-bold">
-
-                        Data
-
-                    </label>
-
-
-                    <input
-                        id="reservationDate"
-                        type="date"
-                        class="form-control"
-                        [class.is-invalid]="dateErrorMessage"
-                        [min]="minDate"
-                        [(ngModel)]="reservationDate"
-                        (ngModelChange)="dateErrorMessage = ''">
-
-
-                    @if (dateErrorMessage) {
-
-                        <div class="field-error">
-
-                            <i class="bi bi-exclamation-circle-fill"></i>
-
-                            {{ dateErrorMessage }}
-
-                        </div>
-
-                    }
+                    <i
+                        class="bi bi-person-lock text-success"
+                        style="font-size: 48px;">
+                    </i>
 
                 </div>
 
+                <h4 class="fw-bold mb-3">
+                    Accedi per prenotare
+                </h4>
 
-                <!-- ORARIO -->
+                <p class="text-muted mb-4">
 
-                <div class="mb-4">
+                    Per prenotare un campo devi avere
+                    un account KickOff.
 
-                    <label
-                        for="startTime"
-                        class="form-label fw-bold">
+                    <br>
 
-                        Orario
+                    Accedi se sei già cliente oppure
+                    registrati gratuitamente.
 
-                    </label>
+                </p>
 
-
-                    <select
-                        id="startTime"
-                        class="form-select"
-                        [class.is-invalid]="timeErrorMessage"
-                        [(ngModel)]="startTime"
-                        (ngModelChange)="timeErrorMessage = ''">
-
-                        <option
-                            value=""
-                            disabled>
-
-                            Seleziona un orario
-
-                        </option>
-
-
-                        @for (
-                            time of availableTimes;
-                            track time
-                        ) {
-
-                            <option
-                                [value]="time">
-
-                                {{ time }}
-
-                            </option>
-
-                        }
-
-                    </select>
-
-
-                    @if (timeErrorMessage) {
-
-                        <div class="field-error">
-
-                            <i class="bi bi-exclamation-circle-fill"></i>
-
-                            {{ timeErrorMessage }}
-
-                        </div>
-
-                    }
-
-                </div>
-
-
-                <!-- BOTTONE -->
-
-                <div class="text-center">
+                <div class="d-flex justify-content-center gap-2">
 
                     <button
                         type="button"
                         class="btn btn-success rounded-pill px-4"
-                        [disabled]="loading"
-                        (click)="openBooking()">
+                        (click)="openLogin.emit()">
 
-                        @if (loading) {
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
 
-                            <span
-                                class="spinner-border spinner-border-sm me-2">
-                            </span>
+                        Accedi
 
-                            Prenotazione...
+                    </button>
 
-                        }
+                    <button
+                        type="button"
+                        class="btn btn-outline-success rounded-pill px-4"
+                        (click)="openRegister.emit()">
 
-                        @else {
+                        <i class="bi bi-person-plus me-2"></i>
 
-                            <i
-                                class="bi bi-calendar-plus me-2">
-                            </i>
-
-                            Prenota
-
-                        }
+                        Registrati
 
                     </button>
 
@@ -187,93 +68,229 @@
 
             </div>
 
-        </div>
-
-    }
+        }
 
 
-    <!-- ========================= -->
-    <!-- RECEPTIONIST -->
-    <!-- ========================= -->
-
-    @if (isReceptionist) {
-
-        <div class="booking-box shadow rounded-4 p-5">
-
-            <div class="mb-3">
-
-                <i
-                    class="bi bi-person-badge text-success"
-                    style="font-size: 48px;">
-                </i>
-
-            </div>
+        @if (isLoggedIn) {
 
 
-            <h4 class="fw-bold mb-3">
+            @if (isCliente) {
 
-                Gestione prenotazioni
+                <div class="booking-box shadow rounded-4 p-4">
 
-            </h4>
+                    <div class="mb-4">
 
+                        <i
+                            class="bi bi-calendar-check text-success"
+                            style="font-size: 48px;">
+                        </i>
 
-            <p class="text-muted mb-0">
+                    </div>
 
-                Il receptionist non effettua prenotazioni
-                come cliente.
+                    <h4 class="fw-bold mb-4">
+                        Nuova prenotazione
+                    </h4>
 
-                <br>
-
-                Puoi gestire le prenotazioni dei clienti
-                dalla sezione
-
-                <strong>
-                    Prenotazioni
-                </strong>
-
-                nella barra di navigazione.
-
-            </p>
-
-        </div>
-
-    }
+                    <div class="booking-form text-start">
 
 
-    <!-- ========================= -->
-    <!-- ADMIN -->
-    <!-- ========================= -->
+                        <div class="mb-3">
 
-    @if (isAdmin) {
+                            <label
+                                for="reservationDate"
+                                class="form-label fw-bold">
 
-        <div class="booking-box shadow rounded-4 p-5">
+                                Data
 
-            <div class="mb-3">
+                            </label>
 
-                <i
-                    class="bi bi-shield-lock text-success"
-                    style="font-size: 48px;">
-                </i>
+                            <input
+                                id="reservationDate"
+                                type="date"
+                                class="form-control"
+                                [class.is-invalid]="dateErrorMessage"
+                                [min]="minDate"
+                                [(ngModel)]="reservationDate"
+                                (ngModelChange)="dateErrorMessage = ''">
 
-            </div>
+                            @if (dateErrorMessage) {
+
+                                <div class="field-error">
+
+                                    <i class="bi bi-exclamation-circle-fill"></i>
+
+                                    {{ dateErrorMessage }}
+
+                                </div>
+
+                            }
+
+                        </div>
 
 
-            <h4 class="fw-bold mb-3">
+                        <div class="mb-4">
 
-                Area amministrativa
+                            <label
+                                for="startTime"
+                                class="form-label fw-bold">
 
-            </h4>
+                                Orario
+
+                            </label>
+
+                            <select
+                                id="startTime"
+                                class="form-select"
+                                [class.is-invalid]="timeErrorMessage"
+                                [(ngModel)]="startTime"
+                                (ngModelChange)="timeErrorMessage = ''">
+
+                                <option
+                                    value=""
+                                    disabled>
+
+                                    Seleziona un orario
+
+                                </option>
+
+                                @for (
+                                    time of availableTimes;
+                                    track time
+                                ) {
+
+                                    <option
+                                        [value]="time">
+
+                                        {{ time }}
+
+                                    </option>
+
+                                }
+
+                            </select>
+
+                            @if (timeErrorMessage) {
+
+                                <div class="field-error">
+
+                                    <i class="bi bi-exclamation-circle-fill"></i>
+
+                                    {{ timeErrorMessage }}
+
+                                </div>
+
+                            }
+
+                        </div>
 
 
-            <p class="text-muted mb-0">
+                        <div class="text-center">
 
-                La prenotazione online è riservata
-                agli utenti con ruolo Cliente.
+                            <button
+                                type="button"
+                                class="btn btn-success rounded-pill px-4"
+                                [disabled]="loading"
+                                (click)="openBooking()">
 
-            </p>
+                                @if (loading) {
 
-        </div>
+                                    <span
+                                        class="spinner-border spinner-border-sm me-2">
+                                    </span>
 
-    }
+                                    Prenotazione...
 
-}
+                                } @else {
+
+                                    <i
+                                        class="bi bi-calendar-plus me-2">
+                                    </i>
+
+                                    Prenota
+
+                                }
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            }
+
+
+            @if (isReceptionist) {
+
+                <div class="booking-box shadow rounded-4 p-5">
+
+                    <div class="mb-3">
+
+                        <i
+                            class="bi bi-person-badge text-success"
+                            style="font-size: 48px;">
+                        </i>
+
+                    </div>
+
+                    <h4 class="fw-bold mb-3">
+                        Gestione prenotazioni
+                    </h4>
+
+                    <p class="text-muted mb-0">
+
+                        Il receptionist non effettua prenotazioni
+                        come cliente.
+
+                        <br>
+
+                        Puoi gestire le prenotazioni dei clienti
+                        dalla sezione
+
+                        <strong>
+                            Prenotazioni
+                        </strong>
+
+                        nella barra di navigazione.
+
+                    </p>
+
+                </div>
+
+            }
+
+
+            @if (isAdmin) {
+
+                <div class="booking-box shadow rounded-4 p-5">
+
+                    <div class="mb-3">
+
+                        <i
+                            class="bi bi-shield-lock text-success"
+                            style="font-size: 48px;">
+                        </i>
+
+                    </div>
+
+                    <h4 class="fw-bold mb-3">
+                        Area amministrativa
+                    </h4>
+
+                    <p class="text-muted mb-0">
+
+                        La prenotazione online è riservata
+                        agli utenti con ruolo Cliente.
+
+                    </p>
+
+                </div>
+
+            }
+
+        }
+
+    </div>
+
+</section>

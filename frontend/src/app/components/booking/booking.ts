@@ -3,11 +3,11 @@ import {
     inject,
     OnInit,
     OnDestroy,
-    ChangeDetectorRef
+    ChangeDetectorRef,
+    output
 } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
-
 
 import { Subscription } from 'rxjs';
 
@@ -22,6 +22,7 @@ import { ReservationRequest } from '../../models/reservation-request';
 
 @Component({
     selector: 'app-booking',
+
     standalone: true,
 
     imports: [
@@ -29,6 +30,7 @@ import { ReservationRequest } from '../../models/reservation-request';
     ],
 
     templateUrl: './booking.html',
+
     styleUrl: './booking.css'
 })
 export class BookingComponent
@@ -47,6 +49,17 @@ export class BookingComponent
 
     private readonly changeDetector =
         inject(ChangeDetectorRef);
+
+
+    // =========================
+    // EVENTI
+    // =========================
+
+    openLogin =
+        output<void>();
+
+    openRegister =
+        output<void>();
 
 
     // =========================
@@ -222,24 +235,15 @@ export class BookingComponent
 
 
     // =========================
-    // LOGIN
-    // =========================
-
-    openLogin(): void {
-
-        // Collegamento al sistema di login
-
-    }
-
-
-    // =========================
     // PRENOTA
     // =========================
 
     openBooking(): void {
 
         if (this.loading) {
+
             return;
+
         }
 
 
@@ -274,6 +278,7 @@ export class BookingComponent
             this.changeDetector.detectChanges();
 
             return;
+
         }
 
 
@@ -291,6 +296,7 @@ export class BookingComponent
             this.changeDetector.detectChanges();
 
             return;
+
         }
 
 
@@ -312,6 +318,7 @@ export class BookingComponent
             this.changeDetector.detectChanges();
 
             return;
+
         }
 
 
@@ -327,6 +334,7 @@ export class BookingComponent
             this.changeDetector.detectChanges();
 
             return;
+
         }
 
 
@@ -344,6 +352,7 @@ export class BookingComponent
             this.changeDetector.detectChanges();
 
             return;
+
         }
 
 
@@ -359,6 +368,7 @@ export class BookingComponent
             this.changeDetector.detectChanges();
 
             return;
+
         }
 
 
@@ -448,7 +458,8 @@ export class BookingComponent
                         );
 
 
-                    this.reservationError = true;
+                    this.reservationError =
+                        true;
 
 
                     this.changeDetector.detectChanges();
