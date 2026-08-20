@@ -207,43 +207,6 @@
 }
 
 
-/* ================================================= */
-/* NUMERO */
-/* ================================================= */
-
-.service-number {
-
-    position: absolute;
-
-    top: 15px;
-
-    right: 15px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    width: 42px;
-
-    height: 42px;
-
-    border: 1px solid rgba(255,255,255,.25);
-
-    border-radius: 10px;
-
-    background: rgba(15, 23, 42, 0.55);
-
-    backdrop-filter: blur(8px);
-
-    color: #ffffff;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-}
 
 
 /* ================================================= */

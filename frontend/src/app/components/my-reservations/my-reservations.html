@@ -54,7 +54,7 @@
                     type="button"
                     class="close-reservations"
                     (click)="closeWindow()"
-                    [disabled]="loading"
+                    [disabled]="cancelLoading"
                     aria-label="Chiudi">
 
                     <i class="bi bi-x-lg"></i>
@@ -103,10 +103,10 @@
 
 
             <!-- ========================================= -->
-            <!-- LOADING -->
+            <!-- LOADING INIZIALE -->
             <!-- ========================================= -->
 
-            @if (loading && reservations.length === 0) {
+            @if (initialLoading) {
 
                 <div class="loading-container">
 
@@ -125,7 +125,11 @@
             }
 
 
-            @if (!loading || reservations.length > 0) {
+            <!-- ========================================= -->
+            <!-- CONTENUTO PRENOTAZIONI -->
+            <!-- ========================================= -->
+
+            @if (!initialLoading) {
 
 
                 <!-- ========================================= -->
@@ -333,9 +337,9 @@
                                                 </span>
 
                                                 <strong>
-                                                    {{ 
-                                                        reservation.price 
-                                                        | number:'1.2-2' 
+                                                    {{
+                                                        reservation.price
+                                                        | number:'1.2-2'
                                                     }}
                                                     €
                                                 </strong>
@@ -576,6 +580,7 @@
 
                 </section>
 
+
             }
 
 
@@ -681,7 +686,7 @@
                     type="button"
                     class="cancel-back"
                     (click)="closeCancelModal()"
-                    [disabled]="loading">
+                    [disabled]="cancelLoading">
 
                     Indietro
 
@@ -692,9 +697,9 @@
                     type="button"
                     class="cancel-confirm"
                     (click)="cancelReservation()"
-                    [disabled]="loading">
+                    [disabled]="cancelLoading">
 
-                    @if (loading) {
+                    @if (cancelLoading) {
 
                         <span
                             class="spinner-border spinner-border-sm">

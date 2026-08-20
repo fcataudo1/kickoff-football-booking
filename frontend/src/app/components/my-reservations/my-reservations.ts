@@ -1,17 +1,16 @@
 import {
   Component,
-  inject,
+  ChangeDetectorRef,
+  EventEmitter,
   OnInit,
   Output,
-  EventEmitter,
-  ChangeDetectorRef
+  inject
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
 import { Reservation } from '../../models/reservation';
-
 
 @Component({
   selector: 'app-my-reservations',
@@ -22,50 +21,35 @@ import { Reservation } from '../../models/reservation';
   templateUrl: './my-reservations.html',
   styleUrl: './my-reservations.css'
 })
-export class MyReservationsComponent
-  implements OnInit {
+export class MyReservationsComponent implements OnInit {
 
+  private readonly http = inject(HttpClient);
 
-  // =========================
-  // SERVIZI
-  // =========================
-
-  private readonly http =
-    inject(HttpClient);
-
-  private readonly changeDetector =
-    inject(ChangeDetectorRef);
-
-
-  // =========================
-  // EVENTO CHIUSURA
-  // =========================
+  private readonly cdr = inject(ChangeDetectorRef);
 
   @Output()
-  close =
-    new EventEmitter<void>();
-
-
-  // =========================
-  // API
-  // =========================
+  close = new EventEmitter<void>();
 
   private readonly apiUrl =
     'http://localhost:8080/api/reservations';
 
-
-  // =========================
-  // STATO
-  // =========================
-
   reservations: Reservation[] = [];
 
-  loading = false;
+  // =========================
+  // LOADING
+  // =========================
+
+  initialLoading = false;
+
+  cancelLoading = false;
+
+  // =========================
+  // MESSAGGI
+  // =========================
 
   errorMessage = '';
 
   successMessage = '';
-
 
   // =========================
   // MODALE CANCELLAZIONE
@@ -73,8 +57,7 @@ export class MyReservationsComponent
 
   showCancelModal = false;
 
-  reservationToCancel:
-    Reservation | null = null;
+  reservationToCancel: Reservation | null = null;
 
 
   // =========================
@@ -94,7 +77,10 @@ export class MyReservationsComponent
 
   closeWindow(): void {
 
-    if (this.loading) {
+    if (
+      this.initialLoading ||
+      this.cancelLoading
+    ) {
       return;
     }
 
@@ -109,12 +95,9 @@ export class MyReservationsComponent
 
   loadReservations(): void {
 
-    this.loading = true;
+    this.initialLoading = true;
 
     this.errorMessage = '';
-
-    this.successMessage = '';
-
 
     this.http
       .get<Reservation[]>(
@@ -122,39 +105,19 @@ export class MyReservationsComponent
       )
       .subscribe({
 
-        // =========================
-        // SUCCESSO
-        // =========================
-
         next: reservations => {
 
-          console.log(
-            'PRENOTAZIONI RICEVUTE:',
-            reservations
-          );
+          this.reservations = reservations;
 
-
-          this.reservations =
-            reservations;
-
-
-          this.loading =
-            false;
-
+          this.initialLoading = false;
 
           /*
            * Forza Angular ad aggiornare
-           * la view dopo la risposta HTTP.
+           * immediatamente la view.
            */
-
-          this.changeDetector.detectChanges();
+          this.cdr.detectChanges();
 
         },
-
-
-        // =========================
-        // ERRORE
-        // =========================
 
         error: error => {
 
@@ -163,16 +126,12 @@ export class MyReservationsComponent
             error
           );
 
-
-          this.loading =
-            false;
-
+          this.initialLoading = false;
 
           this.errorMessage =
             'Non è stato possibile caricare le tue prenotazioni.';
 
-
-          this.changeDetector.detectChanges();
+          this.cdr.detectChanges();
 
         }
 
@@ -182,15 +141,12 @@ export class MyReservationsComponent
 
 
   // =========================
-  // PRENOTAZIONI FUTURE
+  // PROSSIME PRENOTAZIONI
   // =========================
 
-  get upcomingReservations():
-    Reservation[] {
+  get upcomingReservations(): Reservation[] {
 
-    const today =
-      new Date();
-
+    const today = new Date();
 
     today.setHours(
       0,
@@ -199,34 +155,23 @@ export class MyReservationsComponent
       0
     );
 
-
     return this.reservations
 
       .filter(reservation => {
-
-        /*
-         * Le prenotazioni annullate
-         * non sono considerate future.
-         */
 
         if (
           reservation.status ===
           'CANCELLED'
         ) {
-
           return false;
-
         }
-
 
         const reservationDate =
           new Date(
             reservation.reservationDate
           );
 
-
-        return reservationDate >=
-          today;
+        return reservationDate >= today;
 
       })
 
@@ -249,12 +194,9 @@ export class MyReservationsComponent
   // STORICO
   // =========================
 
-  get pastReservations():
-    Reservation[] {
+  get pastReservations(): Reservation[] {
 
-    const today =
-      new Date();
-
+    const today = new Date();
 
     today.setHours(
       0,
@@ -263,34 +205,23 @@ export class MyReservationsComponent
       0
     );
 
-
     return this.reservations
 
       .filter(reservation => {
-
-        /*
-         * Le prenotazioni annullate
-         * finiscono sempre nello storico.
-         */
 
         if (
           reservation.status ===
           'CANCELLED'
         ) {
-
           return true;
-
         }
-
 
         const reservationDate =
           new Date(
             reservation.reservationDate
           );
 
-
-        return reservationDate <
-          today;
+        return reservationDate < today;
 
       })
 
@@ -336,7 +267,6 @@ export class MyReservationsComponent
       new Date(
         `${date}T00:00:00`
       );
-
 
     return parsedDate.toLocaleDateString(
       'it-IT',
@@ -395,7 +325,7 @@ export class MyReservationsComponent
 
 
   // =========================
-  // APRI CONFERMA
+  // APRI MODALE
   // =========================
 
   openCancelModal(
@@ -406,39 +336,37 @@ export class MyReservationsComponent
       reservation.status !==
       'CONFIRMED'
     ) {
-
       return;
-
     }
-
 
     this.reservationToCancel =
       reservation;
 
-
     this.showCancelModal =
       true;
+
+    this.cdr.detectChanges();
 
   }
 
 
   // =========================
-  // CHIUDI CONFERMA
+  // CHIUDI MODALE
   // =========================
 
   closeCancelModal(): void {
 
-    if (this.loading) {
+    if (this.cancelLoading) {
       return;
     }
-
 
     this.showCancelModal =
       false;
 
-
     this.reservationToCancel =
       null;
+
+    this.cdr.detectChanges();
 
   }
 
@@ -452,26 +380,17 @@ export class MyReservationsComponent
     if (
       !this.reservationToCancel
     ) {
-
       return;
-
     }
-
 
     const id =
       this.reservationToCancel.id;
 
+    this.cancelLoading = true;
 
-    this.loading =
-      true;
+    this.errorMessage = '';
 
-
-    this.errorMessage =
-      '';
-
-    this.successMessage =
-      '';
-
+    this.successMessage = '';
 
     this.http
       .delete(
@@ -479,44 +398,54 @@ export class MyReservationsComponent
       )
       .subscribe({
 
-        // =========================
-        // SUCCESSO
-        // =========================
-
         next: () => {
 
-          this.loading =
-            false;
-
+          this.cancelLoading = false;
 
           this.showCancelModal =
             false;
 
-
           this.reservationToCancel =
             null;
-
 
           this.successMessage =
             'Prenotazione annullata correttamente.';
 
-
-          this.changeDetector.detectChanges();
-
-
           /*
-           * Ricarica la lista dopo
-           * l'annullamento.
+           * Ricarica la lista senza
+           * riattivare lo spinner iniziale.
            */
+          this.http
+            .get<Reservation[]>(
+              `${this.apiUrl}/my`
+            )
+            .subscribe({
 
-          this.loadReservations();
+              next: reservations => {
+
+                this.reservations =
+                  reservations;
+
+                this.cdr.detectChanges();
+
+              },
+
+              error: error => {
+
+                console.error(
+                  'Errore aggiornamento prenotazioni:',
+                  error
+                );
+
+                this.cdr.detectChanges();
+
+              }
+
+            });
+
+          this.cdr.detectChanges();
 
         },
-
-
-        // =========================
-        // ERRORE
-        // =========================
 
         error: error => {
 
@@ -525,16 +454,12 @@ export class MyReservationsComponent
             error
           );
 
-
-          this.loading =
-            false;
-
+          this.cancelLoading = false;
 
           this.errorMessage =
             'Non è stato possibile annullare la prenotazione.';
 
-
-          this.changeDetector.detectChanges();
+          this.cdr.detectChanges();
 
         }
 

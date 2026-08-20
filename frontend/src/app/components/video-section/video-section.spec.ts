@@ -1,22 +1,41 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
 
-import { VideoSection } from './video-section';
+import { VideoSectionComponent } from './video-section';
 
-describe('VideoSection', () => {
-  let component: VideoSection;
-  let fixture: ComponentFixture<VideoSection>;
+describe('VideoSectionComponent', () => {
+
+  let component: VideoSectionComponent;
+  let fixture: ComponentFixture<VideoSectionComponent>;
 
   beforeEach(async () => {
+
     await TestBed.configureTestingModule({
-      imports: [VideoSection],
+      imports: [
+        VideoSectionComponent
+      ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(VideoSection);
-    component = fixture.componentInstance;
+    fixture =
+      TestBed.createComponent(
+        VideoSectionComponent
+      );
+
+    component =
+      fixture.componentInstance;
+
     await fixture.whenStable();
+
   });
 
+
   it('should create', () => {
-    expect(component).toBeTruthy();
+
+    expect(component)
+      .toBeTruthy();
+
   });
+
 });

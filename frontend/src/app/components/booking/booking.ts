@@ -410,11 +410,7 @@ export class BookingComponent
 
                 next: (reservation: Reservation) => {
 
-                    console.log(
-                        'PRENOTAZIONE CREATA:',
-                        reservation
-                    );
-
+                
 
                     this.loading = false;
 
