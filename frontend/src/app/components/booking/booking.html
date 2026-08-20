@@ -94,6 +94,8 @@
                     <div class="booking-form text-start">
 
 
+                        <!-- DATA -->
+
                         <div class="mb-3">
 
                             <label
@@ -127,6 +129,8 @@
 
                         </div>
 
+
+                        <!-- ORARIO -->
 
                         <div class="mb-4">
 
@@ -184,6 +188,8 @@
                         </div>
 
 
+                        <!-- BOTTONE -->
+
                         <div class="text-center">
 
                             <button
@@ -220,6 +226,8 @@
 
             }
 
+
+            <!-- RECEPTIONIST -->
 
             @if (isReceptionist) {
 
@@ -261,6 +269,8 @@
             }
 
 
+            <!-- ADMIN -->
+
             @if (isAdmin) {
 
                 <div class="booking-box shadow rounded-4 p-5">
@@ -292,5 +302,135 @@
         }
 
     </div>
+
+
+    <!-- ========================= -->
+    <!-- POPUP PRENOTAZIONE RIUSCITA -->
+    <!-- ========================= -->
+
+    @if (reservationSuccess) {
+
+        <div
+            class="booking-overlay"
+            (click)="closeSuccess()">
+
+            <div
+                class="booking-modal"
+                (click)="$event.stopPropagation()">
+
+                <div class="booking-modal-icon success">
+
+                    <i class="bi bi-check-circle-fill"></i>
+
+                </div>
+
+                <h4 class="fw-bold">
+                    Prenotazione confermata!
+                </h4>
+
+                <p class="text-muted">
+                    La tua prenotazione è stata effettuata
+                    correttamente.
+                </p>
+
+                @if (confirmedReservation) {
+
+                    <div class="reservation-summary">
+
+                        <p>
+                            <strong>Data:</strong>
+                            {{ confirmedReservation.reservationDate }}
+                        </p>
+
+                        <p>
+                            <strong>Orario:</strong>
+                            {{ confirmedReservation.startTime }}
+                        </p>
+
+                        @if (confirmedReservation.footballField) {
+
+                            <p>
+                                <strong>Campo:</strong>
+                                {{ confirmedReservation.footballField.name }}
+                            </p>
+
+                        }
+
+                        <p>
+                            <strong>Prezzo:</strong>
+                            50,00 € totali per la partita (10 giocatori)
+                        </p>
+
+                        <p>
+                            <strong>Pagamento:</strong>
+                            da effettuare in loco
+                        </p>
+
+                    </div>
+
+                }
+
+                <button
+                    type="button"
+                    class="btn btn-success rounded-pill px-4"
+                    (click)="closeSuccess()">
+
+                    <i class="bi bi-check-lg me-2"></i>
+
+                    Chiudi
+
+                </button>
+
+            </div>
+
+        </div>
+
+    }
+
+
+    <!-- ========================= -->
+    <!-- POPUP PRENOTAZIONE FALLITA -->
+    <!-- ========================= -->
+
+    @if (reservationError) {
+
+        <div
+            class="booking-overlay"
+            (click)="closeError()">
+
+            <div
+                class="booking-modal"
+                (click)="$event.stopPropagation()">
+
+                <div class="booking-modal-icon error">
+
+                    <i class="bi bi-exclamation-circle-fill"></i>
+
+                </div>
+
+                <h4 class="fw-bold">
+                    Prenotazione non riuscita
+                </h4>
+
+                <p class="text-muted">
+                    {{ reservationErrorMessage }}
+                </p>
+
+                <button
+                    type="button"
+                    class="btn btn-outline-success rounded-pill px-4"
+                    (click)="closeError()">
+
+                    <i class="bi bi-x-lg me-2"></i>
+
+                    Chiudi
+
+                </button>
+
+            </div>
+
+        </div>
+
+    }
 
 </section>

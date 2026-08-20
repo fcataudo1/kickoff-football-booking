@@ -324,9 +324,7 @@
 
                                         <div class="info-item">
 
-                                            <i
-                                                class="bi bi-cash-coin">
-                                            </i>
+                                            <i class="bi bi-cash-coin"></i>
 
                                             <div>
 
@@ -335,14 +333,20 @@
                                                 </span>
 
                                                 <strong>
-
-                                                    {{
-                                                        reservation.price
-                                                        | number:'1.2-2'
+                                                    {{ 
+                                                        reservation.price 
+                                                        | number:'1.2-2' 
                                                     }}
                                                     €
-
                                                 </strong>
+
+                                                <small>
+                                                    Totale campo · 10 giocatori
+                                                </small>
+
+                                                <small class="payment-note">
+                                                    Pagamento in loco
+                                                </small>
 
                                             </div>
 

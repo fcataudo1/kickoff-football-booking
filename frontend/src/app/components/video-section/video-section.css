@@ -1,134 +1,388 @@
-.video-section{
+/* ================================================= */
+/* VIDEO SECTION */
+/* ================================================= */
 
-    height:650px;
+.video-section {
 
-    position:relative;
+    position: relative;
 
-    overflow:hidden;
+    height: 620px;
 
-    display:flex;
+    margin: 80px 0;
 
-    align-items:center;
+    display: flex;
 
-    justify-content:center;
+    align-items: center;
+    justify-content: center;
 
-    margin:80px 0;
+    overflow: hidden;
 
-    border-radius:30px;
+    border-radius: 28px;
 
-    box-shadow:0 20px 40px rgba(0,0,0,0.15);
-
-}
-
-.video-section video{
-    pointer-events:none;
-}
-
-.video-section video{
-
-    position:absolute;
-
-    inset:0;
-
-    width:100%;
-
-    height:100%;
-
-    object-fit:cover;
-
-    object-position:center;
-
-    z-index:0;
-
-    transform:scale(1.02);
+    box-shadow:
+        0 25px 60px rgba(15, 23, 42, 0.18);
 
 }
 
 
+/* ================================================= */
+/* VIDEO */
+/* ================================================= */
 
-.overlay{
+.video-section video {
 
-    position:absolute;
+    position: absolute;
 
-    inset:0;
+    inset: 0;
 
-    background:linear-gradient(
-        rgba(0,0,0,0.35),
-        rgba(0,0,0,0.65)
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position: center;
+
+    z-index: 0;
+
+    pointer-events: none;
+
+    transform: scale(1.02);
+
+}
+
+
+/* ================================================= */
+/* OVERLAY */
+/* ================================================= */
+
+.video-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+        90deg,
+        rgba(20, 83, 45, 0.78) 0%,
+        rgba(20, 83, 45, 0.45) 35%,
+        rgba(15, 23, 42, 0.25) 65%,
+        rgba(15, 23, 42, 0.55) 100%
     );
 
-    z-index:1;
+    z-index: 1;
 
 }
 
 
+/* ================================================= */
+/* CONTENITORE */
+/* ================================================= */
 
-.video-content{
+.video-section .container {
 
-    position:relative;
+    position: relative;
 
-    z-index:2;
-
-    max-width:800px;
-
-    padding:40px;
-
-}
-
-
-
-.video-content h2{
-
-    font-size:60px;
-
-    letter-spacing:2px;
+    z-index: 2;
 
 }
 
 
+/* ================================================= */
+/* CONTENUTO */
+/* ================================================= */
 
-.video-content p{
+.video-content {
 
-    font-size:22px;
+    max-width: 850px;
 
-    color:rgba(255,255,255,0.9);
+    margin: 0 auto;
+
+    padding: 30px;
 
 }
+
+
+/* ================================================= */
+/* BADGE */
+/* ================================================= */
+
+.video-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 22px;
+
+    padding: 8px 15px;
+
+    border: 1px solid rgba(255, 255, 255, 0.22);
+
+    border-radius: 30px;
+
+    background: rgba(20, 83, 45, 0.35);
+
+    backdrop-filter: blur(8px);
+
+    color: rgba(255, 255, 255, 0.95);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+}
+
+
+.video-badge i {
+
+    margin: 0;
+
+    color: #4ade80;
+
+    font-size: 14px;
+
+}
+
+
+/* ================================================= */
+/* TITOLO */
+/* ================================================= */
+
+.video-content h2 {
+
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: clamp(3rem, 6vw, 5rem);
+
+    font-weight: 800;
+
+    line-height: 1;
+
+    letter-spacing: -2px;
+
+    text-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.45);
+
+}
+
+
+.video-content h2 span {
+
+    color: #4ade80;
+
+}
+
+
+/* ================================================= */
+/* TESTO */
+/* ================================================= */
+
+.video-content p {
+
+    max-width: 650px;
+
+    margin: 25px auto 0;
+
+    color: rgba(255, 255, 255, 0.9);
+
+    font-size: 18px;
+
+    line-height: 1.6;
+
+    text-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.4);
+
+}
+
+
+/* ================================================= */
+/* BOTTONE */
+/* ================================================= */
+
+.video-button {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-top: 30px;
+
+    min-height: 50px;
+
+    padding: 12px 26px;
+
+    border-radius: 10px;
+
+    background: #198754;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 8px 25px rgba(25, 135, 84, 0.32);
+
+    transition:
+        background .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+
+}
+
+
+.video-button i {
+
+    margin: 0;
+
+    font-size: 15px;
+
+}
+
+
+.video-button:hover {
+
+    background: #157347;
+
+    color: #ffffff;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 30px rgba(25, 135, 84, 0.42);
+
+}
+
+
+/* ================================================= */
+/* MOBILE */
+/* ================================================= */
 
 @media (max-width: 768px) {
 
     .video-section {
-        height: 500px;
-        margin: 50px 15px;
-        border-radius: 20px;
+
+        height: 520px;
+
+        margin: 60px 15px;
+
+        border-radius: 22px;
+
     }
+
 
     .video-content {
-        padding: 25px;
+
+        padding: 20px;
+
     }
+
+
+    .video-badge {
+
+        margin-bottom: 18px;
+
+        padding: 7px 12px;
+
+        font-size: 10px;
+
+    }
+
 
     .video-content h2 {
-        font-size: 40px;
+
+        font-size: 3.2rem;
+
+        letter-spacing: -1.5px;
+
     }
 
+
     .video-content p {
-        font-size: 18px;
+
+        margin-top: 20px;
+
+        font-size: 15px;
+
+    }
+
+
+    .video-button {
+
+        margin-top: 25px;
+
+        min-height: 47px;
+
+        padding: 11px 23px;
+
     }
 
 }
 
+
+/* ================================================= */
+/* SMALL MOBILE */
+/* ================================================= */
+
 @media (max-width: 576px) {
 
     .video-section {
-        height: 450px;
-        margin: 40px 10px;
+
+        height: 470px;
+
+        margin: 45px 10px;
+
+        border-radius: 18px;
+
     }
+
 
     .video-content h2 {
-        font-size: 32px;
+
+        font-size: 2.6rem;
+
+        letter-spacing: -1px;
+
     }
 
+
     .video-content p {
-        font-size: 16px;
+
+        font-size: 14px;
+
+        line-height: 1.5;
+
     }
+
+
+    .video-badge {
+
+        padding: 6px 11px;
+
+        font-size: 9px;
+
+    }
+
+
+    .video-button {
+
+        width: 100%;
+
+        max-width: 260px;
+
+    }
+
 }

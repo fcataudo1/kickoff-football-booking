@@ -601,3 +601,222 @@
     }
 
 }
+
+/* ================================================= */
+/* POPUP REGISTRAZIONE COMPLETATA */
+/* ================================================= */
+
+.registration-success-overlay {
+
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(15, 23, 42, 0.58);
+
+    backdrop-filter: blur(4px);
+
+    z-index: 1100;
+}
+
+
+/* ================================================= */
+/* MODAL SUCCESSO */
+/* ================================================= */
+
+.registration-success-modal {
+
+    width: 100%;
+    max-width: 420px;
+
+    padding: 32px 28px;
+
+    text-align: center;
+
+    background: white;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.25);
+
+    animation:
+        registrationSuccessIn 0.2s ease-out;
+}
+
+
+/* ================================================= */
+/* ANIMAZIONE */
+/* ================================================= */
+
+@keyframes registrationSuccessIn {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(10px)
+            scale(0.98);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+}
+
+
+/* ================================================= */
+/* ICONA SUCCESSO */
+/* ================================================= */
+
+.registration-success-icon {
+
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #dcfce7;
+
+    color: #198754;
+
+    font-size: 30px;
+}
+
+
+/* ================================================= */
+/* TITOLO */
+/* ================================================= */
+
+.registration-success-modal h4 {
+
+    margin-bottom: 10px;
+
+    color: #1e293b;
+
+    font-size: 20px;
+
+    font-weight: 700;
+}
+
+
+/* ================================================= */
+/* TESTO */
+/* ================================================= */
+
+.registration-success-modal p {
+
+    margin-bottom: 7px;
+
+    color: #475569;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+.registration-success-modal > span {
+
+    display: block;
+
+    margin-bottom: 24px;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+
+/* ================================================= */
+/* AZIONI */
+/* ================================================= */
+
+.registration-success-actions {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+}
+
+
+.registration-success-actions .btn-success-custom {
+
+    min-height: 40px;
+
+    padding: 8px 18px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #198754;
+
+    color: white;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.registration-success-actions .btn-success-custom:hover {
+
+    background: #157347;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* ================================================= */
+/* MOBILE */
+/* ================================================= */
+
+@media (max-width: 576px) {
+
+    .registration-success-modal {
+
+        padding: 26px 20px;
+
+    }
+
+    .registration-success-actions {
+
+        flex-direction: column;
+
+    }
+
+    .registration-success-actions .btn-success-custom {
+
+        width: 100%;
+
+        justify-content: center;
+
+    }
+
+}

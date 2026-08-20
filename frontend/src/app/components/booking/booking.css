@@ -269,22 +269,45 @@
 
 
 /* ================================================= */
-/* POPUP PRENOTAZIONE */
+/* OVERLAY POPUP PRENOTAZIONE */
 /* ================================================= */
 
-.success-popup {
+.booking-overlay {
 
     position: fixed;
 
-    top: 50%;
-    left: 50%;
+    inset: 0;
 
-    transform: translate(-50%, -50%);
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(15, 23, 42, 0.55);
+
+    backdrop-filter: blur(3px);
+
+    z-index: 2000;
+
+    animation:
+        bookingOverlayIn .2s ease-out;
+
+}
+
+
+/* ================================================= */
+/* MODAL */
+/* ================================================= */
+
+.booking-modal {
 
     width: 420px;
-    max-width: 90%;
 
-    padding: 35px;
+    max-width: 100%;
+
+    padding: 35px 30px;
 
     background: white;
 
@@ -292,131 +315,266 @@
 
     border-radius: 20px;
 
-    z-index: 2000;
-
     text-align: center;
 
     box-shadow:
         0 25px 70px rgba(15, 23, 42, .25);
 
     animation:
-        bookingPopupIn .2s ease-out;
-}
-
-
-@keyframes bookingPopupIn {
-
-    from {
-        opacity: 0;
-        transform:
-            translate(-50%, -47%);
-    }
-
-    to {
-        opacity: 1;
-        transform:
-            translate(-50%, -50%);
-    }
+        bookingModalIn .25s ease-out;
 
 }
 
 
 /* ================================================= */
-/* ICONA POPUP */
+/* ICONA MODAL */
 /* ================================================= */
 
-.success-popup > i {
+.booking-modal-icon {
 
-    display: block;
+    display: flex;
 
-    margin-bottom: 15px;
+    align-items: center;
+    justify-content: center;
 
-    font-size: 55px;
+    width: 70px;
+    height: 70px;
 
-    color: #22c55e;
+    margin: 0 auto 18px;
+
+    border-radius: 50%;
+
+    font-size: 38px;
+
 }
 
 
 /* ================================================= */
-/* TITOLO POPUP */
+/* SUCCESSO */
 /* ================================================= */
 
-.success-popup h3 {
+.booking-modal-icon.success {
 
-    margin-bottom: 20px;
+    color: #16a34a;
+
+    background: #dcfce7;
+
+}
+
+
+/* ================================================= */
+/* ERRORE */
+/* ================================================= */
+
+.booking-modal-icon.error {
+
+    color: #dc2626;
+
+    background: #fee2e2;
+
+}
+
+
+/* ================================================= */
+/* TITOLO */
+/* ================================================= */
+
+.booking-modal h4 {
+
+    margin-bottom: 12px;
 
     color: #1e293b;
 
     font-size: 21px;
 
     font-weight: 700;
+
 }
 
 
 /* ================================================= */
-/* TESTO POPUP */
+/* TESTO */
 /* ================================================= */
 
-.success-popup p {
+.booking-modal > p {
 
-    margin-bottom: 9px;
+    margin-bottom: 18px;
 
     color: #64748b;
 
     font-size: 14px;
+
+    line-height: 1.6;
+
 }
 
 
-.success-popup strong {
+/* ================================================= */
+/* RIEPILOGO PRENOTAZIONE */
+/* ================================================= */
+
+.reservation-summary {
+
+    margin: 20px 0;
+
+    padding: 15px 18px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 12px;
+
+    text-align: left;
+
+}
+
+
+.reservation-summary p {
+
+    margin: 6px 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+}
+
+
+.reservation-summary strong {
 
     color: #334155;
+
 }
 
 
 /* ================================================= */
-/* BUTTON POPUP */
+/* PULSANTE */
 /* ================================================= */
 
-.success-popup button {
+.booking-modal button {
 
-    margin-top: 18px;
+    min-height: 42px;
 
-    min-width: 100px;
-
-    min-height: 40px;
+    padding: 9px 25px;
 
     font-weight: 600;
+
+    transition:
+        transform .2s,
+        box-shadow .2s;
+
+}
+
+
+.booking-modal button:hover {
+
+    transform: translateY(-2px);
+
 }
 
 
 /* ================================================= */
-/* POPUP ERRORE BACKEND */
+/* ANIMAZIONI */
 /* ================================================= */
 
-.error-popup {
+@keyframes bookingOverlayIn {
 
-    border-color: #fecaca;
+    from {
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        opacity: 1;
+
+    }
+
 }
 
 
-.error-popup > i {
+@keyframes bookingModalIn {
 
-    color: #dc2626;
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(10px)
+            scale(.97);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
 }
 
 
-.error-popup h3 {
+/* ================================================= */
+/* MOBILE POPUP */
+/* ================================================= */
 
-    color: #991b1b;
+@media (max-width: 576px) {
+
+    .booking-overlay {
+
+        padding: 15px;
+
+    }
+
+
+    .booking-modal {
+
+        width: 100%;
+
+        padding: 30px 22px;
+
+        border-radius: 18px;
+
+    }
+
+
+    .booking-modal-icon {
+
+        width: 60px;
+        height: 60px;
+
+        font-size: 32px;
+
+    }
+
+
+    .booking-modal h4 {
+
+        font-size: 19px;
+
+    }
+
+
+    .booking-modal > p {
+
+        font-size: 13px;
+
+    }
+
+
+    .reservation-summary {
+
+        padding: 13px 15px;
+
+    }
+
 }
-
-
-.error-popup .btn-danger {
-
-    margin-top: 18px;
-}
-
-
 /* ================================================= */
 /* MOBILE */
 /* ================================================= */
