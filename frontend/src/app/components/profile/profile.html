@@ -1,0 +1,282 @@
+<!-- ================================================= -->
+<!-- PROFILO OVERLAY -->
+<!-- ================================================= -->
+
+<div class="profile-overlay">
+
+
+    <!-- ================================================= -->
+    <!-- MODALE -->
+    <!-- ================================================= -->
+
+    <div class="profile-modal">
+
+
+        <!-- ================================================= -->
+        <!-- HEADER -->
+        <!-- ================================================= -->
+
+        <div class="profile-header">
+
+            <div class="profile-header-content">
+
+
+                <!-- AVATAR -->
+
+                <div class="profile-avatar">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+
+                <!-- TITOLO -->
+
+                <div>
+
+                    <h2>
+                        Il mio profilo
+                    </h2>
+
+                    <p>
+                        Visualizza le informazioni del tuo account
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- CHIUDI -->
+
+            <button
+                type="button"
+                class="close-profile"
+                (click)="closeWindow()"
+                aria-label="Chiudi">
+
+                <i class="bi bi-x"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- CONTENUTO -->
+        <!-- ================================================= -->
+
+        <div class="profile-content">
+
+
+            <!-- ================================================= -->
+            <!-- IDENTITÀ -->
+            <!-- ================================================= -->
+
+            <div class="profile-identity">
+
+                <div class="identity-avatar">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+
+                <div class="identity-info">
+
+                    <h3>
+                        {{ fullName }}
+                    </h3>
+
+                    <span class="role-badge">
+
+                        <i class="bi bi-shield-check"></i>
+
+                        {{ roleLabel }}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- INFORMAZIONI -->
+            <!-- ================================================= -->
+
+            <div class="profile-section">
+
+                <div class="section-title">
+
+                    <i class="bi bi-person-vcard"></i>
+
+                    <span>
+                        Informazioni account
+                    </span>
+
+                </div>
+
+
+                <div class="profile-grid">
+
+
+                    <!-- NOME -->
+
+                    <div class="profile-item">
+
+                        <div class="profile-item-icon">
+
+                            <i class="bi bi-person"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Nome
+                            </span>
+
+                            <strong>
+                                {{ user?.nome }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- COGNOME -->
+
+                    <div class="profile-item">
+
+                        <div class="profile-item-icon">
+
+                            <i class="bi bi-person"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Cognome
+                            </span>
+
+                            <strong>
+                                {{ user?.cognome }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="profile-item">
+
+                        <div class="profile-item-icon">
+
+                            <i class="bi bi-envelope"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Email
+                            </span>
+
+                            <strong>
+                                {{ user?.email }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TELEFONO -->
+
+                    <div class="profile-item">
+
+                        <div class="profile-item-icon">
+
+                            <i class="bi bi-telephone"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Telefono
+                            </span>
+
+                            <strong>
+                                {{ user?.telefono }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- SICUREZZA -->
+            <!-- ================================================= -->
+
+            <div class="profile-security">
+
+                <div class="security-icon">
+
+                    <i class="bi bi-shield-check"></i>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Account protetto
+                    </strong>
+
+                    <span>
+                        I tuoi dati sono gestiti in modo sicuro.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- FOOTER -->
+        <!-- ================================================= -->
+
+        <div class="profile-footer">
+
+            <button
+                type="button"
+                class="profile-close-button"
+                (click)="closeWindow()">
+
+                <i class="bi bi-check2"></i>
+
+                Chiudi
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+</div>

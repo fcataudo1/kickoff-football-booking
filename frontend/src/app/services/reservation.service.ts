@@ -1,32 +1,77 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
 
-import { Reservation } from '../models/reservation';
+import {
+    HttpClient
+} from '@angular/common/http';
+
+import {
+    Observable
+} from 'rxjs';
+
+import {
+    Reservation
+} from '../models/reservation';
+
+import {
+    ReservationRequest
+} from '../models/reservation-request';
 
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class ReservationService {
 
-
-  private apiUrl = 'http://localhost:8080/api/reservations';
-
-
-
-  constructor(
-    private http: HttpClient
-  ) {}
+    private readonly http =
+        inject(HttpClient);
 
 
+    private readonly apiUrl =
+        'http://localhost:8080/api/reservations';
 
-  create(reservation: Reservation) {
 
-    return this.http.post<Reservation>(
-      this.apiUrl,
-      reservation
-    );
+    // =========================================
+    // CREA PRENOTAZIONE
+    // =========================================
 
-  }
+    create(
+        reservation: ReservationRequest
+    ): Observable<Reservation> {
+
+        return this.http.post<Reservation>(
+            this.apiUrl,
+            reservation
+        );
+
+    }
+
+
+    // =========================================
+    // MIE PRENOTAZIONI
+    // =========================================
+
+    getMyReservations():
+        Observable<Reservation[]> {
+
+        return this.http.get<Reservation[]>(
+            `${this.apiUrl}/my`
+        );
+
+    }
+
+
+    // =========================================
+    // CANCELLA PRENOTAZIONE
+    // =========================================
+
+    cancel(
+        id: number
+    ): Observable<void> {
+
+        return this.http.delete<void>(
+            `${this.apiUrl}/${id}`
+        );
+
+    }
 
 }

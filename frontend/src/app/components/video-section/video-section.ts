@@ -14,13 +14,17 @@ export class VideoSectionComponent implements AfterViewInit {
 
     ngAfterViewInit() {
 
-        const video = this.video.nativeElement;
+    const video = this.video.nativeElement;
 
-        video.muted = true;
-        video.volume = 0;
+    video.muted = true;
+    video.volume = 0;
 
-        video.play().catch(error => {
+    const playPromise = video.play();
+
+    if (playPromise !== undefined) {
+        playPromise.catch(error => {
             console.error('Impossibile avviare il video:', error);
         });
+    }
     }
 }

@@ -1,0 +1,9 @@
+spring.datasource.url=jdbc:postgresql://localhost:5432/fpc_football_booking
+spring.datasource.username=postgres
+spring.datasource.password=root
+
+spring.jpa.hibernate.ddl-auto=create
+spring.jpa.show-sql=false
+
+jwt.secret=YOUR_BASE64_SECRET
+jwt.expiration=3600000

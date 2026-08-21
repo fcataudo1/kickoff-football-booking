@@ -1,28 +1,123 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { SlicePipe } from '@angular/common';
+import {
+    Component,
+    inject,
+    OnInit,
+    OnDestroy,
+    ChangeDetectorRef,
+    output
+} from '@angular/core';
 
-import { ReservationFormComponent } from '../reservation-form/reservation-form';
+import { FormsModule } from '@angular/forms';
+
+import { Subscription } from 'rxjs';
+
+import { AuthService } from '../../services/auth.service';
+
+import { ReservationService } from '../../services/reservation.service';
+
+import { Reservation } from '../../models/reservation';
+
+import { ReservationRequest } from '../../models/reservation-request';
 
 
 @Component({
     selector: 'app-booking',
+
     standalone: true,
 
     imports: [
-        FormsModule,
-        ReservationFormComponent,
-        SlicePipe
+        FormsModule
     ],
 
     templateUrl: './booking.html',
+
     styleUrl: './booking.css'
 })
-export class BookingComponent {
+export class BookingComponent
+    implements OnInit, OnDestroy {
 
 
     // =========================
-    // DATI PRENOTAZIONE
+    // SERVIZI
+    // =========================
+
+    private readonly authService =
+        inject(AuthService);
+
+    private readonly reservationService =
+        inject(ReservationService);
+
+    private readonly changeDetector =
+        inject(ChangeDetectorRef);
+
+
+    // =========================
+    // EVENTI
+    // =========================
+
+    openLogin =
+        output<void>();
+
+    openRegister =
+        output<void>();
+
+
+    // =========================
+    // SUBSCRIPTION
+    // =========================
+
+    private authSubscription?: Subscription;
+
+
+    // =========================
+    // AUTENTICAZIONE
+    // =========================
+
+    isLoggedIn = false;
+
+
+    // =========================
+    // RUOLO
+    // =========================
+
+    userRole = '';
+
+
+    // =========================
+    // CLIENTE
+    // =========================
+
+    get isCliente(): boolean {
+
+        return this.userRole === 'CLIENTE';
+
+    }
+
+
+    // =========================
+    // RECEPTIONIST
+    // =========================
+
+    get isReceptionist(): boolean {
+
+        return this.userRole === 'RECEPTIONIST';
+
+    }
+
+
+    // =========================
+    // ADMIN
+    // =========================
+
+    get isAdmin(): boolean {
+
+        return this.userRole === 'ADMIN';
+
+    }
+
+
+    // =========================
+    // PRENOTAZIONE
     // =========================
 
     reservationDate = '';
@@ -30,21 +125,13 @@ export class BookingComponent {
     startTime = '';
 
 
-    // Serve per mostrare
-    // gli errori del primo form
-
-    bookingSubmitted = false;
-
-
     // =========================
-    // POPUP / MODALE
+    // ERRORI FORM
     // =========================
 
-    showReservation = false;
+    dateErrorMessage = '';
 
-    reservationSuccess = false;
-
-    reservationError = false;
+    timeErrorMessage = '';
 
 
     // =========================
@@ -55,11 +142,10 @@ export class BookingComponent {
 
 
     // =========================
-    // ORARI DISPONIBILI
+    // ORARI
     // =========================
 
     availableTimes = [
-
         '16:00',
         '17:00',
         '18:00',
@@ -68,27 +154,44 @@ export class BookingComponent {
         '21:00',
         '22:00',
         '23:00'
-
-    ];
-
-
-    filteredTimes = [
-        ...this.availableTimes
     ];
 
 
     // =========================
-    // PRENOTAZIONE CONFERMATA
+    // STATO
     // =========================
 
-    confirmedReservation: any = null;
+    loading = false;
+
+    reservationSuccess = false;
+
+    reservationError = false;
+
+    reservationErrorMessage = '';
+
+    confirmedReservation:
+        Reservation | null = null;
 
 
     // =========================
-    // COSTRUTTORE
+    // INIT
     // =========================
 
-    constructor() {
+    ngOnInit(): void {
+
+        this.updateAuthState();
+
+
+        this.authSubscription =
+            this.authService.loggedIn$
+                .subscribe(() => {
+
+                    this.updateAuthState();
+
+                    this.changeDetector.detectChanges();
+
+                });
+
 
         const today = new Date();
 
@@ -101,154 +204,314 @@ export class BookingComponent {
 
 
     // =========================
-    // CAMBIO DATA
+    // AGGIORNA STATO AUTH
     // =========================
 
-    onDateChange() {
+    private updateAuthState(): void {
 
-        const today = new Date();
-
-        const selected =
-            new Date(this.reservationDate);
+        this.isLoggedIn =
+            this.authService.isLoggedIn();
 
 
-        // Se è stata selezionata oggi
-
-        if (
-            selected.toDateString()
-            ===
-            today.toDateString()
-        ) {
+        const user =
+            this.authService.getUser();
 
 
-            const currentHour =
-                today.getHours();
-
-
-            this.filteredTimes =
-                this.availableTimes.filter(time => {
-
-
-                    const hour =
-                        Number(
-                            time.split(':')[0]
-                        );
-
-
-                    // Mostra solo gli orari
-                    // successivi all'ora corrente
-
-                    return hour > currentHour;
-
-                });
-
-
-        }
-
-        // Se è un giorno futuro
-
-        else {
-
-            this.filteredTimes = [
-                ...this.availableTimes
-            ];
-
-        }
-
-
-        // Se l'orario precedentemente
-        // selezionato non è più disponibile
-
-        if (
-            !this.filteredTimes.includes(this.startTime)
-        ) {
-
-            this.startTime = '';
-
-        }
+        this.userRole =
+            user?.ruolo ?? '';
 
     }
 
 
     // =========================
-    // CONTINUA
+    // DESTROY
     // =========================
 
-    openReservation() {
+    ngOnDestroy(): void {
+
+        this.authSubscription?.unsubscribe();
+
+    }
 
 
-        // Mostriamo gli errori
+    // =========================
+    // PRENOTA
+    // =========================
 
-        this.bookingSubmitted = true;
+    openBooking(): void {
 
-
-        // Se manca data oppure orario
-        // non apriamo il modale
-
-        if (
-            !this.reservationDate ||
-            !this.startTime
-        ) {
+        if (this.loading) {
 
             return;
 
         }
 
 
-        // Tutto corretto
+        // =========================
+        // RESET ERRORI
+        // =========================
 
-        this.showReservation = true;
+        this.dateErrorMessage = '';
 
-    }
+        this.timeErrorMessage = '';
 
-
-    // =========================
-    // CHIUDI MODALE
-    // =========================
-
-    closeModal() {
-
-        this.showReservation = false;
-
-    }
-
-
-    // =========================
-    // PRENOTAZIONE COMPLETATA
-    // =========================
-
-    closeReservation(reservation: any) {
-
-        this.showReservation = false;
-
-        this.confirmedReservation =
-            reservation;
-
-        this.reservationSuccess = true;
-
-    }
-
-
-    // =========================
-    // ERRORE BACKEND
-    // =========================
-
-    showError() {
-
-        this.showReservation = false;
-
-        this.reservationError = true;
-
-    }
-
-
-    // =========================
-    // CHIUDI ERRORE
-    // =========================
-
-    closeError() {
+        this.reservationSuccess = false;
 
         this.reservationError = false;
+
+        this.reservationErrorMessage = '';
+
+        this.confirmedReservation = null;
+
+
+        // =========================
+        // AUTENTICAZIONE
+        // =========================
+
+        if (!this.isLoggedIn) {
+
+            this.reservationErrorMessage =
+                'Devi effettuare l’accesso prima di poter prenotare.';
+
+            this.reservationError = true;
+
+            this.changeDetector.detectChanges();
+
+            return;
+
+        }
+
+
+        // =========================
+        // CONTROLLO RUOLO
+        // =========================
+
+        if (!this.isCliente) {
+
+            this.reservationErrorMessage =
+                'La prenotazione online è riservata ai clienti.';
+
+            this.reservationError = true;
+
+            this.changeDetector.detectChanges();
+
+            return;
+
+        }
+
+
+        // =========================
+        // DATA + ORARIO MANCANTI
+        // =========================
+
+        if (
+            !this.reservationDate &&
+            !this.startTime
+        ) {
+
+            this.dateErrorMessage =
+                'Seleziona una data.';
+
+            this.timeErrorMessage =
+                'Seleziona un orario.';
+
+            this.changeDetector.detectChanges();
+
+            return;
+
+        }
+
+
+        // =========================
+        // DATA MANCANTE
+        // =========================
+
+        if (!this.reservationDate) {
+
+            this.dateErrorMessage =
+                'Seleziona una data.';
+
+            this.changeDetector.detectChanges();
+
+            return;
+
+        }
+
+
+        // =========================
+        // DATA NON VALIDA
+        // =========================
+
+        if (
+            this.reservationDate < this.minDate
+        ) {
+
+            this.dateErrorMessage =
+                'Seleziona una data valida.';
+
+            this.changeDetector.detectChanges();
+
+            return;
+
+        }
+
+
+        // =========================
+        // ORARIO MANCANTE
+        // =========================
+
+        if (!this.startTime) {
+
+            this.timeErrorMessage =
+                'Seleziona un orario.';
+
+            this.changeDetector.detectChanges();
+
+            return;
+
+        }
+
+
+        // =========================
+        // REQUEST
+        // =========================
+
+        const request: ReservationRequest = {
+
+            reservationDate:
+                this.reservationDate,
+
+            startTime:
+                this.startTime
+
+        };
+
+
+        // =========================
+        // LOADING
+        // =========================
+
+        this.loading = true;
+
+        this.changeDetector.detectChanges();
+
+
+        // =========================
+        // BACKEND
+        // =========================
+
+        this.reservationService
+            .create(request)
+            .subscribe({
+
+                // =========================
+                // SUCCESSO
+                // =========================
+
+                next: (reservation: Reservation) => {
+
+                
+
+                    this.loading = false;
+
+
+                    this.confirmedReservation =
+                        reservation;
+
+
+                    this.reservationSuccess =
+                        true;
+
+
+                    this.reservationDate = '';
+
+                    this.startTime = '';
+
+
+                    this.changeDetector.detectChanges();
+
+                },
+
+
+                // =========================
+                // ERRORE
+                // =========================
+
+                error: error => {
+
+                    console.error(
+                        'ERRORE PRENOTAZIONE:',
+                        error
+                    );
+
+
+                    this.loading = false;
+
+
+                    this.reservationErrorMessage =
+                        this.getReservationErrorMessage(
+                            error
+                        );
+
+
+                    this.reservationError =
+                        true;
+
+
+                    this.changeDetector.detectChanges();
+
+                }
+
+            });
+
+    }
+
+
+    // =========================
+    // MESSAGGIO ERRORE BACKEND
+    // =========================
+
+    private getReservationErrorMessage(
+        error: any
+    ): string {
+
+        const backendMessage =
+            error?.error?.message
+                ?.toLowerCase() ?? '';
+
+
+        if (
+            backendMessage.includes(
+                'already have a reservation'
+            ) ||
+            backendMessage.includes(
+                'reservation for this time'
+            )
+        ) {
+
+            return 'Hai già una prenotazione per questa data e questo orario. Prova a scegliere un altro orario.';
+
+        }
+
+
+        if (
+            backendMessage.includes(
+                'no field available'
+            ) ||
+            backendMessage.includes(
+                'field is not available'
+            ) ||
+            backendMessage.includes(
+                'no available field'
+            )
+        ) {
+
+            return 'Non ci sono campi disponibili per la data e l’orario selezionati. Prova a scegliere un altro orario.';
+
+        }
+
+
+        return 'Non è stato possibile completare la prenotazione. Riprova tra qualche momento.';
 
     }
 
@@ -257,22 +520,26 @@ export class BookingComponent {
     // CHIUDI SUCCESSO
     // =========================
 
-    closeSuccess() {
+    closeSuccess(): void {
 
         this.reservationSuccess = false;
 
-        this.reservationDate = '';
+        this.changeDetector.detectChanges();
 
-        this.startTime = '';
-
-        this.bookingSubmitted = false;
+    }
 
 
-        // Ripristiniamo tutti gli orari
+    // =========================
+    // CHIUDI ERRORE
+    // =========================
 
-        this.filteredTimes = [
-            ...this.availableTimes
-        ];
+    closeError(): void {
+
+        this.reservationError = false;
+
+        this.reservationErrorMessage = '';
+
+        this.changeDetector.detectChanges();
 
     }
 

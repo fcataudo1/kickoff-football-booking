@@ -6,6 +6,7 @@ import com.fpc.football_booking.service.ReservationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -15,6 +16,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import com.fpc.football_booking.entity.User;
+import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -31,12 +34,10 @@ public class ReservationController {
     public ReservationController(
             ReservationService reservationService
     ) {
-
         this.reservationService = reservationService;
-
     }
 
-
+    @PreAuthorize("hasRole('CLIENTE')")
     @PostMapping
     @Operation(
             summary = "Crea una nuova prenotazione",
@@ -53,7 +54,7 @@ public class ReservationController {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Campo non trovato"
+                    description = "Utente non trovato"
             ),
             @ApiResponse(
                     responseCode = "409",
@@ -61,18 +62,23 @@ public class ReservationController {
             )
     })
     public ResponseEntity<ReservationDto> create(
-            @Valid @RequestBody ReservationDto dto
+            @Valid @RequestBody ReservationDto dto,
+            Authentication authentication
     ) {
+
+        User user = (User) authentication.getPrincipal();
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(
-                        reservationService.createReservation(dto)
+                        reservationService.createReservation(
+                                dto,
+                                user.getId()
+                        )
                 );
-
     }
 
-
+    @PreAuthorize("hasRole('RECEPTIONIST')")
     @GetMapping
     @Operation(
             summary = "Recupera tutte le prenotazioni",
@@ -85,10 +91,30 @@ public class ReservationController {
     public List<ReservationDto> getAll() {
 
         return reservationService.getAllReservations();
-
     }
 
+    @PreAuthorize("hasRole('CLIENTE')")
+    @GetMapping("/my")
+    @Operation(
+            summary = "Recupera le proprie prenotazioni",
+            description = "Restituisce le prenotazioni dell'utente autenticato."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Prenotazioni recuperate correttamente"
+    )
+    public List<ReservationDto> getMyReservations(
+            Authentication authentication
+    ) {
 
+        User user = (User) authentication.getPrincipal();
+
+        return reservationService.getMyReservations(
+                user.getId()
+        );
+    }
+
+    @PreAuthorize("hasRole('RECEPTIONIST')")
     @GetMapping("/field/{fieldId}")
     @Operation(
             summary = "Recupera le prenotazioni di un campo",
@@ -113,10 +139,9 @@ public class ReservationController {
                 fieldId,
                 date
         );
-
     }
 
-
+    @PreAuthorize("hasRole('CLIENTE')")
     @DeleteMapping("/{id}")
     @Operation(
             summary = "Cancella una prenotazione",
@@ -133,15 +158,53 @@ public class ReservationController {
             )
     })
     public ResponseEntity<Void> cancel(
-            @PathVariable Long id
+            @PathVariable Long id,
+            Authentication authentication
     ) {
 
-        reservationService.cancelReservation(id);
+        User user = (User) authentication.getPrincipal();
+
+        reservationService.cancelReservation(
+                id,
+                user.getId()
+        );
 
         return ResponseEntity
                 .noContent()
                 .build();
-
     }
 
+
+    @PreAuthorize("hasRole('RECEPTIONIST')")
+    @PatchMapping("/{id}/cancel")
+    @Operation(
+            summary = "Annulla una prenotazione come receptionist",
+            description = "Permette al personale autorizzato di annullare una prenotazione di un cliente."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Prenotazione annullata correttamente"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Prenotazione non trovata"
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Prenotazione già annullata"
+            )
+    })
+    public ResponseEntity<Void> cancelByStaff(
+            @PathVariable Long id
+    ) {
+
+        reservationService.cancelReservationByStaff(
+                id
+        );
+
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
 }

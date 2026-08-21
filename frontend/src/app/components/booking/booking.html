@@ -1,5 +1,3 @@
-<!-- FORM PRENOTAZIONE -->
-
 <section class="booking" id="booking">
 
     <div class="container text-center">
@@ -13,223 +11,426 @@
         </p>
 
 
-        <div class="booking-box shadow rounded-4 p-4 d-flex justify-content-center align-items-end gap-4">
+        @if (!isLoggedIn) {
 
+            <div class="booking-box shadow rounded-4 p-5">
 
-            <!-- DATA -->
+                <div class="mb-3">
 
-            <div class="text-start">
+                    <i
+                        class="bi bi-person-lock text-success"
+                        style="font-size: 48px;">
+                    </i>
 
-                <label class="form-label fw-bold text-success">
-                    Data
-                </label>
+                </div>
 
-                <input
-                    class="form-control"
-                    [class.is-invalid]="bookingSubmitted && !reservationDate"
-                    type="date"
-                    [min]="minDate"
-                    [(ngModel)]="reservationDate"
-                    (change)="onDateChange()">
+                <h4 class="fw-bold mb-3">
+                    Accedi per prenotare
+                </h4>
 
+                <p class="text-muted mb-4">
 
-                @if (bookingSubmitted && !reservationDate) {
+                    Per prenotare un campo devi avere
+                    un account KickOff.
 
-                    <div class="invalid-feedback">
-                        Seleziona una data.
-                    </div>
+                    <br>
 
-                }
+                    Accedi se sei già cliente oppure
+                    registrati gratuitamente.
 
-            </div>
+                </p>
 
+                <div class="d-flex justify-content-center gap-2">
 
-            <!-- ORARIO -->
+                    <button
+                        type="button"
+                        class="btn btn-success rounded-pill px-4"
+                        (click)="openLogin.emit()">
 
-            <div class="text-start">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
 
-                <label class="form-label fw-bold text-success">
-                    Orario
-                </label>
+                        Accedi
 
-                <select
-                    class="form-select"
-                    [class.is-invalid]="bookingSubmitted && !startTime"
-                    [(ngModel)]="startTime">
+                    </button>
 
-                    <option value="" disabled>
-                        Seleziona orario
-                    </option>
+                    <button
+                        type="button"
+                        class="btn btn-outline-success rounded-pill px-4"
+                        (click)="openRegister.emit()">
 
-                    @for (time of filteredTimes; track time) {
+                        <i class="bi bi-person-plus me-2"></i>
 
-                        <option [value]="time">
-                            {{ time }}
-                        </option>
+                        Registrati
 
-                    }
+                    </button>
 
-                </select>
-
-
-                @if (bookingSubmitted && !startTime) {
-
-                    <div class="invalid-feedback">
-                        Seleziona un orario.
-                    </div>
-
-                }
+                </div>
 
             </div>
 
-
-            <!-- BOTTONE -->
-
-            <button
-                type="button"
-                class="btn btn-success rounded-pill px-4"
-                (click)="openReservation()">
-
-                Continua
-
-            </button>
+        }
 
 
-        </div>
+        @if (isLoggedIn) {
+
+
+            @if (isCliente) {
+
+                <div class="booking-box shadow rounded-4 p-4">
+
+                    <div class="mb-4">
+
+                        <i
+                            class="bi bi-calendar-check text-success"
+                            style="font-size: 48px;">
+                        </i>
+
+                    </div>
+
+                    <h4 class="fw-bold mb-4">
+                        Nuova prenotazione
+                    </h4>
+
+                    <div class="booking-form text-start">
+
+
+                        <!-- DATA -->
+
+                        <div class="mb-3">
+
+                            <label
+                                for="reservationDate"
+                                class="form-label fw-bold">
+
+                                Data
+
+                            </label>
+
+                            <input
+                                id="reservationDate"
+                                type="date"
+                                class="form-control"
+                                [class.is-invalid]="dateErrorMessage"
+                                [min]="minDate"
+                                [(ngModel)]="reservationDate"
+                                (ngModelChange)="dateErrorMessage = ''">
+
+                            @if (dateErrorMessage) {
+
+                                <div class="field-error">
+
+                                    <i class="bi bi-exclamation-circle-fill"></i>
+
+                                    {{ dateErrorMessage }}
+
+                                </div>
+
+                            }
+
+                        </div>
+
+
+                        <!-- ORARIO -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="startTime"
+                                class="form-label fw-bold">
+
+                                Orario
+
+                            </label>
+
+                            <select
+                                id="startTime"
+                                class="form-select"
+                                [class.is-invalid]="timeErrorMessage"
+                                [(ngModel)]="startTime"
+                                (ngModelChange)="timeErrorMessage = ''">
+
+                                <option
+                                    value=""
+                                    disabled>
+
+                                    Seleziona un orario
+
+                                </option>
+
+                                @for (
+                                    time of availableTimes;
+                                    track time
+                                ) {
+
+                                    <option
+                                        [value]="time">
+
+                                        {{ time }}
+
+                                    </option>
+
+                                }
+
+                            </select>
+
+                            @if (timeErrorMessage) {
+
+                                <div class="field-error">
+
+                                    <i class="bi bi-exclamation-circle-fill"></i>
+
+                                    {{ timeErrorMessage }}
+
+                                </div>
+
+                            }
+
+                        </div>
+
+
+                        <!-- BOTTONE -->
+
+                        <div class="text-center">
+
+                            <button
+                                type="button"
+                                class="btn btn-success rounded-pill px-4"
+                                [disabled]="loading"
+                                (click)="openBooking()">
+
+                                @if (loading) {
+
+                                    <span
+                                        class="spinner-border spinner-border-sm me-2">
+                                    </span>
+
+                                    Prenotazione...
+
+                                } @else {
+
+                                    <i
+                                        class="bi bi-calendar-plus me-2">
+                                    </i>
+
+                                    Prenota
+
+                                }
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            }
+
+
+            <!-- RECEPTIONIST -->
+
+            @if (isReceptionist) {
+
+                <div class="booking-box shadow rounded-4 p-5">
+
+                    <div class="mb-3">
+
+                        <i
+                            class="bi bi-person-badge text-success"
+                            style="font-size: 48px;">
+                        </i>
+
+                    </div>
+
+                    <h4 class="fw-bold mb-3">
+                        Gestione prenotazioni
+                    </h4>
+
+                    <p class="text-muted mb-0">
+
+                        Il receptionist non effettua prenotazioni
+                        come cliente.
+
+                        <br>
+
+                        Puoi gestire le prenotazioni dei clienti
+                        dalla sezione
+
+                        <strong>
+                            Prenotazioni
+                        </strong>
+
+                        nella barra di navigazione.
+
+                    </p>
+
+                </div>
+
+            }
+
+
+            <!-- ADMIN -->
+
+            @if (isAdmin) {
+
+                <div class="booking-box shadow rounded-4 p-5">
+
+                    <div class="mb-3">
+
+                        <i
+                            class="bi bi-shield-lock text-success"
+                            style="font-size: 48px;">
+                        </i>
+
+                    </div>
+
+                    <h4 class="fw-bold mb-3">
+                        Area amministrativa
+                    </h4>
+
+                    <p class="text-muted mb-0">
+
+                        La prenotazione online è riservata
+                        agli utenti con ruolo Cliente.
+
+                    </p>
+
+                </div>
+
+            }
+
+        }
 
     </div>
 
-</section>
 
+    <!-- ========================= -->
+    <!-- POPUP PRENOTAZIONE RIUSCITA -->
+    <!-- ========================= -->
 
+    @if (reservationSuccess) {
 
-
-<!-- MODALE FORM -->
-
-@if (showReservation) {
-
-    <div class="modal-backdrop-custom">
-
-        <div class="modal-box shadow rounded-4 position-relative">
-
-
-            <!-- X -->
-
-            <button
-                type="button"
-                class="btn-close position-absolute top-0 end-0 m-3"
-                aria-label="Close"
-                (click)="closeModal()">
-            </button>
-
-
-            <!-- FORM PRENOTAZIONE -->
-
-            <app-reservation-form
-
-                [reservationDate]="reservationDate"
-
-                [startTime]="startTime"
-
-                (reservationCompleted)="closeReservation($event)"
-
-                (reservationError)="showError()">
-
-            </app-reservation-form>
-
-
-        </div>
-
-    </div>
-
-}
-
-
-
-
-<!-- POPUP SUCCESSO -->
-
-@if (reservationSuccess) {
-
-    <div class="success-popup shadow rounded-4">
-
-        <i class="bi bi-check-circle"></i>
-
-        <h3>
-            Prenotazione confermata!
-        </h3>
-
-
-        <p>
-            Campo:
-
-            <strong>
-                {{ confirmedReservation?.footballField?.name }}
-            </strong>
-        </p>
-
-
-        <p>
-            Data:
-
-            {{ confirmedReservation?.reservationDate }}
-        </p>
-
-
-        <p>
-            Orario:
-
-            <strong>
-                {{ confirmedReservation?.startTime | slice:0:5 }}
-            </strong>
-        </p>
-
-
-        <button
-            type="button"
-            class="btn btn-success rounded-pill"
+        <div
+            class="booking-overlay"
             (click)="closeSuccess()">
 
-            Chiudi
+            <div
+                class="booking-modal"
+                (click)="$event.stopPropagation()">
 
-        </button>
+                <div class="booking-modal-icon success">
 
-    </div>
+                    <i class="bi bi-check-circle-fill"></i>
 
-}
+                </div>
+
+                <h4 class="fw-bold">
+                    Prenotazione confermata!
+                </h4>
+
+                <p class="text-muted">
+                    La tua prenotazione è stata effettuata
+                    correttamente.
+                </p>
+
+                @if (confirmedReservation) {
+
+                    <div class="reservation-summary">
+
+                        <p>
+                            <strong>Data:</strong>
+                            {{ confirmedReservation.reservationDate }}
+                        </p>
+
+                        <p>
+                            <strong>Orario:</strong>
+                            {{ confirmedReservation.startTime }}
+                        </p>
+
+                        @if (confirmedReservation.footballField) {
+
+                            <p>
+                                <strong>Campo:</strong>
+                                {{ confirmedReservation.footballField.name }}
+                            </p>
+
+                        }
+
+                        <p>
+                            <strong>Prezzo:</strong>
+                            50,00 € totali per la partita (10 giocatori)
+                        </p>
+
+                        <p>
+                            <strong>Pagamento:</strong>
+                            da effettuare in loco
+                        </p>
+
+                    </div>
+
+                }
+
+                <button
+                    type="button"
+                    class="btn btn-success rounded-pill px-4"
+                    (click)="closeSuccess()">
+
+                    <i class="bi bi-check-lg me-2"></i>
+
+                    Chiudi
+
+                </button>
+
+            </div>
+
+        </div>
+
+    }
 
 
+    <!-- ========================= -->
+    <!-- POPUP PRENOTAZIONE FALLITA -->
+    <!-- ========================= -->
 
+    @if (reservationError) {
 
-<!-- POPUP ERRORE -->
-
-@if (reservationError) {
-
-    <div class="success-popup error-popup shadow rounded-4">
-
-        <i class="bi bi-x-circle"></i>
-
-        <h3>
-            Prenotazione non riuscita
-        </h3>
-
-
-        <p>
-            Il campo potrebbe essere già occupato.
-            <br>
-            Riprova con un altro orario.
-        </p>
-
-
-        <button
-            type="button"
-            class="btn btn-danger rounded-pill"
+        <div
+            class="booking-overlay"
             (click)="closeError()">
 
-            Chiudi
+            <div
+                class="booking-modal"
+                (click)="$event.stopPropagation()">
 
-        </button>
+                <div class="booking-modal-icon error">
 
-    </div>
+                    <i class="bi bi-exclamation-circle-fill"></i>
 
-}
+                </div>
+
+                <h4 class="fw-bold">
+                    Prenotazione non riuscita
+                </h4>
+
+                <p class="text-muted">
+                    {{ reservationErrorMessage }}
+                </p>
+
+                <button
+                    type="button"
+                    class="btn btn-outline-success rounded-pill px-4"
+                    (click)="closeError()">
+
+                    <i class="bi bi-x-lg me-2"></i>
+
+                    Chiudi
+
+                </button>
+
+            </div>
+
+        </div>
+
+    }
+
+</section>

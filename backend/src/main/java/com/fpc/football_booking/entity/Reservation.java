@@ -25,19 +25,6 @@ public class Reservation {
 
 
     @Column(nullable = false)
-    private String customerName;
-
-
-    @Column(nullable = false)
-    private String customerPhone;
-
-
-    @Column
-    private String customerEmail;
-
-
-
-    @Column(nullable = false)
     private LocalDate reservationDate;
 
 
@@ -63,5 +50,12 @@ public class Reservation {
             nullable = false
     )
     private FootballField footballField;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+            name = "user_id",
+            nullable = false
+    )
+    private User user;
 
 }

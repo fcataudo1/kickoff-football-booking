@@ -1,0 +1,723 @@
+/* ================================================= */
+/* OVERLAY */
+/* ================================================= */
+
+.profile-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 3000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(15, 23, 42, .60);
+
+    backdrop-filter: blur(6px);
+
+    animation: profileOverlayIn .18s ease-out;
+}
+
+
+/* ================================================= */
+/* ANIMAZIONE OVERLAY */
+/* ================================================= */
+
+@keyframes profileOverlayIn {
+
+    from {
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        opacity: 1;
+
+    }
+
+}
+
+
+/* ================================================= */
+/* MODALE */
+/* ================================================= */
+
+.profile-modal {
+
+    width: 100%;
+
+    max-width: 560px;
+
+    max-height: 90vh;
+
+    overflow: hidden;
+
+    background: white;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, .30);
+
+    animation: profileModalIn .20s ease-out;
+}
+
+
+/* ================================================= */
+/* ANIMAZIONE MODALE */
+/* ================================================= */
+
+@keyframes profileModalIn {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(12px)
+            scale(.97);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+/* ================================================= */
+/* HEADER */
+/* ================================================= */
+
+.profile-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 23px 25px;
+
+    background: white;
+
+    border-bottom:
+        1px solid #e2e8f0;
+}
+
+
+.profile-header-content {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+}
+
+
+/* ================================================= */
+/* ICONA HEADER */
+/* ================================================= */
+
+.profile-avatar {
+
+    width: 48px;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+
+    background: #dcfce7;
+
+    color: #198754;
+
+    font-size: 21px;
+}
+
+
+/* ================================================= */
+/* TITOLO */
+/* ================================================= */
+
+.profile-header h2 {
+
+    margin: 0;
+
+    color: #1e293b;
+
+    font-size: 21px;
+
+    font-weight: 750;
+}
+
+
+.profile-header p {
+
+    margin: 4px 0 0;
+
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+
+/* ================================================= */
+/* CHIUDI */
+/* ================================================= */
+
+.close-profile {
+
+    width: 38px;
+
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #f1f5f9;
+
+    color: #475569;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition:
+        background .2s,
+        color .2s,
+        transform .2s;
+}
+
+
+.close-profile:hover {
+
+    background: #fee2e2;
+
+    color: #dc3545;
+
+    transform: rotate(90deg);
+}
+
+
+/* ================================================= */
+/* CONTENUTO */
+/* ================================================= */
+
+.profile-content {
+
+    max-height: calc(90vh - 145px);
+
+    overflow-y: auto;
+
+    padding: 25px;
+}
+
+
+/* ================================================= */
+/* IDENTITÀ */
+/* ================================================= */
+
+.profile-identity {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 24px;
+
+    padding: 18px;
+
+    border-radius: 14px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+}
+
+
+.identity-avatar {
+
+    width: 58px;
+
+    height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #198754;
+
+    color: white;
+
+    font-size: 25px;
+}
+
+
+.identity-info h3 {
+
+    margin: 0 0 7px;
+
+    color: #1e293b;
+
+    font-size: 17px;
+
+    font-weight: 750;
+}
+
+
+/* ================================================= */
+/* BADGE RUOLO */
+/* ================================================= */
+
+.role-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    background: #dcfce7;
+
+    color: #15803d;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+
+/* ================================================= */
+/* SEZIONE */
+/* ================================================= */
+
+.profile-section {
+
+    margin-bottom: 18px;
+}
+
+
+.section-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 11px;
+
+    color: #334155;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+.section-title i {
+
+    color: #198754;
+
+    font-size: 14px;
+}
+
+
+/* ================================================= */
+/* GRID */
+/* ================================================= */
+
+.profile-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 10px;
+}
+
+
+/* ================================================= */
+/* ITEM */
+/* ================================================= */
+
+.profile-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 0;
+
+    padding: 13px;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 11px;
+
+    background: white;
+
+    transition:
+        border-color .2s,
+        box-shadow .2s;
+}
+
+
+.profile-item:hover {
+
+    border-color: #bbf7d0;
+
+    box-shadow:
+        0 4px 12px rgba(15, 23, 42, .05);
+}
+
+
+/* ================================================= */
+/* ICONA ITEM */
+/* ================================================= */
+
+.profile-item-icon {
+
+    width: 34px;
+
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 9px;
+
+    background: #ecfdf5;
+
+    color: #198754;
+
+    font-size: 14px;
+}
+
+
+.profile-item > div:last-child {
+
+    min-width: 0;
+}
+
+
+.profile-item span {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+}
+
+
+.profile-item strong {
+
+    display: block;
+
+    overflow: hidden;
+
+    color: #334155;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* ================================================= */
+/* SICUREZZA */
+/* ================================================= */
+
+.profile-security {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 13px;
+
+    border-radius: 11px;
+
+    background: #f0fdf4;
+
+    border: 1px solid #bbf7d0;
+}
+
+
+.security-icon {
+
+    width: 34px;
+
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 9px;
+
+    background: #dcfce7;
+
+    color: #15803d;
+
+    font-size: 15px;
+}
+
+
+.profile-security strong {
+
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: #166534;
+
+    font-size: 11px;
+}
+
+
+.profile-security span {
+
+    display: block;
+
+    color: #4d7c5a;
+
+    font-size: 9px;
+}
+
+
+/* ================================================= */
+/* FOOTER */
+/* ================================================= */
+
+.profile-footer {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    padding: 15px 25px;
+
+    background: #f8fafc;
+
+    border-top:
+        1px solid #e2e8f0;
+}
+
+
+/* ================================================= */
+/* PULSANTE CHIUDI */
+/* ================================================= */
+
+.profile-close-button {
+
+    min-height: 38px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 8px 16px;
+
+    border: 1px solid #198754;
+
+    border-radius: 9px;
+
+    background: #198754;
+
+    color: white;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background .2s,
+        border-color .2s,
+        transform .2s;
+}
+
+
+.profile-close-button:hover {
+
+    background: #157347;
+
+    border-color: #157347;
+
+    transform: translateY(-1px);
+}
+
+
+/* ================================================= */
+/* SCROLLBAR */
+/* ================================================= */
+
+.profile-content::-webkit-scrollbar {
+
+    width: 6px;
+}
+
+
+.profile-content::-webkit-scrollbar-track {
+
+    background: transparent;
+}
+
+
+.profile-content::-webkit-scrollbar-thumb {
+
+    border-radius: 10px;
+
+    background: #cbd5e1;
+}
+
+
+/* ================================================= */
+/* MOBILE */
+/* ================================================= */
+
+@media (max-width: 576px) {
+
+    .profile-overlay {
+
+        padding: 12px;
+
+    }
+
+
+    .profile-modal {
+
+        max-height: 94vh;
+
+        border-radius: 17px;
+
+    }
+
+
+    .profile-header {
+
+        padding: 19px;
+
+    }
+
+
+    .profile-header h2 {
+
+        font-size: 19px;
+
+    }
+
+
+    .profile-content {
+
+        padding: 19px;
+
+        max-height:
+            calc(94vh - 135px);
+
+    }
+
+
+    .profile-identity {
+
+        padding: 15px;
+
+    }
+
+
+    .profile-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .profile-footer {
+
+        padding: 14px 19px;
+
+    }
+
+
+    .profile-close-button {
+
+        width: 100%;
+
+    }
+
+}

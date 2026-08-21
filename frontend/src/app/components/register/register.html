@@ -1,0 +1,597 @@
+<div class="register-overlay">
+
+    <div class="register-modal">
+
+        <div class="register-card">
+
+            <!-- ================================================= -->
+            <!-- HEADER -->
+            <!-- ================================================= -->
+
+            <div class="register-header">
+
+                <div class="register-title">
+
+                    <div class="register-icon">
+                        <i class="bi bi-person-plus"></i>
+                    </div>
+
+                    <div>
+
+                        <h4>Registrati</h4>
+
+                        <p>
+                            Crea il tuo account KickOff
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="register-close"
+                    aria-label="Chiudi"
+                    (click)="closeRegister()"
+                    [disabled]="loading">
+
+                    <i class="bi bi-x-lg"></i>
+
+                </button>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- BODY -->
+            <!-- ================================================= -->
+
+            <div class="register-body">
+
+                <div class="row g-3">
+
+
+                    <!-- ================================================= -->
+                    <!-- NOME -->
+                    <!-- ================================================= -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Nome
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="nome"
+                            (blur)="touch('nome')"
+                            [class.is-invalid]="shouldShowError('nome')"
+                            [class.is-valid]="shouldShowValid('nome')"
+                            placeholder="Es. Mario"
+                            [disabled]="loading">
+
+                        @if (shouldShowError('nome')) {
+
+                            <div class="invalid-feedback">
+
+                                Inserisci un nome valido.
+
+                            </div>
+
+                        }
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- COGNOME -->
+                    <!-- ================================================= -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Cognome
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="cognome"
+                            (blur)="touch('cognome')"
+                            [class.is-invalid]="shouldShowError('cognome')"
+                            [class.is-valid]="shouldShowValid('cognome')"
+                            placeholder="Es. Rossi"
+                            [disabled]="loading">
+
+                        @if (shouldShowError('cognome')) {
+
+                            <div class="invalid-feedback">
+
+                                Inserisci un cognome valido.
+
+                            </div>
+
+                        }
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- EMAIL -->
+                    <!-- ================================================= -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            class="form-control"
+                            [(ngModel)]="email"
+                            (blur)="touch('email')"
+                            [class.is-invalid]="shouldShowError('email')"
+                            [class.is-valid]="shouldShowValid('email')"
+                            placeholder="mario.rossi@email.it"
+                            [disabled]="loading">
+
+                        @if (shouldShowError('email')) {
+
+                            <div class="invalid-feedback">
+
+                                Inserisci un indirizzo email valido.
+
+                            </div>
+
+                        }
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- TELEFONO -->
+                    <!-- ================================================= -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Telefono
+                        </label>
+
+                        <input
+                            type="tel"
+                            class="form-control"
+                            [(ngModel)]="telefono"
+                            (blur)="touch('telefono')"
+                            [class.is-invalid]="shouldShowError('telefono')"
+                            [class.is-valid]="shouldShowValid('telefono')"
+                            maxlength="10"
+                            inputmode="numeric"
+                            placeholder="3331234567"
+                            [disabled]="loading">
+
+                        @if (shouldShowError('telefono')) {
+
+                            <div class="invalid-feedback">
+
+                                Il numero deve contenere 10 cifre.
+
+                            </div>
+
+                        }
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- PASSWORD -->
+                    <!-- ================================================= -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Password
+                        </label>
+
+                        <div class="password-wrapper">
+
+                            <input
+                                [type]="showPassword ? 'text' : 'password'"
+                                class="form-control password-input"
+                                [(ngModel)]="password"
+                                (blur)="touch('password')"
+                                [class.is-invalid]="shouldShowError('password')"
+                                [class.is-valid]="shouldShowValid('password')"
+                                placeholder="Inserisci password"
+                                [disabled]="loading">
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                (click)="togglePassword()"
+                                [disabled]="loading"
+                                aria-label="Mostra o nascondi password">
+
+                                <i
+                                    class="bi"
+                                    [class.bi-eye]="!showPassword"
+                                    [class.bi-eye-slash]="showPassword">
+                                </i>
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- REGOLE PASSWORD -->
+
+                        <div class="password-rules">
+
+                            <div
+                                [class.valid-rule]="hasMinimumLength()"
+                                [class.invalid-rule]="
+                                    password.length > 0 &&
+                                    !hasMinimumLength()
+                                ">
+
+                                <i
+                                    class="bi"
+                                    [class.bi-check-circle-fill]="hasMinimumLength()"
+                                    [class.bi-x-circle-fill]="
+                                        password.length > 0 &&
+                                        !hasMinimumLength()
+                                    ">
+                                </i>
+
+                                Almeno 8 caratteri
+
+                            </div>
+
+
+                            <div
+                                [class.valid-rule]="hasUppercase()"
+                                [class.invalid-rule]="
+                                    password.length > 0 &&
+                                    !hasUppercase()
+                                ">
+
+                                <i
+                                    class="bi"
+                                    [class.bi-check-circle-fill]="hasUppercase()"
+                                    [class.bi-x-circle-fill]="
+                                        password.length > 0 &&
+                                        !hasUppercase()
+                                    ">
+                                </i>
+
+                                Una lettera maiuscola
+
+                            </div>
+
+
+                            <div
+                                [class.valid-rule]="hasLowercase()"
+                                [class.invalid-rule]="
+                                    password.length > 0 &&
+                                    !hasLowercase()
+                                ">
+
+                                <i
+                                    class="bi"
+                                    [class.bi-check-circle-fill]="hasLowercase()"
+                                    [class.bi-x-circle-fill]="
+                                        password.length > 0 &&
+                                        !hasLowercase()
+                                    ">
+                                </i>
+
+                                Una lettera minuscola
+
+                            </div>
+
+
+                            <div
+                                [class.valid-rule]="hasNumber()"
+                                [class.invalid-rule]="
+                                    password.length > 0 &&
+                                    !hasNumber()
+                                ">
+
+                                <i
+                                    class="bi"
+                                    [class.bi-check-circle-fill]="hasNumber()"
+                                    [class.bi-x-circle-fill]="
+                                        password.length > 0 &&
+                                        !hasNumber()
+                                    ">
+                                </i>
+
+                                Un numero
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- CONFERMA PASSWORD -->
+                    <!-- ================================================= -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Conferma password
+                        </label>
+
+                        <div class="password-wrapper">
+
+                            <input
+                                [type]="
+                                    showConfirmPassword
+                                        ? 'text'
+                                        : 'password'
+                                "
+                                class="form-control password-input"
+                                [(ngModel)]="confirmPassword"
+                                (blur)="touch('confirmPassword')"
+                                [class.is-invalid]="
+                                    shouldShowError('confirmPassword')
+                                "
+                                [class.is-valid]="
+                                    shouldShowValid('confirmPassword')
+                                "
+                                placeholder="Ripeti password"
+                                [disabled]="loading">
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                (click)="toggleConfirmPassword()"
+                                [disabled]="loading"
+                                aria-label="Mostra o nascondi conferma password">
+
+                                <i
+                                    class="bi"
+                                    [class.bi-eye]="!showConfirmPassword"
+                                    [class.bi-eye-slash]="showConfirmPassword">
+                                </i>
+
+                            </button>
+
+                        </div>
+
+
+                        @if (shouldShowError('confirmPassword')) {
+
+                            <div class="invalid-feedback d-block">
+
+                                @if (!confirmPassword) {
+
+                                    Inserisci la conferma della password.
+
+                                } @else {
+
+                                    Le password non coincidono.
+
+                                }
+
+                            </div>
+
+                        }
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- ERRORE -->
+                    <!-- ================================================= -->
+
+                    <div class="col-12">
+
+                        @if (errorMessage) {
+
+                            <div class="register-alert register-alert-error">
+
+                                <i class="bi bi-exclamation-circle"></i>
+
+                                <span>
+                                    {{ errorMessage }}
+                                </span>
+
+                            </div>
+
+                        }
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- BOTTONE -->
+                    <!-- ================================================= -->
+
+                    <div class="col-12">
+
+                        <button
+                            type="button"
+                            class="register-submit"
+                            (click)="register()"
+                            [disabled]="loading">
+
+                            @if (loading) {
+
+                                <span
+                                    class="spinner-border spinner-border-sm">
+                                </span>
+
+                                Registrazione...
+
+                            } @else {
+
+                                <i class="bi bi-person-plus"></i>
+
+                                Crea account
+
+                            }
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- POPUP UTENTE GIÀ REGISTRATO -->
+<!-- ================================================= -->
+
+@if (showAlreadyRegistered()) {
+
+    <div
+        class="already-registered-overlay"
+        role="presentation">
+
+        <div
+            class="already-registered-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="alreadyRegisteredTitle">
+
+            <div class="already-registered-icon">
+
+                <i class="bi bi-person-check-fill"></i>
+
+            </div>
+
+
+            <h4 id="alreadyRegisteredTitle">
+
+                Account già esistente
+
+            </h4>
+
+
+            <p>
+
+                Esiste già un account con questa
+                email o questo numero di telefono.
+
+            </p>
+
+
+            <span>
+
+                Effettua il login per continuare.
+
+            </span>
+
+
+            <div class="already-registered-actions">
+
+                <button
+                    type="button"
+                    class="btn-secondary-custom"
+                    (click)="closeAlreadyRegistered()">
+
+                    Chiudi
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="btn-success-custom"
+                    (click)="goToLogin()">
+
+                    <i class="bi bi-box-arrow-in-right"></i>
+
+                    Vai al login
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+}
+
+
+<!-- ================================================= -->
+<!-- POPUP REGISTRAZIONE COMPLETATA -->
+<!-- ================================================= -->
+
+@if (showRegistrationSuccess()) {
+
+    <div
+        class="registration-success-overlay"
+        role="presentation">
+
+        <div
+            class="registration-success-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="registrationSuccessTitle">
+
+            <div class="registration-success-icon">
+
+                <i class="bi bi-check-lg"></i>
+
+            </div>
+
+
+            <h4 id="registrationSuccessTitle">
+
+                Registrazione completata!
+
+            </h4>
+
+
+            <p>
+
+                Il tuo account KickOff è stato creato
+                correttamente.
+
+            </p>
+
+
+            <span>
+
+                Ora puoi effettuare il login per iniziare.
+
+            </span>
+
+
+            <div class="registration-success-actions">
+
+                <button
+                    type="button"
+                    class="btn-success-custom"
+                    (click)="goToLoginAfterRegistration()">
+
+                    <i class="bi bi-box-arrow-in-right"></i>
+
+                    Vai al login
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+}

@@ -1,22 +1,47 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
 
-import { WhyKickoff } from './why-kickoff';
+import { WhyKickoffComponent } from './why-kickoff';
 
-describe('WhyKickoff', () => {
-  let component: WhyKickoff;
-  let fixture: ComponentFixture<WhyKickoff>;
+
+describe('WhyKickoffComponent', () => {
+
+  let component: WhyKickoffComponent;
+  let fixture: ComponentFixture<WhyKickoffComponent>;
+
 
   beforeEach(async () => {
+
     await TestBed.configureTestingModule({
-      imports: [WhyKickoff],
+
+      imports: [
+        WhyKickoffComponent
+      ]
+
     }).compileComponents();
 
-    fixture = TestBed.createComponent(WhyKickoff);
-    component = fixture.componentInstance;
+
+    fixture =
+      TestBed.createComponent(
+        WhyKickoffComponent
+      );
+
+    component =
+      fixture.componentInstance;
+
+
     await fixture.whenStable();
+
   });
 
+
   it('should create', () => {
-    expect(component).toBeTruthy();
+
+    expect(component)
+      .toBeTruthy();
+
   });
+
 });

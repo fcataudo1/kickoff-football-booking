@@ -1,0 +1,822 @@
+/* ================================================= */
+/* OVERLAY */
+/* ================================================= */
+
+.register-overlay {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 24px;
+
+    background: rgba(15, 23, 42, 0.68);
+
+    backdrop-filter: blur(5px);
+
+    z-index: 1050;
+
+    overflow-y: auto;
+}
+
+
+/* ================================================= */
+/* MODAL */
+/* ================================================= */
+
+.register-modal {
+    width: 100%;
+    max-width: 680px;
+
+    margin: auto;
+}
+
+
+/* ================================================= */
+/* CARD */
+/* ================================================= */
+
+.register-card {
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: none;
+    border-radius: 18px;
+
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.20);
+}
+
+
+/* ================================================= */
+/* HEADER */
+/* ================================================= */
+
+.register-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 20px 24px;
+
+    background: linear-gradient(
+        135deg,
+        #198754,
+        #157347
+    );
+
+    color: white;
+}
+
+
+.register-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+.register-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.15);
+
+    font-size: 19px;
+}
+
+
+.register-title h4 {
+    margin: 0;
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+.register-title p {
+    margin: 2px 0 0;
+
+    color: rgba(255, 255, 255, 0.80);
+
+    font-size: 12px;
+}
+
+
+/* ================================================= */
+/* CLOSE */
+/* ================================================= */
+
+.register-close {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.12);
+
+    color: white;
+
+    transition: 0.2s;
+}
+
+
+.register-close:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+
+.register-close:disabled {
+    opacity: 0.5;
+}
+
+
+/* ================================================= */
+/* BODY */
+/* ================================================= */
+
+.register-body {
+    padding: 28px;
+}
+
+
+/* ================================================= */
+/* FORM */
+/* ================================================= */
+
+.form-label {
+    margin-bottom: 7px;
+
+    color: #334155;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+.form-control {
+    min-height: 46px;
+
+    padding: 10px 13px;
+
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+
+    color: #1e293b;
+
+    font-size: 14px;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+
+
+.form-control::placeholder {
+    color: #94a3b8;
+}
+
+
+.form-control:focus {
+    border-color: #198754;
+
+    box-shadow:
+        0 0 0 3px rgba(25, 135, 84, 0.12);
+}
+
+
+.form-control.is-valid {
+    border-color: #198754;
+}
+
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+
+.invalid-feedback {
+    margin-top: 4px;
+
+    font-size: 11px;
+}
+
+
+/* ================================================= */
+/* PASSWORD */
+/* ================================================= */
+
+.password-wrapper {
+    position: relative;
+}
+
+
+.password-input {
+    padding-right: 48px;
+}
+
+
+.password-toggle {
+    position: absolute;
+
+    top: 50%;
+    right: 20px;
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transform: translateY(-50%);
+
+    border: none;
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #64748b;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.password-toggle:hover:not(:disabled) {
+    background: #f1f5f9;
+
+    color: #198754;
+}
+
+
+.password-toggle:disabled {
+    opacity: 0.5;
+}
+
+
+/* ================================================= */
+/* PASSWORD RULES */
+/* ================================================= */
+
+.password-rules {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 4px 12px;
+
+    margin-top: 8px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+}
+
+
+.password-rules div {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+}
+
+
+.password-rules i {
+    font-size: 10px;
+}
+
+
+.valid-rule {
+    color: #198754;
+}
+
+
+.invalid-rule {
+    color: #dc3545;
+}
+
+
+/* ================================================= */
+/* ALERT */
+/* ================================================= */
+
+.register-alert {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 10px 12px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+}
+
+
+.register-alert-error {
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    color: #b91c1c;
+}
+
+
+.register-alert-success {
+    background: #f0fdf4;
+
+    border: 1px solid #bbf7d0;
+
+    color: #15803d;
+}
+
+
+/* ================================================= */
+/* SUBMIT */
+/* ================================================= */
+
+.register-submit {
+    width: 100%;
+
+    min-height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #198754;
+
+    color: white;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    transition:
+        transform 0.2s,
+        background 0.2s,
+        box-shadow 0.2s;
+}
+
+
+.register-submit:hover:not(:disabled) {
+    background: #157347;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 7px 18px rgba(25, 135, 84, 0.25);
+}
+
+
+.register-submit:disabled {
+    opacity: 0.7;
+
+    cursor: not-allowed;
+}
+
+
+/* ================================================= */
+/* POPUP GIÀ REGISTRATO */
+/* ================================================= */
+
+.already-registered-overlay {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(15, 23, 42, 0.58);
+
+    backdrop-filter: blur(4px);
+
+    z-index: 1100;
+}
+
+
+.already-registered-modal {
+    width: 100%;
+    max-width: 420px;
+
+    padding: 32px 28px;
+
+    text-align: center;
+
+    background: white;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ICONA */
+
+.already-registered-icon {
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #dcfce7;
+
+    color: #198754;
+
+    font-size: 26px;
+}
+
+
+.already-registered-modal h4 {
+    margin-bottom: 10px;
+
+    color: #1e293b;
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+.already-registered-modal p {
+    margin-bottom: 7px;
+
+    color: #475569;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+.already-registered-modal > span {
+    display: block;
+
+    margin-bottom: 24px;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+
+/* ================================================= */
+/* AZIONI POPUP */
+/* ================================================= */
+
+.already-registered-actions {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+}
+
+
+.btn-secondary-custom,
+.btn-success-custom {
+    min-height: 40px;
+
+    padding: 8px 18px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.btn-secondary-custom {
+    border: 1px solid #dbe2ea;
+
+    background: white;
+
+    color: #475569;
+}
+
+
+.btn-secondary-custom:hover {
+    background: #f8fafc;
+}
+
+
+.btn-success-custom {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    border: none;
+
+    background: #198754;
+
+    color: white;
+}
+
+
+.btn-success-custom:hover {
+    background: #157347;
+
+    transform: translateY(-1px);
+}
+
+
+/* ================================================= */
+/* RESPONSIVE */
+/* ================================================= */
+
+@media (max-width: 576px) {
+
+    .register-overlay {
+        align-items: flex-start;
+
+        padding: 15px;
+    }
+
+
+    .register-body {
+        padding: 20px;
+    }
+
+
+    .register-header {
+        padding: 17px 20px;
+    }
+
+
+    .password-rules {
+        grid-template-columns: 1fr;
+    }
+
+
+    .already-registered-modal {
+        padding: 26px 20px;
+    }
+
+
+    .already-registered-actions {
+        flex-direction: column;
+    }
+
+
+    .btn-secondary-custom,
+    .btn-success-custom {
+        width: 100%;
+
+        justify-content: center;
+    }
+
+}
+
+/* ================================================= */
+/* POPUP REGISTRAZIONE COMPLETATA */
+/* ================================================= */
+
+.registration-success-overlay {
+
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(15, 23, 42, 0.58);
+
+    backdrop-filter: blur(4px);
+
+    z-index: 1100;
+}
+
+
+/* ================================================= */
+/* MODAL SUCCESSO */
+/* ================================================= */
+
+.registration-success-modal {
+
+    width: 100%;
+    max-width: 420px;
+
+    padding: 32px 28px;
+
+    text-align: center;
+
+    background: white;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.25);
+
+    animation:
+        registrationSuccessIn 0.2s ease-out;
+}
+
+
+/* ================================================= */
+/* ANIMAZIONE */
+/* ================================================= */
+
+@keyframes registrationSuccessIn {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(10px)
+            scale(0.98);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+}
+
+
+/* ================================================= */
+/* ICONA SUCCESSO */
+/* ================================================= */
+
+.registration-success-icon {
+
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #dcfce7;
+
+    color: #198754;
+
+    font-size: 30px;
+}
+
+
+/* ================================================= */
+/* TITOLO */
+/* ================================================= */
+
+.registration-success-modal h4 {
+
+    margin-bottom: 10px;
+
+    color: #1e293b;
+
+    font-size: 20px;
+
+    font-weight: 700;
+}
+
+
+/* ================================================= */
+/* TESTO */
+/* ================================================= */
+
+.registration-success-modal p {
+
+    margin-bottom: 7px;
+
+    color: #475569;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+.registration-success-modal > span {
+
+    display: block;
+
+    margin-bottom: 24px;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+
+/* ================================================= */
+/* AZIONI */
+/* ================================================= */
+
+.registration-success-actions {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+}
+
+
+.registration-success-actions .btn-success-custom {
+
+    min-height: 40px;
+
+    padding: 8px 18px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #198754;
+
+    color: white;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.registration-success-actions .btn-success-custom:hover {
+
+    background: #157347;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* ================================================= */
+/* MOBILE */
+/* ================================================= */
+
+@media (max-width: 576px) {
+
+    .registration-success-modal {
+
+        padding: 26px 20px;
+
+    }
+
+    .registration-success-actions {
+
+        flex-direction: column;
+
+    }
+
+    .registration-success-actions .btn-success-custom {
+
+        width: 100%;
+
+        justify-content: center;
+
+    }
+
+}

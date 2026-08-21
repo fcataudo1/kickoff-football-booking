@@ -1,0 +1,174 @@
+<div class="login-overlay" (click)="onOverlayClick($event)">
+
+    <div class="login-modal">
+
+        <div class="login-card">
+
+            <!-- HEADER -->
+            <div class="login-header">
+
+                <div class="login-icon">
+                    <i class="bi bi-person"></i>
+                </div>
+
+                <div>
+                    <h2>Accedi</h2>
+                    <p>Accedi al tuo account KickOff</p>
+                </div>
+
+                <button
+                    type="button"
+                    class="close-button"
+                    aria-label="Chiudi"
+                    (click)="closeLogin()"
+                    [disabled]="loading">
+
+                    <i class="bi bi-x-lg"></i>
+
+                </button>
+
+            </div>
+
+
+            <!-- FORM -->
+            <div class="login-body">
+
+                <!-- EMAIL -->
+                <div class="form-group">
+
+                    <label for="login-email">
+                        Email
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-envelope input-icon"></i>
+
+                        <input
+                            id="login-email"
+                            type="email"
+                            class="form-control"
+                            [(ngModel)]="email"
+                            (blur)="touch('email')"
+                            [class.is-invalid]="shouldShowError('email')"
+                            [class.is-valid]="shouldShowValid('email')"
+                            placeholder="Inserisci la tua email"
+                            [disabled]="loading">
+
+                    </div>
+
+                    @if (shouldShowError('email')) {
+
+                        <div class="field-error">
+                            <i class="bi bi-exclamation-circle"></i>
+                            Inserisci un indirizzo email valido.
+                        </div>
+
+                    }
+
+                </div>
+
+
+                <!-- PASSWORD -->
+                <div class="form-group">
+
+                    <label for="login-password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-lock input-icon"></i>
+
+                        <input
+                            id="login-password"
+                            [type]="showPassword ? 'text' : 'password'"
+                            class="form-control"
+                            [(ngModel)]="password"
+                            (blur)="touch('password')"
+                            [class.is-invalid]="shouldShowError('password')"
+                            [class.is-valid]="shouldShowValid('password')"
+                            placeholder="Inserisci la password"
+                            [disabled]="loading">
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            (click)="togglePassword()"
+                            [disabled]="loading"
+                            [attr.aria-label]="showPassword
+                                ? 'Nascondi password'
+                                : 'Mostra password'">
+
+                            <i
+                                class="bi"
+                                [class.bi-eye]="!showPassword"
+                                [class.bi-eye-slash]="showPassword">
+                            </i>
+
+                        </button>
+
+                    </div>
+
+                    @if (shouldShowError('password')) {
+
+                        <div class="field-error">
+                            <i class="bi bi-exclamation-circle"></i>
+                            Inserisci la password.
+                        </div>
+
+                    }
+
+                </div>
+
+
+                <!-- ERRORE LOGIN -->
+                @if (errorMessage) {
+
+                    <div
+                        class="login-error"
+                        role="alert">
+
+                        <i class="bi bi-exclamation-circle"></i>
+
+                        <span>
+                            {{ errorMessage }}
+                        </span>
+
+                    </div>
+
+                }
+
+
+                <!-- LOGIN -->
+                <button
+                    type="button"
+                    class="login-button"
+                    (click)="login()"
+                    [disabled]="loading">
+
+                    @if (loading) {
+
+                        <span
+                            class="spinner-border spinner-border-sm">
+                        </span>
+
+                        Accesso...
+
+                    } @else {
+
+                        <i class="bi bi-box-arrow-in-right"></i>
+
+                        Accedi
+
+                    }
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

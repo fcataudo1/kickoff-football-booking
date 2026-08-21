@@ -4,12 +4,17 @@ package com.fpc.football_booking.service;
 import com.fpc.football_booking.dto.ReservationDto;
 import com.fpc.football_booking.entity.FootballField;
 import com.fpc.football_booking.entity.Reservation;
+import com.fpc.football_booking.entity.User;
 import com.fpc.football_booking.exception.ConflictException;
+import com.fpc.football_booking.exception.ResourceNotFoundException;
 import com.fpc.football_booking.mapper.ReservationMapper;
 import com.fpc.football_booking.repository.FootballFieldRepository;
 import com.fpc.football_booking.repository.ReservationRepository;
 import com.fpc.football_booking.entity.enums.ReservationStatus;
 import com.fpc.football_booking.exception.BusinessException;
+import com.fpc.football_booking.repository.UserRepository;
+import com.fpc.football_booking.service.impl.ReservationServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,274 +41,226 @@ class ReservationServiceImplTest {
     private FootballFieldRepository fieldRepository;
 
     @Mock
+    private UserRepository userRepository;
+
+    @Mock
     private ReservationMapper reservationMapper;
 
     @InjectMocks
     private ReservationServiceImpl reservationService;
 
 
-    @Test
-    void shouldCreateReservation() {
+    private ReservationDto reservationDto;
 
-        ReservationDto dto = new ReservationDto();
+    private Reservation reservation;
 
-        dto.setCustomerName("Mario Rossi");
-        dto.setCustomerPhone("3331111111");
-        dto.setCustomerEmail("mario@test.com");
-        dto.setReservationDate(
-                LocalDate.of(2026, 8, 20)
+    private ReservationDto responseDto;
+
+    private User user;
+
+    private FootballField field;
+
+
+    @BeforeEach
+    void setUp() {
+
+        reservationDto = new ReservationDto();
+
+        reservationDto.setReservationDate(
+                LocalDate.now().plusDays(5)
         );
-        dto.setStartTime(
+
+        reservationDto.setStartTime(
                 LocalTime.of(18, 0)
         );
 
 
-        FootballField field = new FootballField();
+        responseDto = new ReservationDto();
+
+
+        user = new User();
+
+        user.setId(1L);
+
+
+        field = new FootballField();
 
         field.setId(1L);
+
         field.setName("Campo 1");
+
         field.setActive(true);
 
 
-        Reservation reservation = new Reservation();
+        reservation = new Reservation();
 
-        reservation.setCustomerName("Mario Rossi");
-        reservation.setCustomerPhone("3331111111");
-        reservation.setCustomerEmail("mario@test.com");
+        reservation.setId(1L);
+
         reservation.setReservationDate(
-                LocalDate.of(2026, 8, 20)
+                reservationDto.getReservationDate()
         );
+
         reservation.setStartTime(
-                LocalTime.of(18, 0)
+                reservationDto.getStartTime()
         );
 
+        reservation.setUser(user);
 
-        Reservation savedReservation = new Reservation();
+        reservation.setFootballField(field);
 
-        savedReservation.setId(1L);
-        savedReservation.setCustomerName("Mario Rossi");
-        savedReservation.setCustomerPhone("3331111111");
-        savedReservation.setCustomerEmail("mario@test.com");
-        savedReservation.setReservationDate(
-                LocalDate.of(2026, 8, 20)
-        );
-        savedReservation.setStartTime(
-                LocalTime.of(18, 0)
-        );
-        savedReservation.setFootballField(field);
-        savedReservation.setPrice(
+        reservation.setPrice(
                 BigDecimal.valueOf(50)
         );
-        savedReservation.setStatus(
+
+        reservation.setStatus(
                 ReservationStatus.CONFIRMED
         );
+    }
 
 
-        ReservationDto resultDto = new ReservationDto();
+    // =========================================================
+    // CREATE RESERVATION
+    // =========================================================
 
-        resultDto.setId(1L);
-        resultDto.setCustomerName("Mario Rossi");
-        resultDto.setCustomerPhone("3331111111");
-        resultDto.setReservationDate(
-                LocalDate.of(2026, 8, 20)
-        );
-        resultDto.setStartTime(
-                LocalTime.of(18, 0)
-        );
-        resultDto.setPrice(
-                BigDecimal.valueOf(50)
-        );
-        resultDto.setStatus(
-                ReservationStatus.CONFIRMED
-        );
+    @Test
+    void shouldCreateReservationSuccessfully() {
+
+        when(userRepository.findById(1L))
+                .thenReturn(
+                        Optional.of(user)
+                );
+
+
+        when(
+                reservationRepository
+                        .existsConfirmedReservation(
+                                1L,
+                                reservationDto.getReservationDate(),
+                                reservationDto.getStartTime()
+                        )
+        ).thenReturn(false);
 
 
         when(
                 fieldRepository.findAvailableFields(
-                        LocalDate.of(2026, 8, 20),
-                        LocalTime.of(18, 0)
+                        reservationDto.getReservationDate(),
+                        reservationDto.getStartTime()
                 )
-        ).thenReturn(List.of(field));
+        ).thenReturn(
+                List.of(field)
+        );
 
 
         when(
-                reservationMapper.toEntity(dto)
+                reservationMapper.toEntity(
+                        reservationDto
+                )
         ).thenReturn(reservation);
 
 
         when(
-                reservationRepository.save(any(Reservation.class))
-        ).thenReturn(savedReservation);
+                reservationRepository.save(
+                        reservation
+                )
+        ).thenReturn(reservation);
 
 
         when(
-                reservationMapper.toDTO(savedReservation)
-        ).thenReturn(resultDto);
+                reservationMapper.toDTO(
+                        reservation
+                )
+        ).thenReturn(responseDto);
 
 
         ReservationDto result =
-                reservationService.createReservation(dto);
+                reservationService.createReservation(
+                        reservationDto,
+                        1L
+                );
 
 
         assertNotNull(result);
 
-        assertEquals(
-                1L,
-                result.getId()
+        assertSame(
+                responseDto,
+                result
         );
 
+
         assertEquals(
-                "Mario Rossi",
-                result.getCustomerName()
+                user,
+                reservation.getUser()
         );
+
+
+        assertEquals(
+                field,
+                reservation.getFootballField()
+        );
+
 
         assertEquals(
                 BigDecimal.valueOf(50),
-                result.getPrice()
+                reservation.getPrice()
         );
+
 
         assertEquals(
                 ReservationStatus.CONFIRMED,
-                result.getStatus()
+                reservation.getStatus()
+        );
+
+
+        verify(userRepository)
+                .findById(1L);
+
+
+        verify(
+                reservationRepository
+        ).existsConfirmedReservation(
+                1L,
+                reservationDto.getReservationDate(),
+                reservationDto.getStartTime()
         );
 
 
         verify(fieldRepository)
                 .findAvailableFields(
-                        LocalDate.of(2026, 8, 20),
-                        LocalTime.of(18, 0)
+                        reservationDto.getReservationDate(),
+                        reservationDto.getStartTime()
                 );
-
-        verify(reservationRepository)
-                .save(any(Reservation.class));
-
-        verify(reservationMapper)
-                .toEntity(dto);
-
-        verify(reservationMapper)
-                .toDTO(savedReservation);
-    }
-
-    @Test
-    void shouldThrowExceptionWhenNoFieldIsAvailable() {
-
-        ReservationDto dto = new ReservationDto();
-
-        dto.setCustomerName("Mario Rossi");
-        dto.setCustomerPhone("3331111111");
-        dto.setCustomerEmail("mario@test.com");
-        dto.setReservationDate(
-                LocalDate.of(2026, 8, 20)
-        );
-        dto.setStartTime(
-                LocalTime.of(18, 0)
-        );
-
-
-        when(
-                fieldRepository.findAvailableFields(
-                        LocalDate.of(2026, 8, 20),
-                        LocalTime.of(18, 0)
-                )
-        ).thenReturn(List.of());
-
-
-        ConflictException exception = assertThrows(
-                ConflictException.class,
-                () -> reservationService.createReservation(dto)
-        );
-
-
-        assertEquals(
-                "No football field available",
-                exception.getMessage()
-        );
-
-
-        verify(fieldRepository)
-                .findAvailableFields(
-                        LocalDate.of(2026, 8, 20),
-                        LocalTime.of(18, 0)
-                );
-
-
-        verify(reservationRepository, never())
-                .save(any(Reservation.class));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenCustomerAlreadyHasReservation() {
-
-        ReservationDto dto = new ReservationDto();
-
-        dto.setCustomerName("Mario Rossi");
-        dto.setCustomerPhone("3331111111");
-        dto.setCustomerEmail("mario@test.com");
-        dto.setReservationDate(
-                LocalDate.of(2026, 8, 20)
-        );
-        dto.setStartTime(
-                LocalTime.of(18, 0)
-        );
-
-
-        when(
-                reservationRepository.existsConfirmedReservation(
-                        "3331111111",
-                        LocalDate.of(2026, 8, 20),
-                        LocalTime.of(18, 0)
-                )
-        ).thenReturn(true);
-
-
-        ConflictException exception = assertThrows(
-                ConflictException.class,
-                () -> reservationService.createReservation(dto)
-        );
-
-
-        assertEquals(
-                "You already have a reservation for this time",
-                exception.getMessage()
-        );
 
 
         verify(reservationRepository)
-                .existsConfirmedReservation(
-                        "3331111111",
-                        LocalDate.of(2026, 8, 20),
-                        LocalTime.of(18, 0)
-                );
+                .save(reservation);
 
 
-        verify(fieldRepository, never())
-                .findAvailableFields(any(), any());
-
-
-        verify(reservationRepository, never())
-                .save(any(Reservation.class));
+        verify(reservationMapper)
+                .toDTO(reservation);
     }
+
+
+    // =========================================================
+    // DATA NEL PASSATO
+    // =========================================================
 
     @Test
     void shouldThrowExceptionWhenReservationDateIsInThePast() {
 
-        ReservationDto dto = new ReservationDto();
-
-        dto.setCustomerName("Mario Rossi");
-        dto.setCustomerPhone("3331111111");
-        dto.setCustomerEmail("mario@test.com");
-        dto.setReservationDate(
+        reservationDto.setReservationDate(
                 LocalDate.now().minusDays(1)
         );
-        dto.setStartTime(
-                LocalTime.of(18, 0)
-        );
 
 
-        BusinessException exception = assertThrows(
-                BusinessException.class,
-                () -> reservationService.createReservation(dto)
-        );
+        BusinessException exception =
+                assertThrows(
+                        BusinessException.class,
+                        () ->
+                                reservationService.createReservation(
+                                        reservationDto,
+                                        1L
+                                )
+                );
 
 
         assertEquals(
@@ -313,32 +270,35 @@ class ReservationServiceImplTest {
 
 
         verifyNoInteractions(
+                userRepository,
                 reservationRepository,
                 fieldRepository,
                 reservationMapper
         );
     }
 
+
+    // =========================================================
+    // ORARIO PRIMA DELLE 16
+    // =========================================================
+
     @Test
-    void shouldThrowExceptionWhenReservationIsBeforeOpeningTime() {
+    void shouldRejectReservationBeforeOpeningTime() {
 
-        ReservationDto dto = new ReservationDto();
-
-        dto.setCustomerName("Mario Rossi");
-        dto.setCustomerPhone("3331111111");
-        dto.setCustomerEmail("mario@test.com");
-        dto.setReservationDate(
-                LocalDate.now().plusDays(1)
-        );
-        dto.setStartTime(
+        reservationDto.setStartTime(
                 LocalTime.of(15, 0)
         );
 
 
-        BusinessException exception = assertThrows(
-                BusinessException.class,
-                () -> reservationService.createReservation(dto)
-        );
+        BusinessException exception =
+                assertThrows(
+                        BusinessException.class,
+                        () ->
+                                reservationService.createReservation(
+                                        reservationDto,
+                                        1L
+                                )
+                );
 
 
         assertEquals(
@@ -348,6 +308,7 @@ class ReservationServiceImplTest {
 
 
         verifyNoInteractions(
+                userRepository,
                 reservationRepository,
                 fieldRepository,
                 reservationMapper
@@ -355,26 +316,27 @@ class ReservationServiceImplTest {
     }
 
 
+    // =========================================================
+    // ORARIO DOPO LE 23
+    // =========================================================
+
     @Test
-    void shouldThrowExceptionWhenReservationIsAfterClosingTime() {
+    void shouldRejectReservationAfterLastSlot() {
 
-        ReservationDto dto = new ReservationDto();
-
-        dto.setCustomerName("Mario Rossi");
-        dto.setCustomerPhone("3331111111");
-        dto.setCustomerEmail("mario@test.com");
-        dto.setReservationDate(
-                LocalDate.now().plusDays(1)
-        );
-        dto.setStartTime(
+        reservationDto.setStartTime(
                 LocalTime.of(23, 30)
         );
 
 
-        BusinessException exception = assertThrows(
-                BusinessException.class,
-                () -> reservationService.createReservation(dto)
-        );
+        BusinessException exception =
+                assertThrows(
+                        BusinessException.class,
+                        () ->
+                                reservationService.createReservation(
+                                        reservationDto,
+                                        1L
+                                )
+                );
 
 
         assertEquals(
@@ -384,32 +346,35 @@ class ReservationServiceImplTest {
 
 
         verifyNoInteractions(
+                userRepository,
                 reservationRepository,
                 fieldRepository,
                 reservationMapper
         );
     }
 
+
+    // =========================================================
+    // ORARIO NON PIENO
+    // =========================================================
+
     @Test
-    void shouldThrowExceptionWhenReservationIsNotOnFullHour() {
+    void shouldRejectReservationNotOnFullHour() {
 
-        ReservationDto dto = new ReservationDto();
-
-        dto.setCustomerName("Mario Rossi");
-        dto.setCustomerPhone("3331111111");
-        dto.setCustomerEmail("mario@test.com");
-        dto.setReservationDate(
-                LocalDate.now().plusDays(1)
-        );
-        dto.setStartTime(
+        reservationDto.setStartTime(
                 LocalTime.of(18, 30)
         );
 
 
-        BusinessException exception = assertThrows(
-                BusinessException.class,
-                () -> reservationService.createReservation(dto)
-        );
+        BusinessException exception =
+                assertThrows(
+                        BusinessException.class,
+                        () ->
+                                reservationService.createReservation(
+                                        reservationDto,
+                                        1L
+                                )
+                );
 
 
         assertEquals(
@@ -419,6 +384,7 @@ class ReservationServiceImplTest {
 
 
         verifyNoInteractions(
+                userRepository,
                 reservationRepository,
                 fieldRepository,
                 reservationMapper
@@ -426,12 +392,364 @@ class ReservationServiceImplTest {
     }
 
 
+    // =========================================================
+    // SECONDI DIVERSI DA ZERO
+    // =========================================================
+
     @Test
-    void shouldCancelReservation() {
+    void shouldRejectReservationWithSeconds() {
 
-        Reservation reservation = new Reservation();
+        reservationDto.setStartTime(
+                LocalTime.of(18, 0, 1)
+        );
 
-        reservation.setId(1L);
+
+        BusinessException exception =
+                assertThrows(
+                        BusinessException.class,
+                        () ->
+                                reservationService.createReservation(
+                                        reservationDto,
+                                        1L
+                                )
+                );
+
+
+        assertEquals(
+                "Reservation must start on a full hour",
+                exception.getMessage()
+        );
+    }
+
+
+    // =========================================================
+    // UTENTE NON TROVATO
+    // =========================================================
+
+    @Test
+    void shouldThrowExceptionWhenUserDoesNotExist() {
+
+        when(userRepository.findById(99L))
+                .thenReturn(
+                        Optional.empty()
+                );
+
+
+        ResourceNotFoundException exception =
+                assertThrows(
+                        ResourceNotFoundException.class,
+                        () ->
+                                reservationService.createReservation(
+                                        reservationDto,
+                                        99L
+                                )
+                );
+
+
+        assertEquals(
+                "User not found",
+                exception.getMessage()
+        );
+
+
+        verify(userRepository)
+                .findById(99L);
+
+
+        verify(
+                reservationRepository,
+                never()
+        ).save(any());
+
+
+        verify(
+                fieldRepository,
+                never()
+        ).findAvailableFields(any(), any());
+    }
+
+
+    // =========================================================
+    // PRENOTAZIONE GIÀ ESISTENTE
+    // =========================================================
+
+    @Test
+    void shouldRejectDuplicateReservation() {
+
+        when(userRepository.findById(1L))
+                .thenReturn(
+                        Optional.of(user)
+                );
+
+
+        when(
+                reservationRepository
+                        .existsConfirmedReservation(
+                                1L,
+                                reservationDto.getReservationDate(),
+                                reservationDto.getStartTime()
+                        )
+        ).thenReturn(true);
+
+
+        ConflictException exception =
+                assertThrows(
+                        ConflictException.class,
+                        () ->
+                                reservationService.createReservation(
+                                        reservationDto,
+                                        1L
+                                )
+                );
+
+
+        assertEquals(
+                "You already have a reservation for this time",
+                exception.getMessage()
+        );
+
+
+        verify(
+                fieldRepository,
+                never()
+        ).findAvailableFields(any(), any());
+
+
+        verify(
+                reservationRepository,
+                never()
+        ).save(any());
+    }
+
+
+    // =========================================================
+    // NESSUN CAMPO DISPONIBILE
+    // =========================================================
+
+    @Test
+    void shouldRejectReservationWhenNoFieldIsAvailable() {
+
+        when(userRepository.findById(1L))
+                .thenReturn(
+                        Optional.of(user)
+                );
+
+
+        when(
+                reservationRepository
+                        .existsConfirmedReservation(
+                                1L,
+                                reservationDto.getReservationDate(),
+                                reservationDto.getStartTime()
+                        )
+        ).thenReturn(false);
+
+
+        when(
+                fieldRepository.findAvailableFields(
+                        reservationDto.getReservationDate(),
+                        reservationDto.getStartTime()
+                )
+        ).thenReturn(
+                List.of()
+        );
+
+
+        ConflictException exception =
+                assertThrows(
+                        ConflictException.class,
+                        () ->
+                                reservationService.createReservation(
+                                        reservationDto,
+                                        1L
+                                )
+                );
+
+
+        assertEquals(
+                "No football field available",
+                exception.getMessage()
+        );
+
+
+        verify(
+                reservationRepository,
+                never()
+        ).save(any());
+
+
+        verify(
+                reservationMapper,
+                never()
+        ).toEntity(any());
+    }
+
+
+    // =========================================================
+    // GET FIELD RESERVATIONS
+    // =========================================================
+
+    @Test
+    void shouldReturnFieldReservations() {
+
+        LocalDate date =
+                LocalDate.now().plusDays(5);
+
+
+        List<Reservation> reservations =
+                List.of(reservation);
+
+
+        List<ReservationDto> dtoList =
+                List.of(responseDto);
+
+
+        when(
+                reservationRepository
+                        .findByFootballFieldIdAndReservationDate(
+                                1L,
+                                date
+                        )
+        ).thenReturn(reservations);
+
+
+        when(
+                reservationMapper.toDTOList(
+                        reservations
+                )
+        ).thenReturn(dtoList);
+
+
+        List<ReservationDto> result =
+                reservationService.getFieldReservations(
+                        1L,
+                        date
+                );
+
+
+        assertEquals(
+                dtoList,
+                result
+        );
+
+
+        verify(
+                reservationRepository
+        ).findByFootballFieldIdAndReservationDate(
+                1L,
+                date
+        );
+
+
+        verify(
+                reservationMapper
+        ).toDTOList(reservations);
+    }
+
+
+    // =========================================================
+    // GET ALL RESERVATIONS
+    // =========================================================
+
+    @Test
+    void shouldReturnAllReservations() {
+
+        List<Reservation> reservations =
+                List.of(reservation);
+
+
+        List<ReservationDto> dtoList =
+                List.of(responseDto);
+
+
+        when(
+                reservationRepository.findAll()
+        ).thenReturn(reservations);
+
+
+        when(
+                reservationMapper.toDTOList(
+                        reservations
+                )
+        ).thenReturn(dtoList);
+
+
+        List<ReservationDto> result =
+                reservationService.getAllReservations();
+
+
+        assertEquals(
+                dtoList,
+                result
+        );
+
+
+        verify(
+                reservationRepository
+        ).findAll();
+
+
+        verify(
+                reservationMapper
+        ).toDTOList(reservations);
+    }
+
+
+    // =========================================================
+    // GET MY RESERVATIONS
+    // =========================================================
+
+    @Test
+    void shouldReturnMyReservations() {
+
+        List<Reservation> reservations =
+                List.of(reservation);
+
+
+        List<ReservationDto> dtoList =
+                List.of(responseDto);
+
+
+        when(
+                reservationRepository.findByUserId(1L)
+        ).thenReturn(reservations);
+
+
+        when(
+                reservationMapper.toDTOList(
+                        reservations
+                )
+        ).thenReturn(dtoList);
+
+
+        List<ReservationDto> result =
+                reservationService.getMyReservations(1L);
+
+
+        assertEquals(
+                dtoList,
+                result
+        );
+
+
+        verify(
+                reservationRepository
+        ).findByUserId(1L);
+
+
+        verify(
+                reservationMapper
+        ).toDTOList(reservations);
+    }
+
+
+    // =========================================================
+    // CANCEL USER RESERVATION
+    // =========================================================
+
+    @Test
+    void shouldCancelOwnReservation() {
+
         reservation.setStatus(
                 ReservationStatus.CONFIRMED
         );
@@ -444,7 +762,10 @@ class ReservationServiceImplTest {
         );
 
 
-        reservationService.cancelReservation(1L);
+        reservationService.cancelReservation(
+                1L,
+                1L
+        );
 
 
         assertEquals(
@@ -453,20 +774,57 @@ class ReservationServiceImplTest {
         );
 
 
-        verify(reservationRepository)
-                .findById(1L);
-
-
-        verify(reservationRepository)
-                .save(reservation);
+        verify(
+                reservationRepository
+        ).save(reservation);
     }
 
+
+    // =========================================================
+    // RESERVATION NOT FOUND
+    // =========================================================
+
     @Test
-    void shouldThrowExceptionWhenReservationIsAlreadyCancelled() {
+    void shouldThrowExceptionWhenCancellingNonExistingReservation() {
 
-        Reservation reservation = new Reservation();
+        when(
+                reservationRepository.findById(99L)
+        ).thenReturn(
+                Optional.empty()
+        );
 
-        reservation.setId(1L);
+
+        ResourceNotFoundException exception =
+                assertThrows(
+                        ResourceNotFoundException.class,
+                        () ->
+                                reservationService.cancelReservation(
+                                        99L,
+                                        1L
+                                )
+                );
+
+
+        assertEquals(
+                "Reservation not found",
+                exception.getMessage()
+        );
+
+
+        verify(
+                reservationRepository,
+                never()
+        ).save(any());
+    }
+
+
+    // =========================================================
+    // CANCELLED RESERVATION
+    // =========================================================
+
+    @Test
+    void shouldRejectAlreadyCancelledReservation() {
+
         reservation.setStatus(
                 ReservationStatus.CANCELLED
         );
@@ -479,10 +837,15 @@ class ReservationServiceImplTest {
         );
 
 
-        BusinessException exception = assertThrows(
-                BusinessException.class,
-                () -> reservationService.cancelReservation(1L)
-        );
+        BusinessException exception =
+                assertThrows(
+                        BusinessException.class,
+                        () ->
+                                reservationService.cancelReservation(
+                                        1L,
+                                        1L
+                                )
+                );
 
 
         assertEquals(
@@ -491,11 +854,172 @@ class ReservationServiceImplTest {
         );
 
 
-        verify(reservationRepository)
-                .findById(1L);
-
-
-        verify(reservationRepository, never())
-                .save(any(Reservation.class));
+        verify(
+                reservationRepository,
+                never()
+        ).save(any());
     }
+
+
+    // =========================================================
+    // CANCEL OTHER USER RESERVATION
+    // =========================================================
+
+    @Test
+    void shouldRejectCancellationOfAnotherUserReservation() {
+
+        User otherUser =
+                new User();
+
+        otherUser.setId(2L);
+
+
+        reservation.setUser(otherUser);
+
+        reservation.setStatus(
+                ReservationStatus.CONFIRMED
+        );
+
+
+        when(
+                reservationRepository.findById(1L)
+        ).thenReturn(
+                Optional.of(reservation)
+        );
+
+
+        BusinessException exception =
+                assertThrows(
+                        BusinessException.class,
+                        () ->
+                                reservationService.cancelReservation(
+                                        1L,
+                                        1L
+                                )
+                );
+
+
+        assertEquals(
+                "You can only cancel your own reservations",
+                exception.getMessage()
+        );
+
+
+        verify(
+                reservationRepository,
+                never()
+        ).save(any());
+    }
+
+
+    // =========================================================
+    // CANCEL BY STAFF
+    // =========================================================
+
+    @Test
+    void shouldCancelReservationByStaff() {
+
+        reservation.setStatus(
+                ReservationStatus.CONFIRMED
+        );
+
+
+        when(
+                reservationRepository.findById(1L)
+        ).thenReturn(
+                Optional.of(reservation)
+        );
+
+
+        reservationService.cancelReservationByStaff(1L);
+
+
+        assertEquals(
+                ReservationStatus.CANCELLED,
+                reservation.getStatus()
+        );
+
+
+        verify(
+                reservationRepository
+        ).save(reservation);
+    }
+
+
+    // =========================================================
+    // STAFF - RESERVATION NOT FOUND
+    // =========================================================
+
+    @Test
+    void shouldThrowExceptionWhenStaffCancelsNonExistingReservation() {
+
+        when(
+                reservationRepository.findById(99L)
+        ).thenReturn(
+                Optional.empty()
+        );
+
+
+        ResourceNotFoundException exception =
+                assertThrows(
+                        ResourceNotFoundException.class,
+                        () ->
+                                reservationService
+                                        .cancelReservationByStaff(99L)
+                );
+
+
+        assertEquals(
+                "Reservation not found",
+                exception.getMessage()
+        );
+
+
+        verify(
+                reservationRepository,
+                never()
+        ).save(any());
+    }
+
+
+    // =========================================================
+    // STAFF - ALREADY CANCELLED
+    // =========================================================
+
+    @Test
+    void shouldRejectStaffCancellationOfAlreadyCancelledReservation() {
+
+        reservation.setStatus(
+                ReservationStatus.CANCELLED
+        );
+
+
+        when(
+                reservationRepository.findById(1L)
+        ).thenReturn(
+                Optional.of(reservation)
+        );
+
+
+        BusinessException exception =
+                assertThrows(
+                        BusinessException.class,
+                        () ->
+                                reservationService
+                                        .cancelReservationByStaff(1L)
+                );
+
+
+        assertEquals(
+                "Reservation already cancelled",
+                exception.getMessage()
+        );
+
+
+        verify(
+                reservationRepository,
+                never()
+        ).save(any());
+    }
+
 }

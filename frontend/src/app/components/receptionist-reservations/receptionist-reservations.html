@@ -1,0 +1,723 @@
+<!-- ================================================= -->
+<!-- FINESTRA PRENOTAZIONI RECEPTIONIST -->
+<!-- ================================================= -->
+
+<div class="reservations-overlay">
+
+    <div class="reservations-modal">
+
+
+        <!-- ================================================= -->
+        <!-- HEADER -->
+        <!-- ================================================= -->
+
+        <div class="reservations-header">
+
+            <div class="header-content">
+
+                <div class="header-icon">
+                    <i class="bi bi-calendar2-week"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        Prenotazioni
+                    </h2>
+
+                    <p>
+                        Gestisci le prenotazioni dei clienti
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="close-reservations"
+                [disabled]="loading || showCancelModal"
+                (click)="closeWindow()"
+                aria-label="Chiudi">
+
+                <i class="bi bi-x"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- CONTENUTO -->
+        <!-- ================================================= -->
+
+        <div class="reservations-content">
+
+
+            <!-- ================================================= -->
+            <!-- FILTRI -->
+            <!-- ================================================= -->
+
+            <div class="filters-card">
+
+
+                <div class="filter-group">
+
+                    <label for="reservationDate">
+
+                        <i class="bi bi-calendar3"></i>
+
+                        Data
+
+                    </label>
+
+
+                    <input
+                        id="reservationDate"
+                        type="date"
+                        class="form-control"
+                        [(ngModel)]="selectedDate">
+
+                </div>
+
+
+                <div class="filter-group">
+
+                    <label for="fieldFilter">
+
+                        <i class="bi bi-grid"></i>
+
+                        Campo
+
+                    </label>
+
+
+                    <select
+                        id="fieldFilter"
+                        class="form-select"
+                        [(ngModel)]="selectedFieldId">
+
+                        <option value="">
+                            Tutti i campi
+                        </option>
+
+
+                        @for (
+                            field of fields;
+                            track field.footballField.id
+                        ) {
+
+                            <option
+                                [value]="field.footballField.id">
+
+                                {{ field.footballField.name }}
+
+                            </option>
+
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="reset-filters"
+                    (click)="resetFilters()">
+
+                    <i class="bi bi-arrow-counterclockwise"></i>
+
+                    Azzera
+
+                </button>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- RIEPILOGO -->
+            <!-- ================================================= -->
+
+            <div class="reservations-summary">
+
+                <div>
+
+                    <span class="summary-label">
+                        Prenotazioni
+                    </span>
+
+                    <strong>
+                        {{ filteredReservations.length }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- LOADING -->
+            <!-- ================================================= -->
+
+            @if (loading) {
+
+                <div class="loading-container">
+
+                    <div
+                        class="spinner-border text-success"
+                        role="status">
+                    </div>
+
+                    <p>
+                        Caricamento prenotazioni...
+                    </p>
+
+                </div>
+
+            }
+
+
+            <!-- ================================================= -->
+            <!-- ERRORE -->
+            <!-- ================================================= -->
+
+            @if (
+                !loading &&
+                errorMessage
+            ) {
+
+                <div class="reservation-alert error">
+
+                    <i class="bi bi-exclamation-circle"></i>
+
+                    <span>
+                        {{ errorMessage }}
+                    </span>
+
+                    <button
+                        type="button"
+                        (click)="loadReservations()">
+
+                        Riprova
+
+                    </button>
+
+                </div>
+
+            }
+
+
+            <!-- ================================================= -->
+            <!-- NESSUNA PRENOTAZIONE -->
+            <!-- ================================================= -->
+
+            @if (
+                !loading &&
+                !errorMessage &&
+                filteredReservations.length === 0
+            ) {
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+
+                        <i class="bi bi-calendar-x"></i>
+
+                    </div>
+
+                    <h4>
+                        Nessuna prenotazione
+                    </h4>
+
+                    <p>
+                        Non ci sono prenotazioni
+                        corrispondenti ai filtri selezionati.
+                    </p>
+
+                </div>
+
+            }
+
+
+            <!-- ================================================= -->
+            <!-- LISTA -->
+            <!-- ================================================= -->
+
+            @if (
+                !loading &&
+                !errorMessage &&
+                filteredReservations.length > 0
+            ) {
+
+                <div class="reservations-list">
+
+                    @for (
+                        reservation of filteredReservations;
+                        track reservation.id
+                    ) {
+
+                        <div
+                            class="reservation-card"
+                            [class.reservation-cancelled]="
+                                isCancelled(reservation)
+                            ">
+
+
+                            <!-- CAMPO -->
+
+                            <div class="reservation-field">
+
+                                <div class="field-icon">
+
+                                    <i class="bi bi-dribbble"></i>
+
+                                </div>
+
+                                <div class="field-info">
+
+                                    <strong>
+                                        {{ reservation.footballField.name }}
+                                    </strong>
+
+                                    <span>
+                                        Campo da calcio
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- CLIENTE -->
+
+                            <div class="reservation-client">
+
+                                <div class="client-icon">
+
+                                    <i class="bi bi-person"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <span>
+                                        Cliente
+                                    </span>
+
+                                    <strong>
+
+                                        {{ reservation.user.nome }}
+                                        {{ reservation.user.cognome }}
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- TELEFONO -->
+
+                            <div class="reservation-contact">
+
+                                <i class="bi bi-telephone"></i>
+
+                                <span>
+                                    {{ reservation.user.telefono }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- DATA -->
+
+                            <div class="reservation-date">
+
+                                <i class="bi bi-calendar3"></i>
+
+                                <div>
+
+                                    <span>
+                                        Data
+                                    </span>
+
+                                    <strong>
+
+                                        {{
+                                            formatDate(
+                                                reservation.reservationDate
+                                            )
+                                        }}
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ORARIO -->
+
+                            <div class="reservation-time">
+
+                                <i class="bi bi-clock"></i>
+
+                                <div>
+
+                                    <span>
+                                        Orario
+                                    </span>
+
+                                    <strong>
+
+                                        {{
+                                            formatTime(
+                                                reservation.startTime
+                                            )
+                                        }}
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- PREZZO -->
+
+                            <div class="reservation-price">
+
+                                <span>
+                                    Totale
+                                </span>
+
+                                <strong>
+                                    €{{ reservation.price }}
+                                </strong>
+
+                            </div>
+
+
+                            <!-- STATO -->
+
+                            <div class="reservation-status">
+
+                                @if (
+                                    isConfirmed(reservation)
+                                ) {
+
+                                    <span
+                                        class="status-badge confirmed">
+
+                                        <i
+                                            class="bi bi-check-circle">
+                                        </i>
+
+                                        Confermata
+
+                                    </span>
+
+                                }
+
+
+                                @if (
+                                    isCancelled(reservation)
+                                ) {
+
+                                    <span
+                                        class="status-badge cancelled">
+
+                                        <i
+                                            class="bi bi-x-circle">
+                                        </i>
+
+                                        Annullata
+
+                                    </span>
+
+                                }
+
+                            </div>
+
+
+                            <!-- AZIONI -->
+
+                            <div class="reservation-actions">
+
+                                @if (
+                                    isConfirmed(reservation)
+                                ) {
+
+                                    <button
+                                        type="button"
+                                        class="cancel-reservation"
+                                        [disabled]="
+                                            cancellingId !== null
+                                        "
+                                        (click)="
+                                            cancelReservation(reservation)
+                                        ">
+
+                                        <i class="bi bi-x-circle"></i>
+
+                                        Annulla
+
+                                    </button>
+
+                                }
+
+
+                                @if (
+                                    isCancelled(reservation)
+                                ) {
+
+                                    <span
+                                        class="cancelled-label">
+
+                                        <i class="bi bi-check2"></i>
+
+                                        Già annullata
+
+                                    </span>
+
+                                }
+
+                            </div>
+
+                        </div>
+
+                    }
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- MODALE CONFERMA ANNULLAMENTO -->
+<!-- ================================================= -->
+
+@if (showCancelModal && reservationToCancel) {
+
+    <div
+        class="cancel-modal-overlay"
+        (click)="closeCancelModal()">
+
+        <div
+            class="cancel-modal"
+            (click)="$event.stopPropagation()">
+
+
+            <!-- ICONA -->
+
+            <div class="cancel-modal-icon">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+            </div>
+
+
+            <!-- TITOLO -->
+
+            <h3>
+                Annulla prenotazione
+            </h3>
+
+
+            <!-- TESTO -->
+
+            <p class="cancel-modal-question">
+
+                Sei sicuro di voler annullare questa prenotazione?
+
+            </p>
+
+
+            <!-- DETTAGLI -->
+
+            <div class="cancel-details">
+
+
+                <!-- CLIENTE -->
+
+                <div class="cancel-detail">
+
+                    <div class="cancel-detail-icon">
+
+                        <i class="bi bi-person"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Cliente
+                        </span>
+
+                        <strong>
+
+                            {{ reservationToCancel.user.nome }}
+                            {{ reservationToCancel.user.cognome }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CAMPO -->
+
+                <div class="cancel-detail">
+
+                    <div class="cancel-detail-icon">
+
+                        <i class="bi bi-dribbble"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Campo
+                        </span>
+
+                        <strong>
+
+                            {{
+                                reservationToCancel
+                                    .footballField.name
+                            }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DATA -->
+
+                <div class="cancel-detail">
+
+                    <div class="cancel-detail-icon">
+
+                        <i class="bi bi-calendar3"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Data
+                        </span>
+
+                        <strong>
+
+                            {{
+                                formatDate(
+                                    reservationToCancel
+                                        .reservationDate
+                                )
+                            }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ORARIO -->
+
+                <div class="cancel-detail">
+
+                    <div class="cancel-detail-icon">
+
+                        <i class="bi bi-clock"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Orario
+                        </span>
+
+                        <strong>
+
+                            {{
+                                formatTime(
+                                    reservationToCancel.startTime
+                                )
+                            }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- AZIONI -->
+
+            <div class="cancel-modal-actions">
+
+
+                <button
+                    type="button"
+                    class="cancel-modal-back"
+                    [disabled]="cancellingId !== null"
+                    (click)="closeCancelModal()">
+
+                    Torna indietro
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="cancel-modal-confirm"
+                    [disabled]="cancellingId !== null"
+                    (click)="confirmCancellation()">
+
+
+                    @if (
+                        cancellingId !== null
+                    ) {
+
+                        <span
+                            class="spinner-border spinner-border-sm">
+                        </span>
+
+                        Annullamento...
+
+                    }
+
+                    @else {
+
+                        <i class="bi bi-trash3"></i>
+
+                        Annulla prenotazione
+
+                    }
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+}
