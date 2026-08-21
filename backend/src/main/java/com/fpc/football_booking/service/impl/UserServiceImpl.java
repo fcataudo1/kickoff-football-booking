@@ -1,4 +1,4 @@
-package com.fpc.football_booking.service;
+package com.fpc.football_booking.service.impl;
 
 import com.fpc.football_booking.dto.UserRequestDto;
 import com.fpc.football_booking.dto.UserResponseDto;
@@ -8,6 +8,7 @@ import com.fpc.football_booking.exception.ConflictException;
 import com.fpc.football_booking.exception.ResourceNotFoundException;
 import com.fpc.football_booking.mapper.UserMapper;
 import com.fpc.football_booking.repository.UserRepository;
+import com.fpc.football_booking.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

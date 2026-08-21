@@ -1,4 +1,4 @@
-package com.fpc.football_booking.service;
+package com.fpc.football_booking.service.impl;
 
 
 import com.fpc.football_booking.dto.ReservationDto;
@@ -13,6 +13,7 @@ import com.fpc.football_booking.mapper.ReservationMapper;
 import com.fpc.football_booking.repository.FootballFieldRepository;
 import com.fpc.football_booking.repository.ReservationRepository;
 import com.fpc.football_booking.repository.UserRepository;
+import com.fpc.football_booking.service.ReservationService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 

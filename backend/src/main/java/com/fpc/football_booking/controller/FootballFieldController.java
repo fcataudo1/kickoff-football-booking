@@ -1,7 +1,7 @@
 package com.fpc.football_booking.controller;
 
 import com.fpc.football_booking.dto.FootballFieldDto;
-import com.fpc.football_booking.service.FootballFieldService;
+import com.fpc.football_booking.service.impl.FootballFieldService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,13 +30,12 @@ public class FootballFieldController {
     public FootballFieldController(
             FootballFieldService fieldService
     ) {
-
         this.fieldService = fieldService;
-
     }
 
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('CLIENTE', 'RECEPTIONIST')")
     @Operation(
             summary = "Recupera tutti i campi",
             description = "Restituisce la lista di tutti i campi da calcio."
@@ -47,11 +47,11 @@ public class FootballFieldController {
     public List<FootballFieldDto> getAll() {
 
         return fieldService.getAll();
-
     }
 
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('CLIENTE', 'RECEPTIONIST')")
     @Operation(
             summary = "Recupera un campo",
             description = "Restituisce un campo da calcio tramite il suo ID."
@@ -71,11 +71,11 @@ public class FootballFieldController {
     ) {
 
         return fieldService.read(id);
-
     }
 
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Crea un nuovo campo",
             description = "Crea un nuovo campo da calcio utilizzando i dati forniti."
@@ -99,11 +99,11 @@ public class FootballFieldController {
                 .body(
                         fieldService.insert(dto)
                 );
-
     }
 
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Modifica un campo",
             description = "Aggiorna i dati di un campo da calcio esistente."
@@ -130,11 +130,11 @@ public class FootballFieldController {
         dto.setId(id);
 
         return fieldService.update(dto);
-
     }
 
 
     @PutMapping("/{id}/disable")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Disabilita un campo",
             description = "Disabilita un campo da calcio impedendone l'utilizzo per nuove prenotazioni."
@@ -158,7 +158,5 @@ public class FootballFieldController {
         return ResponseEntity
                 .noContent()
                 .build();
-
     }
-
 }

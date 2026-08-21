@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,10 @@ public class UserController {
         this.userService = userService;
     }
 
+
+    // =================================================
+    // REGISTRAZIONE CLIENTE
+    // =================================================
 
     @PostMapping
     @Operation(
@@ -64,10 +69,15 @@ public class UserController {
     }
 
 
+    // =================================================
+    // GESTIONE UTENTI - ADMIN
+    // =================================================
+
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Recupera tutti gli utenti",
-            description = "Restituisce la lista degli utenti presenti nel sistema."
+            description = "Restituisce la lista degli utenti presenti nel sistema. Accessibile solo agli amministratori."
     )
     @ApiResponse(
             responseCode = "200",
@@ -80,9 +90,10 @@ public class UserController {
 
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Recupera un utente",
-            description = "Restituisce un utente tramite il suo ID."
+            description = "Restituisce un utente tramite il suo ID. Accessibile solo agli amministratori."
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -103,9 +114,10 @@ public class UserController {
 
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Elimina un utente",
-            description = "Elimina un utente tramite il suo ID."
+            description = "Elimina un utente tramite il suo ID. Accessibile solo agli amministratori."
     )
     @ApiResponses(value = {
             @ApiResponse(

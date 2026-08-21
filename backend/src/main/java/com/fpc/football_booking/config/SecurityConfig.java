@@ -23,16 +23,21 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+
     public SecurityConfig(
             JwtAuthenticationFilter jwtAuthenticationFilter
     ) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
+
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
+
     }
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(
@@ -50,9 +55,14 @@ public class SecurityConfig {
                         )
                 )
 
+
+                // =========================
+                // EXCEPTION HANDLING
+                // =========================
+
                 .exceptionHandling(exception -> exception
 
-                        // 401 - utente NON autenticato
+                        // 401 - non autenticato
                         .authenticationEntryPoint(
                                 (request, response, authException) -> {
 
@@ -70,8 +80,7 @@ public class SecurityConfig {
                                 }
                         )
 
-                        // 403 - utente autenticato
-                        // ma senza permessi
+                        // 403 - autenticato ma senza permessi
                         .accessDeniedHandler(
                                 (request, response, accessDeniedException) -> {
 
@@ -90,34 +99,51 @@ public class SecurityConfig {
                         )
                 )
 
+
+                // =========================
+                // AUTHORIZATION
+                // =========================
+
                 .authorizeHttpRequests(auth -> auth
+
+
+                        // =========================
+                        // PUBLIC
+                        // =========================
 
                         .requestMatchers(
                                 "/api/auth/login",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
-                        ).permitAll()
+                        )
+                        .permitAll()
 
 
-                                // USERS
+                        // =========================
+                        // USERS
+                        // =========================
 
-                                // Registrazione pubblica
-                                .requestMatchers(
-                                        HttpMethod.POST,
-                                        "/api/users"
-                                )
-                                .permitAll()
+                        // Registrazione pubblica
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/users"
+                        )
+                        .permitAll()
 
-                                // Gestione utenti
-                                .requestMatchers("/api/users/**")
-                                .hasRole("ADMIN")
+                        // Gestione utenti → solo ADMIN
+                        .requestMatchers(
+                                "/api/users/**"
+                        )
+                        .hasRole("ADMIN")
 
 
                         // =========================
                         // AUTH
                         // =========================
 
-                        .requestMatchers("/api/auth/me")
+                        .requestMatchers(
+                                "/api/auth/me"
+                        )
                         .authenticated()
 
 
@@ -126,82 +152,108 @@ public class SecurityConfig {
                         // =========================
 
                         // Creazione prenotazione
-                        .requestMatchers(HttpMethod.POST, "/api/reservations")
-                        .hasAnyRole(
-                                "CLIENTE"
+                        // → SOLO CLIENTE
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/reservations"
                         )
+                        .hasRole("CLIENTE")
 
 
                         // Proprie prenotazioni
+                        // → SOLO CLIENTE
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/reservations/my"
                         )
-                        .hasAnyRole(
-                                "CLIENTE",
-                                "RECEPTIONIST",
-                                "ADMIN"
-                        )
+                        .hasRole("CLIENTE")
 
 
                         // Tutte le prenotazioni
+                        // → SOLO RECEPTIONIST
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/reservations"
                         )
-                        .hasAnyRole(
-                                "RECEPTIONIST",
-                                "ADMIN"
-                        )
+                        .hasRole("RECEPTIONIST")
 
 
                         // Prenotazioni di un campo
+                        // → SOLO RECEPTIONIST
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/reservations/field/**"
                         )
-                        .hasAnyRole(
-                                "RECEPTIONIST",
-                                "ADMIN"
-                        )
+                        .hasRole("RECEPTIONIST")
 
 
-                        // Cancellazione
+                        // Cancellazione propria prenotazione
+                        // → SOLO CLIENTE
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/reservations/**"
                         )
-                        .hasAnyRole(
-                                "CLIENTE"
+                        .hasRole("CLIENTE")
+
+
+                        // Annullamento prenotazione cliente
+                        // → SOLO RECEPTIONIST
+                        .requestMatchers(
+                                HttpMethod.PATCH,
+                                "/api/reservations/*/cancel"
                         )
+                        .hasRole("RECEPTIONIST")
 
 
-                                // =========================
-                                // ANNULLAMENTO RECEPTIONIST
-                                // =========================
+                        // =========================
+                        // FIELDS
+                        // =========================
 
-                                .requestMatchers(
-                                        HttpMethod.PATCH,
-                                        "/api/reservations/*/cancel"
-                                )
-                                .hasAnyRole(
-                                        "RECEPTIONIST",
-                                        "ADMIN"
-                                )
+                        // Lettura campi
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/fields",
+                                "/api/fields/**"
+                        )
+                        .authenticated()
+
+                        // Creazione/modifica/disabilitazione
+                        // → SOLO ADMIN
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/fields"
+                        )
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/fields/**"
+                        )
+                        .hasRole("ADMIN")
 
 
-                        // Tutto il resto
+                        // =========================
+                        // EVERYTHING ELSE
+                        // =========================
+
                         .anyRequest()
                         .authenticated()
                 )
+
 
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
                 );
 
+
         return http.build();
     }
+
+
+    // =========================
+    // CORS
+    // =========================
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -209,9 +261,13 @@ public class SecurityConfig {
         CorsConfiguration configuration =
                 new CorsConfiguration();
 
+
         configuration.setAllowedOrigins(
-                List.of("http://localhost:4200")
+                List.of(
+                        "http://localhost:4200"
+                )
         );
+
 
         configuration.setAllowedMethods(
                 List.of(
@@ -224,19 +280,24 @@ public class SecurityConfig {
                 )
         );
 
+
         configuration.setAllowedHeaders(
                 List.of("*")
         );
 
+
         configuration.setAllowCredentials(true);
+
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
+
 
         source.registerCorsConfiguration(
                 "/**",
                 configuration
         );
+
 
         return source;
     }

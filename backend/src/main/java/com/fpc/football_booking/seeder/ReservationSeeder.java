@@ -67,16 +67,6 @@ public class ReservationSeeder implements CommandLineRunner {
                             .findByEmail("mario.rossi@example.com")
                             .orElseThrow();
 
-            User receptionist =
-                    userRepository
-                            .findByEmail("luca.bianchi@example.com")
-                            .orElseThrow();
-
-            User admin =
-                    userRepository
-                            .findByEmail("admin@kickoff.com")
-                            .orElseThrow();
-
 
             Reservation reservation1 =
                     createReservation(
@@ -88,31 +78,22 @@ public class ReservationSeeder implements CommandLineRunner {
 
             Reservation reservation2 =
                     createReservation(
-                            receptionist,
-                            field1,
-                            LocalTime.of(20, 0)
-                    );
-
-
-            Reservation reservation3 =
-                    createReservation(
-                            admin,
+                            cliente,
                             field2,
-                            LocalTime.of(21, 0)
+                            LocalTime.of(20, 0)
                     );
 
 
             reservationRepository.saveAll(
                     List.of(
                             reservation1,
-                            reservation2,
-                            reservation3
+                            reservation2
                     )
             );
 
 
             logger.info(
-                    "ReservationSeeder initialized: 3 reservations created"
+                    "ReservationSeeder initialized: 2 reservations created"
             );
 
         } else {
@@ -130,7 +111,8 @@ public class ReservationSeeder implements CommandLineRunner {
             LocalTime startTime
     ) {
 
-        Reservation reservation = new Reservation();
+        Reservation reservation =
+                new Reservation();
 
 
         reservation.setUser(user);

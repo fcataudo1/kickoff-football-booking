@@ -2,7 +2,7 @@ package com.fpc.football_booking.config;
 
 import com.fpc.football_booking.entity.User;
 import com.fpc.football_booking.repository.UserRepository;
-import com.fpc.football_booking.service.JwtService;
+import com.fpc.football_booking.service.impl.JwtService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

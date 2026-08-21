@@ -6,6 +6,7 @@ import com.fpc.football_booking.service.ReservationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -36,7 +37,7 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-
+    @PreAuthorize("hasRole('CLIENTE')")
     @PostMapping
     @Operation(
             summary = "Crea una nuova prenotazione",
@@ -77,7 +78,7 @@ public class ReservationController {
                 );
     }
 
-
+    @PreAuthorize("hasRole('RECEPTIONIST')")
     @GetMapping
     @Operation(
             summary = "Recupera tutte le prenotazioni",
@@ -92,6 +93,7 @@ public class ReservationController {
         return reservationService.getAllReservations();
     }
 
+    @PreAuthorize("hasRole('CLIENTE')")
     @GetMapping("/my")
     @Operation(
             summary = "Recupera le proprie prenotazioni",
@@ -112,6 +114,7 @@ public class ReservationController {
         );
     }
 
+    @PreAuthorize("hasRole('RECEPTIONIST')")
     @GetMapping("/field/{fieldId}")
     @Operation(
             summary = "Recupera le prenotazioni di un campo",
@@ -138,7 +141,7 @@ public class ReservationController {
         );
     }
 
-
+    @PreAuthorize("hasRole('CLIENTE')")
     @DeleteMapping("/{id}")
     @Operation(
             summary = "Cancella una prenotazione",
@@ -172,6 +175,7 @@ public class ReservationController {
     }
 
 
+    @PreAuthorize("hasRole('RECEPTIONIST')")
     @PatchMapping("/{id}/cancel")
     @Operation(
             summary = "Annulla una prenotazione come receptionist",
