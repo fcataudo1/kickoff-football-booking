@@ -32,6 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-# Environment-specific configuration
-backend/src/main/resources/application-dev.properties
-backend/src/main/resources/application-test.properties
+# Spring Boot environment configuration
+/src/main/resources/application-dev.properties
+/src/main/resources/application-test.properties
