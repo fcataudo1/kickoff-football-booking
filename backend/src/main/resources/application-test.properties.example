@@ -1,9 +1,9 @@
-spring.datasource.url=jdbc:postgresql://localhost:5432/fpc_football_booking
-spring.datasource.username=postgres
-spring.datasource.password=root
+spring.datasource.url=jdbc:postgresql://localhost:5432/YOUR_TEST_DATABASE
+spring.datasource.username=YOUR_USERNAME
+spring.datasource.password=${DB_PASSWORD}
 
 spring.jpa.hibernate.ddl-auto=create
 spring.jpa.show-sql=false
 
-jwt.secret=YOUR_BASE64_SECRET
+jwt.secret=YOUR_JWT_SECRET
 jwt.expiration=3600000

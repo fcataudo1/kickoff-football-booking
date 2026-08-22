@@ -33,4 +33,5 @@ build/
 .vscode/
 
 # Environment-specific configuration
-src/main/resources/application-dev.properties
+backend/src/main/resources/application-dev.properties
+backend/src/main/resources/application-test.properties
