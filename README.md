@@ -434,6 +434,62 @@ http://localhost:4200
 
 ---
 
+## ⚙️ Configurazione
+
+Prima di avviare il backend è necessario configurare PostgreSQL e creare il database:
+
+```text
+fpc_football_booking
+```
+Le configurazioni contenenti credenziali, password e chiavi JWT non vengono incluse nel repository.
+
+Per l'ambiente di sviluppo, creare localmente il file:
+
+```text
+backend/src/main/resources/application-dev.properties
+```
+
+utilizzando come riferimento:
+
+```text
+backend/src/main/resources/application-dev.properties.example
+```
+
+Il file locale deve contenere le proprie configurazioni, ad esempio:
+
+```text
+spring.datasource.url=jdbc:postgresql://localhost:5432/fpc_football_booking
+spring.datasource.username=postgres
+spring.datasource.password=${DB_PASSWORD}
+
+spring.jpa.hibernate.ddl-auto=create
+spring.jpa.show-sql=false
+
+jwt.secret=LA_TUA_JWT_SECRET
+jwt.expiration=3600000
+```
+
+La password del database viene letta dalla variabile d'ambiente:
+
+```text
+DB_PASSWORD
+```
+
+La chiave `jwt.secret` deve essere sostituita con una propria chiave segreta JWT.
+
+Il file `application-dev.properties` è escluso dal repository tramite `.gitignore`.
+
+Per avviare il backend utilizzando il profilo `dev`:
+
+```text
+spring.profiles.active=dev
+```
+
+oppure configurare il profilo direttamente tramite IntelliJ IDEA.
+
+
+---
+
 ## 📖 API Documentation
 
 Le API REST sono documentate tramite Swagger / OpenAPI.
